@@ -56,7 +56,7 @@ export default {
         id: String,
     },
     mounted() {
-        this.fetchTeamInfo();
+        this.fetchSchedule();
     },
     data() {
       return {
@@ -68,9 +68,35 @@ export default {
       };
     },
     methods: {
-        async fetchTeamInfo() {
+        async fetchSchedule() {
+          try {
+            this.isLoading = true;
+            const response = await fetch(`/api/v1/schedule/${this.todaysDate}`, {
+              method: 'GET',
+              headers: {
+                'Cache-Control': 'no-cache',
+              },
+              // You can add more options here if needed
+            });
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            const data = await response.json();
+            this.schedule = data;
+            this.isLoading = false;
+
+            if(this.todaysDate > data.regularSeasonEndDate) //if the regular season is over send last date of regular season
+              this.fetchTeamInfo(data.regularSeasonEndDate);
+            else //send current date
+              this.fetchTeamInfo(this.todaysDate);
+          } catch (error) {
+            console.error('Error fetching scores:', error);
+            alert('Error fetching scores. See console for details.');
+          }
+        },
+        async fetchTeamInfo(date) {
             try {
-                const response = await fetch(`/api/v1/standings/${this.todaysDate}`, {
+                const response = await fetch(`/api/v1/standings/${date}`, {
                   method: 'GET',
                   headers: {
                     'Cache-Control': 'no-cache',
@@ -83,6 +109,7 @@ export default {
 
                 const data = await response.json();
                 this.configureTeamInfo(data);
+                console.log(data);
                 this.isLoading = false;
             }
             catch (error) {

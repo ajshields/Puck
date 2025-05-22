@@ -1,9 +1,11 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+import fs from 'fs';
+import path from 'path';
+
+
 export default defineConfig({
   plugins: [
     vue(),
@@ -35,6 +37,16 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/puckPedia/, ''),
       },
+      '/yahoo': {
+        target: 'https://api.login.yahoo.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/yahoo/, ''),
+      },
+      /*'/fantasy': {
+        target: 'https://fantasysports.yahooapis.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/fantasy/, ''),
+      },*/
       /*'/edgeApi': {
         target: 'https://edge.api.brightcove.com',
         changeOrigin: true,

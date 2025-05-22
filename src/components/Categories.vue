@@ -403,6 +403,7 @@ export default {
       pageTitle: 'Leaders',
       currentView: 'leaders', // Default view
       todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0], // Default to today's date
+      seasonYear: '',
       points: [], //used to display top ten players on screen
       pointsData: [], //holds all data for top points players
       selectedPoints: null, //for row select
@@ -447,6 +448,7 @@ export default {
     };
   },
   mounted() {
+    this.getYears();
     this.fetchPoints();
     this.fetchGoals();
     this.fetchAssists();
@@ -462,7 +464,7 @@ export default {
     //LEADERS METHODS
     async fetchPoints() {
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/20232024/2?categories=points&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=points&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -482,7 +484,7 @@ export default {
     },
     async fetchGoals() {
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/20232024/2?categories=goals&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=goals&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -502,7 +504,7 @@ export default {
     },
     async fetchAssists() {
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/20232024/2?categories=assists&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=assists&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -522,7 +524,7 @@ export default {
     },
     async fetchPlusMinus() {
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/20232024/2?categories=plusMinus&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=plusMinus&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -542,7 +544,7 @@ export default {
     },
     async fetchPenaltyMins() {
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/20232024/2?categories=penaltyMins&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=penaltyMins&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -562,7 +564,7 @@ export default {
     },
     async fetchFaceoffs() {
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/20232024/2?categories=faceoffLeaders&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=faceoffLeaders&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -582,7 +584,7 @@ export default {
     },
     async fetchWins() {
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/20232024/2?categories=wins&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=wins&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -602,7 +604,7 @@ export default {
     },
     async fetchShutouts() {
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/20232024/2?categories=shutouts&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=shutouts&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -622,7 +624,7 @@ export default {
     },
     async fetchSavePctgs() {
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/20232024/2?categories=savePctg&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=savePctg&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -642,7 +644,7 @@ export default {
     },
     async fetchGoalsAgainstAverages() {
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/20232024/2?categories=goalsAgainstAverage&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=goalsAgainstAverage&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -663,6 +665,20 @@ export default {
     },
     changeView(view) {
       this.currentView = view;
+    },
+    getYears() {
+      //season years
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      let currentYear = currentDate.getFullYear();
+      let nextYear;
+      if (currentMonth >= 8) { // September to December
+          nextYear = currentYear + 1;
+      } else { // January to August
+          nextYear = currentYear;
+          currentYear = currentYear - 1;
+      }
+      this.seasonYears = `${currentYear}${nextYear}`;
     },
     configurePoints(pointsList) {
       for(let i = 0; i < pointsList.points.length;  i++) {
@@ -735,14 +751,16 @@ export default {
       this.selectedWinsInfo.wins = this.winsData.wins[0].value;
     },
     configureShutouts(shutoutsList) {
-      for(let i = 0; i < shutoutsList.shutouts.length;  i++) {
-        this.shutouts.push({"place": (i+1), "name": (shutoutsList.shutouts[i].firstName.default+" "+shutoutsList.shutouts[i].lastName.default), "shutouts": shutoutsList.shutouts[i].value});
+      if(this.selectedShutouts) {
+        for(let i = 0; i < shutoutsList.shutouts.length;  i++) {
+          this.shutouts.push({"place": (i+1), "name": (shutoutsList.shutouts[i].firstName.default+" "+shutoutsList.shutouts[i].lastName.default), "shutouts": shutoutsList.shutouts[i].value});
+        }
+        this.selectedShutouts = this.shutouts.length > 0 ? this.shutouts[0] : null,
+        this.selectedShutoutsInfo.picture = this.shutoutsData.shutouts[0].headshot;
+        this.selectedShutoutsInfo.info.push({"teamLogo": this.shutoutsData.shutouts[0].teamLogo, "team": this.shutoutsData.shutouts[0].teamAbbrev, "number": ("#"+(this.shutoutsData.shutouts[0].sweaterNumber)), "position": this.shutoutsData.shutouts[0].position});
+        this.selectedShutoutsInfo.name = this.shutoutsData.shutouts[0].firstName.default+" "+this.shutoutsData.shutouts[0].lastName.default;
+        this.selectedShutoutsInfo.shutouts = this.shutoutsData.shutouts[0].value;
       }
-      this.selectedShutouts = this.shutouts.length > 0 ? this.shutouts[0] : null,
-      this.selectedShutoutsInfo.picture = this.shutoutsData.shutouts[0].headshot;
-      this.selectedShutoutsInfo.info.push({"teamLogo": this.shutoutsData.shutouts[0].teamLogo, "team": this.shutoutsData.shutouts[0].teamAbbrev, "number": ("#"+(this.shutoutsData.shutouts[0].sweaterNumber)), "position": this.shutoutsData.shutouts[0].position});
-      this.selectedShutoutsInfo.name = this.shutoutsData.shutouts[0].firstName.default+" "+this.shutoutsData.shutouts[0].lastName.default;
-      this.selectedShutoutsInfo.shutouts = this.shutoutsData.shutouts[0].value;
     },
     configureSavePctgs(savePctgsList) {
       for(let i = 0; i < savePctgsList.savePctg.length;  i++) {

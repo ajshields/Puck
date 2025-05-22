@@ -19,7 +19,8 @@
     "vue-autocomplete": "^0.0.2",
     "vue-color-picker-wheel": "^0.4.3",
     "vue-multiselect": "^2.1.9",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.2",

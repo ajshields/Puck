@@ -133,10 +133,10 @@ export default {
             });
         },
         searchPlayerGo(event) {
-            /*this.$router.push({ name: 'player.season', params: { id: event.value.value }});
+            this.$router.push({ name: 'player.season', params: { id: event.value.value }});
             setTimeout(() => {
                 window.location.reload();
-            }, 50);*/
+            }, 50);
 
             const currentPath = this.$route.path;
             // Construct the new team-specific path by replacing the current team abbreviation with the selected one

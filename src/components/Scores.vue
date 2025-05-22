@@ -6,7 +6,7 @@
   <div><ProgressSpinner v-if="isLoading" /></div>
   <!-- Date navigation bar -->
   <div class="date-navigation">
-    <button @mousedown="startScroll(-1)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button left">&lt;</button>
+    <button @mousedown="startScroll(-1, 10)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button left">&lt;</button>
     <div class="dates" ref="datesContainer" @wheel="handleWheel">
       <div
         v-for="(date, index) in dateRange"
@@ -18,14 +18,27 @@
         {{ formatDate(date) }}
       </div>
     </div>
-    <button @mousedown="startScroll(1)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button right">&gt;</button>
+    <button @mousedown="startScroll(1, 10)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button right">&gt;</button>
   </div>
 
     <!-- Display fetched data -->
+    <h3 style="color:white;margin-bottom:1rem">{{ dateDesc(selectedDate) }}</h3>
+    <h5 v-if="games.games && games.games.length==0" style="color:white">No games today</h5>
     <div v-if="games.games && games.games.length > 0">
-      <h3 style="color:white">{{ dateDesc(selectedDate) }}</h3>
       <ul>
         <li v-for="game in games.games" :key="game.id" @click="openGame(game)" class="game-box">
+          <div v-if="game.gameType==1" class="game-type"> <!--preseason tag-->
+            <img src="@/assets/greenDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
+            <strong >preseason</strong>
+          </div>
+          <div v-else-if="game.gameType==3" class="game-type"> <!--playoffs tag-->
+            <img src="@/assets/blueDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
+            <strong >playoffs</strong>
+          </div>
+          <div v-else-if="game.specialEvent" class="game-type"> <!--special event tag-->
+            <img src="@/assets/yellowDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
+            <strong >{{ game.specialEvent.default }}</strong>
+          </div>
           <div class="game-section">
             <div class="team-container">
               <div class="game-team">
@@ -103,6 +116,10 @@ export default {
     this.setupDateRange();
     this.fetchGames();
     this.fetchSchedule();
+    this.$refs.datesContainer.addEventListener('wheel', this.handleWheel);
+  },
+  beforeDestroy() {
+    this.$refs.datesContainer.removeEventListener('wheel', this.handleWheel);
   },
   created() {
   // If the route does not have the 'date' parameter, navigate to today's date
@@ -121,7 +138,7 @@ export default {
   watch: {
     '$route.params.date': 'updateSelectedDate',
     selectedDate: 'fetchGames',
-    'schedule.regularSeasonStartDate': 'setupDateRange',
+    'schedule.preSeasonStartDate': 'setupDateRange',
     'schedule.regularSeasonEndDate': 'setupDateRange',
   },
   methods: {
@@ -178,8 +195,13 @@ export default {
     },
     setupDateRange() {
       const today = new Date();
-      const startDate = new Date(this.schedule.regularSeasonStartDate);
-      const endDate = new Date(this.schedule.regularSeasonEndDate);
+      const month = today.getMonth() + 1;
+      const startDate = new Date(this.schedule.preSeasonStartDate);
+      let endDate;
+      if (month < 4) //if before april end season as regular season
+          endDate = new Date(this.schedule.regularSeasonEndDate);
+      else //if after april end season as playoffs
+          endDate = new Date(this.schedule.playoffEndDate);
 
       // Calculate the number of days between start and end dates
       const daysDifference = Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24));
@@ -287,12 +309,14 @@ export default {
       }
     },
     handleWheel(event) {
-      // Prevent the default scroll behavior
       event.preventDefault();
-      // Determine the direction of the scroll
-      const delta = Math.sign(event.deltaY);
-      // Scroll the container accordingly
-      //this.scrollDates(delta);
+      if (event.deltaY < 0) {
+        this.startScroll(1, 1);
+      } else {
+        this.startScroll(-1, 1);
+      }
+      // Stop scrolling after a short delay to mimic button behavior
+      setTimeout(this.stopScroll, 150);
     },
     scrollDates(direction) {
       const container = this.$refs.datesContainer;
@@ -305,7 +329,7 @@ export default {
         this.$refs.datesContainer.scrollLeft += 10; // Adjust scroll distance as needed
       }
     },
-    startScroll(direction) {
+    startScroll(direction, speed) {
         if (!this.isScrolling) {
             this.isScrolling = true;
             // Start scrolling immediately
@@ -313,7 +337,7 @@ export default {
             // Start scrolling continuously
             this.scrollInterval = setInterval(() => {
                 this.scrollDates(direction);
-            }, 10); // Adjust the interval as needed
+            }, speed); // Adjust the interval as needed
         }
     },
     // Stop scrolling
@@ -415,6 +439,17 @@ export default {
 
 .game-box:hover {
   background-color: var(--hover-dark-color);
+}
+
+.game-type {
+  display: flex;
+  position: absolute;
+  margin-top: -18px;
+  margin-left: -11px;
+  font-size: 9px;
+  font-style: italic;
+  color: white;
+  align-items: center;
 }
 
 .game-section {

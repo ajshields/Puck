@@ -77,7 +77,7 @@
                 <div class="game-popup-team-section">
                     <div class="game-popup-team-info">
                         <img :src="gameClickedInfo.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(gameClickedInfo.awayTeam.abbrev)" style="width:100px;cursor:pointer">
-                        <strong style="color:white">{{ gameClickedInfo.awayTeam.name.default }}</strong>
+                        <strong style="color:white">{{ gameClickedInfo.awayTeam.commonName.default }}</strong>
                         <strong v-if="gameClickedInfo.gameState=='OFF' || gameClickedInfo.gameState=='FINAL'" style="font-size:x-small">SOG: {{ gameClickedInfo.awayTeam.sog }}</strong>
                     </div>
                     <strong style="font-size:xx-large;color:white;height:75px">{{ gameClickedInfo.awayTeam.score }}</strong>
@@ -86,7 +86,7 @@
                     <strong style="font-size:xx-large;color:white;height:75px">{{ gameClickedInfo.homeTeam.score }}</strong>
                     <div class="game-popup-team-info">
                         <img :src="gameClickedInfo.homeTeam.logo" alt="Home Team Logo" @click="goToTeam(gameClickedInfo.homeTeam.abbrev)" style="width:100px;cursor:pointer">
-                        <strong style="color:white">{{ gameClickedInfo.homeTeam.name.default }}</strong>
+                        <strong style="color:white">{{ gameClickedInfo.homeTeam.commonName.default }}</strong>
                         <strong v-if="gameClickedInfo.gameState=='OFF' || gameClickedInfo.gameState=='FINAL'" style="font-size:x-small">SOG: {{ gameClickedInfo.homeTeam.sog }}</strong>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                     <Column field="first" header="1st" sortable style="width: 5%"></Column>
                     <Column field="second" header="2nd" style="width: 5%"></Column>
                     <Column field="third" header="3rd" sortable style="width: 5%"></Column>
-                    <Column v-if="gameClickedInfo.summary && gameClickedInfo.summary.shotsByPeriod.length>3" field="overtime" header="OT" sortable style="width: 5%"></Column>
+                    <!-- <Column v-if="gameClickedInfo.summary && gameClickedInfo.summary.shotsByPeriod.length>3" field="overtime" header="OT" sortable style="width: 5%"></Column> -->
                     <Column field="total" header="T" sortable style="width: 5%"></Column>
                 </DataTable>
             </div>
@@ -125,7 +125,8 @@
                                 <img :src="getPlayerTeamLogo(player.teamAbbrev)" alt="Player Team Logo" class="popup-player-team-logo">
                             </div>
                             <div class="popup-three-stars-column">
-                                <strong style="color:white">{{ player.name }}</strong>
+                                <strong v-if="player.name.default" style="color:white">{{ player.name.default }}</strong>
+                                <strong v-else style="color:white">{{ player.name }}</strong>
                                 <strong>#{{ player.sweaterNo }} - {{ player.position }}</strong>
                                 <strong></strong>
                             </div>
@@ -306,9 +307,9 @@ export default {
                 const year = this.date.getFullYear();
                 const month = this.date.getMonth() + 1;
                 let seasonYears;
-                if (year < 2024 || (year === 2024 && month < 9))
+                if (month < 9) //if before september set season to 2024-2025
                     seasonYears = (year - 1) + '' + year;
-                else
+                else //if after september set season to 2025-2026
                     seasonYears = year + '' + (year + 1);
 
                 const response = await fetch(`/api/v1/club-schedule-season/${this.id}/${seasonYears}`, { //club-schedule-season/TOR/20232024
@@ -341,7 +342,7 @@ export default {
                 this.date = new Date(game.startTimeUTC);
                 this.isLoading = true;
                 try {
-                    const response = await fetch(`/api/v1_1/gamecenter/${game.id}/landing`, {
+                    const response = await fetch(`/api/v1/gamecenter/${game.id}/landing`, {
                         method: 'GET',
                         headers: {
                             'Cache-Control': 'no-cache',
@@ -361,7 +362,7 @@ export default {
                 }
 
                 try {
-                    const response = await fetch(`/api/v1_1/gamecenter/${game.id}/boxscore`, {
+                    const response = await fetch(`/api/v1/gamecenter/${game.id}/boxscore`, {
                         method: 'GET',
                         headers: {
                             'Cache-Control': 'no-cache',
@@ -554,7 +555,7 @@ export default {
         },
         configureLineScore() {
             this.popupLineScore = [];
-            if(this.gameClickedInfo.gameState == "OFF" || this.gameClickedInfo.gameState == "FINAL") {
+            if((this.gameClickedInfo.gameState == "OFF" || this.gameClickedInfo.gameState == "FINAL") && (this.gameClickedInfo.summary.linescore)) {
                 let tempScoreAway = {"logo": this.gameClickedInfo.awayTeam.logo, "team": this.gameClickedInfo.awayTeam.abbrev, "first": "", "second": "", "third": "", "overtime": "", "total": this.gameClickedInfo.awayTeam.score};
                 let tempScoreHome = {"logo": this.gameClickedInfo.homeTeam.logo, "team": this.gameClickedInfo.homeTeam.abbrev, "first": "", "second": "", "third": "", "overtime": "", "total": this.gameClickedInfo.homeTeam.score};
                 for(let i = 0; i < this.gameClickedInfo.summary.linescore.byPeriod.length; i++) {
@@ -583,11 +584,18 @@ export default {
         },
         configureThreeStars(player, statType, goalieStatType) {
             if(this.boxScore.id && (this.gameClickedInfo.gameState == "OFF" || this.gameClickedInfo.gameState == "FINAL")) {
+                //this if/else statement checks the api call and uses the proper json
+                let boxScore = {};
+                if(this.boxScore.boxscore)
+                    boxScore = this.boxScore.boxscore
+                else if(this.boxScore.playerByGameStats)
+                    boxScore = this.boxScore
+                //
                 // Determine the team abbreviation
                 const teamAbbrev = player.teamAbbrev;
                 const teamStats = teamAbbrev === this.boxScore.awayTeam.abbrev ? 
-                    this.boxScore.boxscore.playerByGameStats.awayTeam :
-                    this.boxScore.boxscore.playerByGameStats.homeTeam;
+                    boxScore.playerByGameStats.awayTeam :
+                    boxScore.playerByGameStats.homeTeam;
 
                 // Determine the position
                 const position = player.position;

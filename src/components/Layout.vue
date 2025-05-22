@@ -7,6 +7,7 @@
                 <router-link to="/scores">SCORES</router-link>
                 <router-link to="/standings">STANDINGS</router-link>
                 <router-link to="/leaders/categories">LEADERS</router-link>
+                <router-link to="/fantasy">FANTASY</router-link>
             </nav>
         </header>
         <router-view></router-view>

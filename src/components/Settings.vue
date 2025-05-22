@@ -50,6 +50,11 @@ export default {
                       command: () => this.navigateTo('/leaders/categories')
                     },
                     {
+                      label: ' FANTASY',
+                      icon: 'pi pi-fw pi-list',
+                      command: () => this.navigateTo('/fantasy')
+                    },
+                    {
                       label: ' THEMES',
                       icon: 'pi pi-fw pi-palette',
                       items: [

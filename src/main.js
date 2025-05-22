@@ -3,10 +3,12 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import { createRouter, createWebHistory } from 'vue-router';
+import store from './store';
 import Home from './components/Home.vue';
 import Scores from './components/Scores.vue';
 import Standings from './components/Standings.vue';
 import Leaders from './components/Leaders.vue';
+import Fantasy from './components/Fantasy.vue';
 import Game from './components/Game.vue';
 import Team from './components/Team.vue';
 import Roster from './components/Roster.vue';
@@ -36,6 +38,7 @@ const routes = [
       components: {'leaders-content': Statistics},
     },
   ]},
+  { path: '/fantasy', component: Fantasy },
   { path: '/game/:id', name: 'game', component: Game, props: true },
   { path: '/team/:id', component: Team, props: true, children: [
     {
@@ -93,5 +96,6 @@ const router = createRouter({
 const app = createApp(App);
 app.use(PrimeVue);
 app.use(router);
+app.use(store);
 
 app.mount('#app');

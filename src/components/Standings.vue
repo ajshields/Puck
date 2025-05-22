@@ -5,13 +5,19 @@
   </Layout>
   <div><ProgressSpinner v-if="isLoading" /></div>
 
-  <!-- Horizontal header with clickable options -->
-  <div class="header">
-      <a @click="changeView('division')" :class="{ active: currentView === 'division' }">DIVISION</a>
-      <a @click="changeView('wildCard')" :class="{ active: currentView === 'wildCard' }">WILD CARD</a>
-      <a @click="changeView('conference')" :class="{ active: currentView === 'conference' }">CONFERENCE</a>
-      <a @click="changeView('overall')" :class="{ active: currentView === 'overall' }">OVERALL</a>
+  <div class="standings-options">
+      <v-button class="standings-selector" :class="{ 'standings-selector-selected': type === 'season' }" @click="type='season'">Season</v-button>
+      <v-button class="standings-selector" :class="{ 'standings-selector-selected': type === 'playoffs' }" @click="type='playoffs'">Playoffs</v-button>
   </div>
+
+  <!-- Horizontal header with clickable options -->
+  <div v-if="type == 'season'">
+    <div class="header">
+        <a @click="changeView('division')" :class="{ active: currentView === 'division' }">DIVISION</a>
+        <a @click="changeView('wildCard')" :class="{ active: currentView === 'wildCard' }">WILD CARD</a>
+        <a @click="changeView('conference')" :class="{ active: currentView === 'conference' }">CONFERENCE</a>
+        <a @click="changeView('overall')" :class="{ active: currentView === 'overall' }">OVERALL</a>
+    </div>
 
     <div v-if="currentView === 'division'">
       <h3>EASTERN</h3>
@@ -288,6 +294,7 @@
         <Column field="streak" header="STRK" style="width: 5%"></Column>
       </DataTable>
     </div>
+  </div>
 
     <!-- Display error if any -->
     <div v-if="error">
@@ -313,24 +320,52 @@ export default {
     return {
       isLoading: true,
       pageTitle: 'Standings',
+      type: 'season',
       currentView: 'division', // Default view
       todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0], // Default to today's date
       divisionStandings: {atlantic:[], metropolitan:[], central:[], pacific:[]},
       wildCardStandings: {atlantic:[], metropolitan:[], eastWC:[], central:[], pacific:[], westWC:[]},
       conferenceStandings: {eastern:[], western:[]},
       overallStandings: [],
+      schedule: [],
+      bracket: {},
       error: null,
     };
   },
   mounted() {
-    this.fetchTeams();
+    this.fetchSchedule();
+    this.fetchBracket();
   },
   methods: {
-    async fetchTeams() {
-      // Implement your fetchGames logic here
-      // Use this.todaysDate to get today's date
+    async fetchSchedule() {
       try {
-        const response = await fetch(`/api/v1/standings/${this.todaysDate}`, {
+        this.isLoading = true;
+        const response = await fetch(`/api/v1/schedule/${this.todaysDate}`, {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+          // You can add more options here if needed
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        this.schedule = data;
+        this.isLoading = false;
+
+        if(this.todaysDate > data.regularSeasonEndDate) //if the regular season is over send last date of regular season
+          this.fetchTeams(data.regularSeasonEndDate);
+        else //send current date
+          this.fetchTeams(this.todaysDate);
+      } catch (error) {
+        console.error('Error fetching scores:', error);
+        alert('Error fetching scores. See console for details.');
+      }
+    },
+    async fetchTeams(standingsDate) {
+      try {
+        const response = await fetch(`/api/v1/standings/${standingsDate}`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -348,6 +383,28 @@ export default {
       } catch (error) {
         console.error('Error fetching teams:', error);
         alert('Error fetching teams. See console for details.');
+      }
+    },
+    async fetchBracket() {
+      try {
+        this.isLoading = true;
+        const response = await fetch(`/api/v1/playoff-bracket/${new Date().getFullYear()}`, {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+          // You can add more options here if needed
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(data);
+        this.bracket = data;
+        this.isLoading = false;
+      } catch (error) {
+        console.error('Error fetching scores:', error);
+        alert('Error fetching scores. See console for details.');
       }
     },
     changeView(view) {
@@ -457,6 +514,41 @@ export default {
 .sub-section {
   background-color: #56565600;
   font-size: 15px;
+}
+
+.standings-options {
+    display: flex;
+    justify-content: center;
+    border: solid;
+    border-width: thin;
+    border-color: #ffffff14;
+    border-radius: 8px;
+}
+
+.standings-selector {
+    display: flex;
+    width: 125px !important;
+    justify-content: center;
+    background-color: #ffffff00;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 2px 2px;
+    transition-duration: 0.3s;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.standings-selector:hover {
+    background-color: var(--main-color);
+    color: black;
+}
+
+.standings-selector-selected {
+    background-color: var(--main-color);
+    color: black;
 }
 
 .team-logo-standings{

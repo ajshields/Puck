@@ -90,9 +90,9 @@ export default {
             const year = this.date.getFullYear();
             const month = this.date.getMonth() + 1;
             let seasonYears;
-            if (year < 2024 || (year === 2024 && month < 9))
+            if (month < 9) //if before september set season to 2024-2025
                 seasonYears = (year - 1) + '' + year;
-            else
+            else //if after september set season to 2025-2026
                 seasonYears = year + '' + (year + 1);
 
             try {

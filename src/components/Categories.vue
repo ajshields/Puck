@@ -1,7 +1,12 @@
 <template>
     <div><ProgressSpinner v-if="isLoading" /></div>
 
-    <div class="grid-container" style="margin-top: 40px">
+    <div class="leaders-options">
+      <v-button class="leaders-selector" :class="{ 'leaders-selector-selected': type === 'season' }" @click="switchStatType('season'), type='season'">Season</v-button>
+      <v-button class="leaders-selector" :class="{ 'leaders-selector-selected': type === 'playoffs' }" @click="type=switchStatType('playoffs'), type='playoffs'">Playoffs</v-button>
+  </div>
+
+    <div class="grid-container" style="margin-top: 20px">
       <!-- POINTS Leaders -->
       <div class="grid-item">
         <div class="left-section">
@@ -404,6 +409,7 @@ export default {
       currentView: 'leaders', // Default view
       todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0], // Default to today's date
       seasonYear: '',
+      type: 'season',
       points: [], //used to display top ten players on screen
       pointsData: [], //holds all data for top points players
       selectedPoints: null, //for row select
@@ -463,8 +469,11 @@ export default {
   methods: {
     //LEADERS METHODS
     async fetchPoints() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=points&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=points&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -483,8 +492,11 @@ export default {
       }
     },
     async fetchGoals() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=goals&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=goals&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -503,8 +515,11 @@ export default {
       }
     },
     async fetchAssists() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=assists&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=assists&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -523,8 +538,11 @@ export default {
       }
     },
     async fetchPlusMinus() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=plusMinus&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=plusMinus&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -543,8 +561,11 @@ export default {
       }
     },
     async fetchPenaltyMins() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=penaltyMins&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=penaltyMins&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -563,8 +584,11 @@ export default {
       }
     },
     async fetchFaceoffs() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/2?categories=faceoffLeaders&limit=10`, {
+        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=faceoffLeaders&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -583,8 +607,11 @@ export default {
       }
     },
     async fetchWins() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=wins&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=wins&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -603,8 +630,11 @@ export default {
       }
     },
     async fetchShutouts() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=shutouts&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=shutouts&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -623,8 +653,11 @@ export default {
       }
     },
     async fetchSavePctgs() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=savePctg&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=savePctg&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -643,8 +676,11 @@ export default {
       }
     },
     async fetchGoalsAgainstAverages() {
+      let statsType = 2;
+      if(this.type=='playoffs')
+        statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/2?categories=goalsAgainstAverage&limit=10`, {
+        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=goalsAgainstAverage&limit=10`, {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache',
@@ -666,6 +702,19 @@ export default {
     changeView(view) {
       this.currentView = view;
     },
+    switchStatType(statType) {
+      this.type = statType;
+      this.fetchPoints();
+      this.fetchGoals();
+      this.fetchAssists();
+      this.fetchPlusMinus();
+      this.fetchPenaltyMins();
+      this.fetchFaceoffs();
+      this.fetchWins();
+      this.fetchShutouts();
+      this.fetchSavePctgs();
+      this.fetchGoalsAgainstAverages();
+    },
     getYears() {
       //season years
       const currentDate = new Date();
@@ -681,6 +730,9 @@ export default {
       this.seasonYears = `${currentYear}${nextYear}`;
     },
     configurePoints(pointsList) {
+      this.points = [];
+      this.selectedPoints = null;
+      this.selectedPointsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < pointsList.points.length;  i++) {
         this.points.push({"place": (i+1), "name": (pointsList.points[i].firstName.default+" "+pointsList.points[i].lastName.default), "points": pointsList.points[i].value});
       }
@@ -691,6 +743,9 @@ export default {
       this.selectedPointsInfo.points = this.pointsData.points[0].value;
     },
     configureGoals(goalsList) {
+      this.goals = [];
+      this.selectedGoals = null;
+      this.selectedGoalsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < goalsList.goals.length;  i++) {
         this.goals.push({"place": (i+1), "name": (goalsList.goals[i].firstName.default+" "+goalsList.goals[i].lastName.default), "goals": goalsList.goals[i].value});
       }
@@ -701,6 +756,9 @@ export default {
       this.selectedGoalsInfo.goals = this.goalsData.goals[0].value;
     },
     configureAssists(assistsList) {
+      this.assists = [];
+      this.selectedAssists = null;
+      this.selectedAssistsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < assistsList.assists.length;  i++) {
         this.assists.push({"place": (i+1), "name": (assistsList.assists[i].firstName.default+" "+assistsList.assists[i].lastName.default), "assists": assistsList.assists[i].value});
       }
@@ -711,6 +769,9 @@ export default {
       this.selectedAssistsInfo.assists = this.assistsData.assists[0].value;
     },
     configurePlusMinus(plusMinusList) {
+      this.plusMinus = [];
+      this.selectedPlusMinus = null;
+      this.selectedPlusMinusInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < plusMinusList.plusMinus.length;  i++) {
         this.plusMinus.push({"place": (i+1), "name": (plusMinusList.plusMinus[i].firstName.default+" "+plusMinusList.plusMinus[i].lastName.default), "plusMinus": plusMinusList.plusMinus[i].value});
       }
@@ -721,6 +782,9 @@ export default {
       this.selectedPlusMinusInfo.plusMinus = this.plusMinusData.plusMinus[0].value;
     },
     configurePenaltyMins(penaltyMinsList) {
+      this.penaltyMins = [];
+      this.selectedPenaltyMins = null;
+      this.selectedPenaltyMinsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < penaltyMinsList.penaltyMins.length;  i++) {
         this.penaltyMins.push({"place": (i+1), "name": (penaltyMinsList.penaltyMins[i].firstName.default+" "+penaltyMinsList.penaltyMins[i].lastName.default), "penaltyMins": penaltyMinsList.penaltyMins[i].value});
       }
@@ -731,6 +795,9 @@ export default {
       this.selectedPenaltyMinsInfo.penaltyMins = this.penaltyMinsData.penaltyMins[0].value;
     },
     configureFaceoffs(faceoffsList) {
+      this.faceoffs = [];
+      this.selectedFaceoffs = null;
+      this.selectedFaceoffsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < faceoffsList.faceoffLeaders.length;  i++) {
         this.faceoffs.push({"place": (i+1), "name": (faceoffsList.faceoffLeaders[i].firstName.default+" "+faceoffsList.faceoffLeaders[i].lastName.default), "faceoffs": (faceoffsList.faceoffLeaders[i].value*100).toFixed(1)});
       }
@@ -741,6 +808,9 @@ export default {
       this.selectedFaceoffsInfo.faceoffs = (this.faceoffsData.faceoffLeaders[0].value*100).toFixed(1);
     },
     configureWins(winsList) {
+      this.wins = [];
+      this.selectedWins = null;
+      this.selectedWinsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < winsList.wins.length;  i++) {
         this.wins.push({"place": (i+1), "name": (winsList.wins[i].firstName.default+" "+winsList.wins[i].lastName.default), "wins": winsList.wins[i].value});
       }
@@ -751,7 +821,10 @@ export default {
       this.selectedWinsInfo.wins = this.winsData.wins[0].value;
     },
     configureShutouts(shutoutsList) {
-      if(this.selectedShutouts) {
+      this.shutouts = [];
+      this.selectedShutouts = null;
+      this.selectedShutoutsInfo = {picture: null, name: null, info: [], points: null};
+      if(shutoutsList.shutouts) {
         for(let i = 0; i < shutoutsList.shutouts.length;  i++) {
           this.shutouts.push({"place": (i+1), "name": (shutoutsList.shutouts[i].firstName.default+" "+shutoutsList.shutouts[i].lastName.default), "shutouts": shutoutsList.shutouts[i].value});
         }
@@ -763,6 +836,9 @@ export default {
       }
     },
     configureSavePctgs(savePctgsList) {
+      this.savePctgs = [];
+      this.selectedSavePctgs = null;
+      this.selectedSavePctgsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < savePctgsList.savePctg.length;  i++) {
         this.savePctgs.push({"place": (i+1), "name": (savePctgsList.savePctg[i].firstName.default+" "+savePctgsList.savePctg[i].lastName.default), "savePctgs": String((savePctgsList.savePctg[i].value).toFixed(3)).slice(1)});
       }
@@ -773,6 +849,9 @@ export default {
       this.selectedSavePctgsInfo.savePctgs = String((this.savePctgsData.savePctg[0].value).toFixed(3)).slice(1);
     },
     configureGoalsAgainstAverages(goalsAgainstAveragesList) {
+      this.goalsAgainstAverages = [];
+      this.selectedGoalsAgainstAverages = null;
+      this.selectedGoalsAgainstAveragesInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < goalsAgainstAveragesList.goalsAgainstAverage.length;  i++) {
         this.goalsAgainstAverages.push({"place": (i+1), "name": (goalsAgainstAveragesList.goalsAgainstAverage[i].firstName.default+" "+goalsAgainstAveragesList.goalsAgainstAverage[i].lastName.default), "goalsAgainstAverages": (goalsAgainstAveragesList.goalsAgainstAverage[i].value).toFixed(2)});
       }
@@ -953,6 +1032,42 @@ export default {
 </script>
 
 <style>
+.leaders-options {
+    display: flex;
+    justify-content: center;
+    border: solid;
+    border-width: thin;
+    border-color: #ffffff14;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.leaders-selector {
+    display: flex;
+    width: 125px !important;
+    justify-content: center;
+    background-color: #ffffff00;
+    color: white;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 2px 2px;
+    transition-duration: 0.3s;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.leaders-selector:hover {
+    background-color: var(--main-color);
+    color: black;
+}
+
+.leaders-selector-selected {
+    background-color: var(--main-color);
+    color: black;
+}
+
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns with equal width */

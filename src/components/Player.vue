@@ -1,7 +1,7 @@
 <template>
     <!-- <div><ProgressSpinner v-if="isLoading" /></div> -->
     <Settings></Settings>
-    <router-link :to="'/scores'" class="app-header">PuckIt</router-link>
+    <router-link :to="'/scores'" class="app-header">Puck</router-link>
     <!-- <AutoComplete v-model="searchPlayer" :suggestions="allSearchPlayers" field="label" placeholder="Search Players" :minLength="3" @complete="searchPlayerGo" /> -->
     <div v-if="allSearchPlayers.length>0">
         <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Select a Player" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
@@ -195,5 +195,12 @@ export default {
     overflow-y: auto;
     width: 100%;
     margin-left: -20px;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .options-dropdown{
+        margin-left: 7%;
+    }
 }
 </style>

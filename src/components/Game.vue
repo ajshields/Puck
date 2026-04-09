@@ -15,21 +15,21 @@
     </div>
 
     <div v-if="game.gameType">
-        <strong style="color:white">{{ dateDesc() }}</strong>
+        <strong class="date-formatting">{{ dateDesc() }}</strong>
         <!-- SCOREBOARD -->
         <div class="scoreboard">
             <button @click="goBack" class="back-button">&#9664;</button>
             <!-- Away Scoreboard -->
             <div style="display:flex">
-                <img :src="game.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-logo-game">
-                <div @click="goToTeam(game.awayTeam.abbrev)" class="scoreboard-layout">
-                    <strong>{{ game.awayTeam.placeName.default }}</strong>
-                    <strong style="font-weight:bold;font-size:large">{{ game.awayTeam.commonName.default }}</strong>
+                <img :src="game.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-logo-game away">
+                <div @click="goToTeam(game.awayTeam.abbrev)" class="scoreboard-layout away">
+                    <strong class="scoreboard-city-name">{{ game.awayTeam.placeName.default }}</strong>
+                    <strong class="scoreboard-team-name">{{ game.awayTeam.commonName.default }}</strong>
                     <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ game.awayTeam.record }}</strong>
-                    <strong v-if="game.awayTeam.sog" style="font-size:small">SOG: {{ game.awayTeam.sog }}</strong>
+                    <strong v-if="game.awayTeam.sog" class="scoreboard-team-sog">SOG: {{ game.awayTeam.sog }}</strong>
                 </div>
-                <strong v-if="game.situation && game.situation.awayTeam.situationDescriptions" class="game-powerplay-tag" style="margin-left:10px">PP</strong>
-                <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" style="font-size:65px;margin-left:130px">{{ game.awayTeam.score }}</strong>
+                <strong v-if="game.situation && game.situation.awayTeam.situationDescriptions" class="game-powerplay-tag away">PP</strong>
+                <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="away-team-score-layout">{{ game.awayTeam.score }}</strong>
             </div>
             <!-- Middle Scoreboard -->
             <div class="scoreboard-layout-middle">
@@ -39,22 +39,22 @@
                 </div>
                 <div v-else class="middle-scoreboard">
                     <strong v-if="(game.gameState=='LIVE' || game.gameState=='CRIT') && !game.clock.inIntermission" style="font-size:large">{{ game.clock.timeRemaining }}</strong>
-                    <strong v-if="(game.gameState=='LIVE' || game.gameState=='CRIT')">{{ getPeriodScoreboard(false, game.summary.linescore.byPeriod.length, game.clock.inIntermission) }}</strong>
+                    <strong v-if="(game.gameState=='LIVE' || game.gameState=='CRIT')">{{ getPeriodScoreboard(false, game.periodDescriptor.number, game?.clock?.inIntermission) }}</strong>
                     <strong v-if="game.gameState=='OFF' || game.gameState=='FINAL'" style="font-size:large">Final</strong>
                     <strong v-if="game.gameState=='OFF' || game.gameState=='FINAL'">{{ getPeriodScoreboard(true, game.periodDescriptor.number) }}</strong>
                 </div>
             </div>
             <!-- Home Scoreboard -->
             <div style="display:flex">
-                <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" style="font-size:65px;margin-right:130px">{{ game.homeTeam.score }}</strong>
-                <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="game-powerplay-tag" style="margin-right:10px">PP</strong>
-                <div @click="goToTeam(game.homeTeam.abbrev)" class="scoreboard-layout">
-                    <strong>{{ game.homeTeam.placeName.default }}</strong>
-                    <strong style="font-weight:bold;font-size:large">{{ game.homeTeam.commonName.default }}</strong>
+                <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="home-team-score-layout">{{ game.homeTeam.score }}</strong>
+                <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="game-powerplay-tag home">PP</strong>
+                <div @click="goToTeam(game.homeTeam.abbrev)" class="scoreboard-layout home">
+                    <strong class="scoreboard-city-name">{{ game.homeTeam.placeName.default }}</strong>
+                    <strong class="scoreboard-team-name">{{ game.homeTeam.commonName.default }}</strong>
                     <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ game.homeTeam.record }}</strong>
-                    <strong v-if="game.homeTeam.sog" style="font-size:small">SOG: {{ game.homeTeam.sog }}</strong>
+                    <strong v-if="game.homeTeam.sog" class="scoreboard-team-sog">SOG: {{ game.homeTeam.sog }}</strong>
                 </div>
-                <img :src="game.homeTeam.logo" alt="Home Team Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-logo-game">
+                <img :src="game.homeTeam.logo" alt="Home Team Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-logo-game home">
             </div>
         </div>
         <div style="margin-top:20px;"></div>
@@ -63,7 +63,7 @@
             <div class="game-left-side">
                 <!-- GAME PLAYS -->
                 <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT') && plays.length>0" style="margin-top:1rem">
-                    <h3 style="color:white">Last Play</h3>
+                    <h3 style="margin-top:-1rem;color:white">Last Play</h3>
                     <div class="last-play-box">
                         <div class="last-play">
                             <img v-if="plays[0].team" :src="plays[0].team" :alt="plays[0].team" style="padding-right:3%;width:50px"/>
@@ -111,12 +111,12 @@
                             </div>
                             <!-- <button @click="playHighlight(goal)" class="highlight-button">&#11208;</button> -->
                         </div>
-                        <div v-else v-for="attempt in game.summary.shootout" class="goal-box">
+                        <div v-else v-for="attempt in game.summary.shootout.events" class="goal-box">
                             <img :src="attempt.headshot" alt="Player Logo" class="player-logo">
                             <img :src="getPlayerTeamLogo(attempt.teamAbbrev)" alt="Player Team Logo" class="player-team-logo">
                             <div class="summary-players" style="width:100%">
                                 <div style="display:inline-flex;align-items:center">
-                                    <strong class="goal-text" style="width:30%">{{ getAbbrevName(attempt.firstName, attempt.lastName) }}<strong v-if="attempt.gameWinner" class="goal-text-amount"> (GW)</strong></strong>
+                                    <strong class="goal-text" style="width:30%">{{ getAbbrevName(attempt.firstName.default, attempt.lastName.default) }}<strong v-if="attempt.gameWinner" class="goal-text-amount"> (GW)</strong></strong>
                                     <img v-if="attempt.result=='goal'" src="@/assets/puck.svg" alt="Puck" class="penalty-shot-logo"/>
                                     <img v-else src="@/assets/mask.svg" alt="Mask" class="penalty-shot-logo"/>
                                 </div>
@@ -128,27 +128,27 @@
                 <!-- GOALIE COMPARISON STATS -->
                 <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="goalie-stats" style="margin-top:1rem">
                     <div class="team-leaders-header">
-                        <strong style="font-size:x-large;color: white">Goalie Comparison</strong>
+                        <strong class="team-leaders-header-text">Goalie Comparison</strong>
                         <!-- <strong style="font-size:small">Goalie Comparison</strong> -->
                         <div class="team-leaders-header-bar"></div>
                         <div class="team-leaders-logos">
-                            <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" style="width:80px;cursor:pointer">
-                            <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" style="width:80px;cursor:pointer">
+                            <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-leaders-logo-size">
+                            <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-leaders-logo-size">
                         </div>
                     </div>
                     <div class="goalie-stats-content">
                         <!-- goalies away side -->
                         <div v-if="gameStory.preGameMatchup" class="goalie-stats-content-away">
-                            <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.awayTeam" style="display:flex;padding:20px;margin-right:-15px;">
-                                <div v-if="goalie.record" class="goalie-stat-values" style="margin-left:-25px">
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong style="color:white">{{ goalie.record }}</strong><strong style="font-size:x-small">Record</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong style="color:white">{{ getSavePctg(goalie.savePctg) }}</strong><strong style="font-size:x-small">SV%</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong style="color:white">{{ goalie.gaa }}</strong><strong style="font-size:x-small">GAA</strong></div>
+                            <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.awayTeam" class="goalie-stats-content-away-section">
+                                <div v-if="goalie.record" class="goalie-stat-values away">
+                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
+                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
+                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
                                 </div>
                                 <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info" style="align-items:flex-end;padding-right:15px">
-                                    <strong style="font-size:small">{{ goalie.firstName.default }}</strong>
-                                    <strong style="font-size:larger;color:white">{{ goalie.lastName.default }}</strong>
-                                    <strong style="font-size:small">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
+                                    <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
+                                    <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
+                                    <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
                                 </div>
                                 <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
                             </div>
@@ -158,17 +158,17 @@
                         </div>
                         <!-- goalies home side -->
                         <div class="goalie-stats-content-home">
-                            <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.homeTeam" style="display:flex;padding:20px;margin-left:-15px;">
+                            <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.homeTeam" class="goalie-stats-content-away-section">
                                 <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
                                 <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info" style="align-items:flex-start;padding-left:15px">
-                                    <strong style="font-size:small">{{ goalie.firstName.default }}</strong>
-                                    <strong style="font-size:larger;color:white">{{ goalie.lastName.default }}</strong>
-                                    <strong style="font-size:small">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
+                                    <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
+                                    <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
+                                    <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
                                 </div>
-                                <div v-if="goalie.record" class="goalie-stat-values" style="margin-right:-25px">
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong style="color:white">{{ goalie.record }}</strong><strong style="font-size:x-small">Record</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong style="color:white">{{ getSavePctg(goalie.savePctg) }}</strong><strong style="font-size:x-small">SV%</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong style="color:white">{{ goalie.gaa }}</strong><strong style="font-size:x-small">GAA</strong></div>
+                                <div v-if="goalie.record" class="goalie-stat-values home">
+                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
+                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
+                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
                                 </div>
                             </div>
                         </div>
@@ -266,42 +266,42 @@
                 <!-- TEAM LEADERS -->
                 <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && game.matchup" class="team-leaders">
                     <div class="team-leaders-header">
-                        <strong style="font-size:x-large;color: white">Players to Watch</strong>
+                        <strong class="team-leaders-header-text">Players to Watch</strong>
                         <!-- <strong style="font-size:small">Last 5 Games</strong> -->
                         <div class="team-leaders-header-bar"></div>
                         <div class="team-leaders-logos">
-                            <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" style="width:80px;cursor:pointer">
-                            <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" style="width:80px;cursor:pointer">
+                            <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-leaders-logo-size">
+                            <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-leaders-logo-size">
                         </div>
                     </div>
                     <div v-for="category in gameStory.preGameMatchup.skatingLeaders.leaders" class="stat-leader">
-                        <div class="stat-leader-column" style="align-items:center;width:50px;padding-left:80px">
+                        <div class="stat-leader-column away">
                             <strong style="font-size:xxx-large;color:white">{{ category.awayLeader.value }}</strong>
                             <strong style="font-size:small;margin-top:-10px;">{{ getValueLetter(category.category, false) }}</strong>
                         </div>
                         <div class="stat-leader-middle">
-                            <div @click="goToPlayer(category.awayLeader.playerId)" class="stat-leader-player-info" style="align-items:flex-end;padding-right:25px">
-                                <strong style="font-size:small">{{ category.awayLeader.firstName.default }}</strong>
-                                <strong style="font-size:larger;color:white">{{ category.awayLeader.lastName.default }}</strong>
-                                <strong style="font-size:small">#{{ category.awayLeader.sweaterNumber }} - {{ category.awayLeader.positionCode }}</strong>
+                            <div @click="goToPlayer(category.awayLeader.playerId)" class="stat-leader-player-info away">
+                                <strong class="player-compare first-name">{{ category.awayLeader.firstName.default }}</strong>
+                                <strong class="player-compare last-name">{{ category.awayLeader.lastName.default }}</strong>
+                                <strong class="player-compare position-num">#{{ category.awayLeader.sweaterNumber }} - {{ category.awayLeader.positionCode }}</strong>
                             </div>
-                            <div class="stat-leader-column">
+                            <div class="stat-leader-column headshot">
                                 <img :src="category.awayLeader.headshot" @click="goToPlayer(category.awayLeader.playerId)" alt="Player Category Headshot" class="category-headshot">
                             </div>
                             <div class="stat-leader-column">
-                                <strong style="text-transform:uppercase;margin-top:-20px">{{ category.category }}</strong>
+                                <strong class="vertical-line-category">{{ category.category }}</strong>
                                 <div class="vertical-line-container"><div class="vertical-line"></div></div>
                             </div>
-                            <div class="stat-leader-column">
+                            <div class="stat-leader-column headshot">
                                 <img :src="category.homeLeader.headshot" @click="goToPlayer(category.homeLeader.playerId)" alt="Player Category Headshot" class="category-headshot">
                             </div>
-                            <div @click="goToPlayer(category.homeLeader.playerId)" class="stat-leader-player-info" style="align-items:flex-start;padding-left:25px">
-                                <strong style="font-size:small">{{ category.homeLeader.firstName.default }}</strong>
-                                <strong style="font-size:larger;color:white">{{ category.homeLeader.lastName.default }}</strong>
-                                <strong style="font-size:small">#{{ category.homeLeader.sweaterNumber }} - {{ category.homeLeader.positionCode }}</strong>
+                            <div @click="goToPlayer(category.homeLeader.playerId)" class="stat-leader-player-info home">
+                                <strong class="player-compare first-name">{{ category.homeLeader.firstName.default }}</strong>
+                                <strong class="player-compare last-name">{{ category.homeLeader.lastName.default }}</strong>
+                                <strong class="player-compare position-num">#{{ category.homeLeader.sweaterNumber }} - {{ category.homeLeader.positionCode }}</strong>
                             </div>
                         </div>
-                        <div class="stat-leader-column" style="align-items:center;width:50px;padding-right:80px">
+                        <div class="stat-leader-column home">
                             <strong style="font-size:xxx-large;color:white">{{ category.homeLeader.value }}</strong>
                             <strong style="font-size:small;margin-top:-10px;">{{ getValueLetter(category.category, false) }}</strong>
                         </div>
@@ -309,7 +309,7 @@
                 </div>
 
                 <!-- PLAYER STATS -->
-                <div v-if="game.gameState=='PRE' || game.gameState=='FUT'">
+                <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="players-stats-section">
                     <div class="player-stats-box" style="margin-top:1rem">
                         <h3 style="color:white">Player Stats</h3>
                         <div class="player-stats-teams">
@@ -317,7 +317,7 @@
                             <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerStats(game.homeTeam.id)">{{ game.homeTeam.commonName.default }}</v-button>
                         </div>
                     </div>
-                    <DataTable :value="playerStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer" tableStyle="width: 100%">
+                    <DataTable :value="playerStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer">
                         <Column field="sweaterNumber" header="#" style="width:3%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                         <Column field="name" header="Player" class="stats-name-header" style="width:5%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                         <Column field="position" header="POS" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
@@ -346,9 +346,9 @@
                                     <!-- <img src="@/assets/star.svg" alt="Star" style="margin-top:5px"/> -->
                                     <strong style="font-size:xx-large;color:var(--main-color)">&#128970;</strong>
                                 </div>
-                                <div style="margin-left:15px">
-                                    <img :src="player.headshot" @click="goToPlayer(player.playerId)" alt="Player Category Headshot" class="category-headshot">
-                                    <img :src="getPlayerTeamLogo(player.teamAbbrev)" alt="Player Team Logo" class="player-team-logo">
+                                <div class="three-stars-formatting">
+                                    <img :src="player.headshot" @click="goToPlayer(player.playerId)" alt="Player Category Headshot" class="category-headshot three-stars">
+                                    <img :src="getPlayerTeamLogo(player.teamAbbrev)" alt="Player Team Logo" class="player-team-logo three-stars">
                                 </div>
                                 <div class="three-stars-column">
                                     <strong v-if="player.name.default" @click="goToPlayer(player.playerId)" style="cursor:pointer">{{ player.name.default }}</strong>
@@ -358,7 +358,7 @@
                                 </div>
                             </div>
                             <div>
-                                <div v-if="player.position=='G'" style="display:flex;justify-content:space-between">
+                                <div v-if="player.position=='G'" class="three-stars-stats">
                                     <div class="three-stars-column">
                                         <strong style="color:white">{{ configureThreeStars(player, 'saveShotsAgainst', 'SA') }}</strong>
                                         <strong style="font-size:x-small">SA</strong>
@@ -376,7 +376,7 @@
                                         <strong style="font-size:x-small">SV%</strong>
                                     </div>
                                 </div>
-                                <div v-else style="display:flex;justify-content:space-between">
+                                <div v-else class="three-stars-stats">
                                     <div class="three-stars-column">
                                         <strong style="color:white">{{ configureThreeStars(player, 'goals') }}</strong>
                                         <strong style="font-size:x-small">G</strong>
@@ -405,7 +405,7 @@
                 </div>
 
                 <!-- PLAYER GAME STATS -->
-                <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'">
+                <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="players-stats-section">
                     <div class="player-stats-box" style="margin-top:1rem">
                         <h3 style="color:white">Stats</h3>
                         <div class="player-stats-teams">
@@ -413,7 +413,7 @@
                             <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerGameStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerGameStats('home')">{{ game.homeTeam.commonName.default }}</v-button>
                         </div>
                     </div>
-                    <DataTable :value="playerGameStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer" tableStyle="width: 100%">
+                    <DataTable :value="playerGameStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer">
                         <Column field="sweaterNumber" header="#" style="width:3%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                         <Column field="name" header="Player" class="stats-name-header" style="width:5%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                         <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
@@ -468,7 +468,7 @@
                 </div>
 
                 <!-- SEASON SERIES -->
-                <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (game.matchup.gameType==2)" style="margin-top:1rem">
+                <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (game.matchup.gameType==2) && (game.matchup.seasonSeries)" style="margin-top:1rem">
                     <div class="season-series">
                         <h3 style="margin-top:0rem;padding:5px;color:white">Season Series</h3>
                         <div class="season-series-games">
@@ -687,7 +687,7 @@
                         <strong class="overall-game-info-label">Location</strong>
                         <strong>{{ game.venue.default }}, {{ game.venueLocation.default }}</strong>
                     </div>
-                    <div v-if="game.matchup" class="overall-game-info-section">
+                    <!-- <div v-if="game.matchup" class="overall-game-info-section">
                         <strong class="overall-game-info-label">{{ game.awayTeam.abbrev }} Coach</strong>
                         <strong v-if="game.matchup.gameInfo">{{ game.matchup.gameInfo.awayTeam.headCoach.default }}</strong>
                         <strong v-if="game.summary">{{ game.summary.gameInfo.awayTeam.headCoach.default }}</strong>
@@ -696,7 +696,7 @@
                         <strong class="overall-game-info-label">{{ game.homeTeam.abbrev }} Coach</strong>
                         <strong v-if="game.matchup.gameInfo">{{ game.matchup.gameInfo.homeTeam.headCoach.default }}</strong>
                         <strong v-if="game.summary">{{ game.summary.gameInfo.homeTeam.headCoach.default }}</strong>
-                    </div>
+                    </div> -->
                     <!-- <div v-if="game.summary.referees" class="overall-game-info-section">
                         <strong class="overall-game-info-label">Referees</strong>
                         <strong v-for="(referee, index) in game.summary.gameInfo.referees" :key="index"><strong v-if="index!=0">, </strong>{{ referee.default }}</strong>
@@ -916,10 +916,10 @@ export default {
                         event = data.plays[i].details.secondaryReason ? `Stoppage - ${(data.plays[i].details.secondaryReason).replace(/-/g, ' ')}` : `Stoppage - ${(data.plays[i].details.reason).replace(/-/g, ' ')}`;
                         break;
                     case 'period-start':
-                        event = `Start of period ${data.plays[i].period}`
+                        event = `Start of period ${data.plays[i].periodDescriptor.number}`
                         break;
                     case 'period-end':
-                        event = `End of period ${data.plays[i].period}`
+                        event = `End of period ${data.plays[i].periodDescriptor.number}`
                         break;
                     case 'faceoff':
                         team = this.getPlayTeam(data.plays[i].details.eventOwnerTeamId, data);
@@ -1197,7 +1197,7 @@ export default {
                     case 'SV':
                         return goalie.saveShotsAgainst.split('/')[0];
                     case 'SV%':
-                        return goalie.savePctg;
+                        return Number(goalie.savePctg).toFixed(3);
                     case 'id':
                         return goalie.playerId;
                     default:
@@ -1273,7 +1273,7 @@ export default {
                         // Create a penalty object
                         const penaltyObj = {
                             team: penalty.teamAbbrev.default ? penalty.teamAbbrev.default : penalty.teamAbbrev,
-                            player: penalty.committedByPlayer,
+                            player: `${penalty.committedByPlayer.firstName.default} ${penalty.committedByPlayer.lastName.default}`,
                             penalty: `${formatPenaltyType(penalty.descKey)} - ${penalty.duration} minutes`,
                             time: penalty.timeInPeriod
                         };
@@ -1578,6 +1578,10 @@ export default {
     transform: translateY(-50%);
 }
 
+.date-formatting {
+    color: white;
+}
+
 .scoreboard {
     /* position: fixed; */
     top: 0;
@@ -1654,6 +1658,18 @@ export default {
     flex-direction: column;
 }
 
+.goalie-stats-content-away-section {
+    display: flex;
+    padding: 20px;
+    margin-right: -15px;
+}
+
+.goalie-stats-content-home-section {
+    display: flex;
+    padding: 20px;
+    margin-left: -15px;
+}
+
 .goalie-stats-content-home {
     width: 50%;
     display: flex;
@@ -1666,6 +1682,14 @@ export default {
     align-items: center;
     justify-content: space-around;
 }
+.goalie-stat-values.away {
+    margin-right:-25px;
+    margin-left: -40px;
+}
+.goalie-stat-values.home {
+    margin-left:-25px;
+    margin-right: -30px;
+}
 
 .goalie-stat-info {
     display: flex;
@@ -1674,6 +1698,16 @@ export default {
     align-self: center;
     cursor: pointer;
 }
+
+.goalie-compare.record{color:white}
+.goalie-compare.record-text{font-size:x-small}
+.goalie-compare.svg{color:white}
+.goalie-compare.svg-text{font-size:x-small}
+.goalie-compare.gaa{color:white}
+.goalie-compare.gaa-text{font-size:x-small}
+.player-compare.first-name{font-size:small}
+.player-compare.last-name{font-size:larger;color:white}
+.player-compare.position-num{font-size:small}
 
 .goalies-column {
     display: flex;
@@ -1699,6 +1733,11 @@ export default {
     margin: 20px;
 }
 
+.team-leaders-header-text {
+    font-size: x-large;
+    color: white;
+}
+
 .team-leaders-header-bar {
     border: solid;
     border-width: thin;
@@ -1712,6 +1751,11 @@ export default {
     justify-content: space-between;
 }
 
+.team-leaders-logo-size {
+    width: 80px;
+    cursor: pointer;
+}
+
 .stat-leader {
     display: flex;
     justify-content: space-between;
@@ -1722,6 +1766,16 @@ export default {
     display: flex;
     flex-direction: column;
 }
+.stat-leader-column.away {
+    align-items: center;
+    width: 50px;
+    padding-left: 80px;
+}
+.stat-leader-column.home {
+    align-items: center;
+    width: 50px;
+    padding-right: 80px;
+}
 
 .stat-leader-player-info {
     display: flex;
@@ -1730,10 +1784,22 @@ export default {
     align-self: center;
     cursor: pointer;
 }
+.stat-leader-player-info.away {
+    align-items:flex-end;
+    padding-right: 25px;
+}
+.stat-leader-player-info.home {
+    align-items:flex-start;
+    padding-left: 25px;
+}
 
 .stat-leader-middle {
     display: flex;
     flex-direction: row;
+}
+
+.players-stats-section .p-datatable-table {
+    width: 100%;
 }
 
 .player-stats-box {
@@ -1812,6 +1878,20 @@ export default {
     align-items: center;
 }
 
+.three-stars-formatting {
+    margin-left: 15px;
+}
+
+.three-stars-stats {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vertical-line-category {
+    text-transform: uppercase;
+    margin-top: -20px;
+}
+
 .vertical-line-container {
     display: flex;
     align-items: center;
@@ -1858,6 +1938,10 @@ export default {
     border-width: thin;
     border-radius: 50px;
 }
+.category-headshot.three-stars {
+    width: 60px;
+    height: 60px;
+}
 
 .player-team-logo {
     width: 40px;
@@ -1883,7 +1967,16 @@ export default {
     text-align: center;
 }
 
-.game-powerplay-tag {
+.scoreboard-team-name {
+    font-weight: bold;
+    font-size: large;
+}
+
+.scoreboard-team-sog {
+    font-size: small;
+}
+
+.game-powerplay-tag.away {
     margin-top: 17px;
     width: 35px;
     height: 100%;
@@ -1892,6 +1985,29 @@ export default {
     border-radius: 3px;
     font-size: smaller;
     text-align: center;
+    margin-left: 10px
+}
+
+.game-powerplay-tag.home {
+    margin-top: 17px;
+    width: 35px;
+    height: 100%;
+    background-color: var(--main-color);
+    /* color: black; */
+    border-radius: 3px;
+    font-size: smaller;
+    text-align: center;
+    margin-right: 10px
+}
+
+.away-team-score-layout {
+    font-size:65px;
+    margin-left:130px;
+}
+
+.home-team-score-layout {
+    font-size:65px;
+    margin-right:130px;
 }
 
 .middle-scoreboard {
@@ -2128,5 +2244,198 @@ export default {
 
 .overall-game-info-label {
     width:30%;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .away-team-score-layout {
+        display: flex;
+        margin-left: 5px;
+        margin-right: -5px;
+        font-size: 35px;
+        align-items: center;
+    }
+    .back-button {
+        left: 0px;
+    }
+    .category-headshot {
+        width: 60px;
+        height: 60px;
+    }
+    .category-headshot.three-stars {
+        width: 40px;
+        height: 40px;
+    }
+    .date-formatting {
+        margin-left: 10%;
+    }
+    .game-left-side {
+        width: 100%;
+    }
+    .game-right-side {
+        width: 100%;
+        margin-left: 0px;
+    }
+    .game-powerplay-tag.away {
+        margin-top: 0px;
+        width: 16px;
+        font-size: xx-small;
+        margin-left: 0px;
+    }
+    .game-powerplay-tag.home {
+        margin-top: 0px;
+        width: 16px;
+        font-size: xx-small;
+        margin-right: 0px;
+    }
+    .game-summary {
+        flex-direction: column;
+    }
+    .goalie-compare.record{font-size:x-small}
+    .goalie-compare.record-text{font-size:xx-small}
+    .goalie-compare.svg{font-size:x-small}
+    .goalie-compare.svg-text{font-size:xx-small}
+    .goalie-compare.gaa{font-size:x-small}
+    .goalie-compare.gaa-text{font-size:xx-small}
+    .player-compare.first-name{font-size:x-small}
+    .player-compare.last-name{font-size:small}
+    .player-compare.position-num{font-size:x-small}
+    .goalie-stats-content-away-section {
+        padding: 10px;
+        margin-right: 0px;
+        align-items: center;
+        height: 100px;
+    }
+    .goalie-stats-content-home-section {
+        padding: 10px;
+        margin-left: 0px;
+        align-items: center;
+        height: 100px;
+    }
+    .goalie-stat-values {
+        flex-direction: column;
+    }
+    .goalie-stat-values.away {
+        margin-right: -25px;
+        margin-left: -30px;
+    }
+    .home-team-score-layout {
+        display: flex;
+        margin-left: 10px;
+        margin-right: 0px;
+        font-size: 35px;
+        align-items: center;
+    }
+    .middle-scoreboard {
+        font-size: small;
+    }
+    .players-stats-section .p-datatable-table {
+        width: 165%;
+    }
+    .player-team-logo.three-stars {
+        width: 30px;
+        margin-left: -45px;
+        margin-top: 30px;
+    }
+    .scoreboard {
+        display: flex;
+        padding: 0px;
+        justify-content: center;
+    }
+    .scoreboard-city-name {
+        font-size: smaller;
+    }
+    .scoreboard-layout.away {
+        margin-left: -22%;
+    }
+    .scoreboard-layout.home {
+        margin-left: 15%;
+    }
+    .scoreboard-team-name {
+        font-weight: bold;
+        font-size: small;
+    }
+    .scoreboard-team-sog {
+        font-size: xx-small;
+    }
+    .stat-leader {
+        margin-top: 30px;
+    }
+    .stat-leader-column.away {
+        padding-left: 0px;
+    }
+    .stat-leader-column.home {
+        padding-right: 0px;
+    }
+    .stat-leader-column.headshot {
+        justify-content: center;
+    }
+    .stat-leader-player-info.away {
+        align-items:center;
+        padding-right: 0px;
+        width: 70px;
+    }
+    .stat-leader-player-info.home {
+        align-items:center;
+        padding-left: 0px;
+        width: 70px;
+    }
+    .team-leaders-header {
+        margin: 0px;
+    }
+    .team-leaders-header-bar {
+        margin-top: 2px;
+        margin-bottom: 0px;
+    }
+    .team-leaders-header-text {
+        font-size: small;
+        display: flex;
+        justify-content: center;
+    }
+    .team-leaders-logos {
+        justify-content: space-around;
+    }
+    .team-leaders-logo-size {
+        width: 66px;
+    }
+    .team-logo-game.away {
+        width: 85px;
+        height: 100px;
+        position: absolute;
+        left: -7px;
+        top: 5%;
+    }
+    .team-logo-game.home {
+        width: 85px;
+        height: 100px;
+        position: absolute;
+        right: -2px;
+        top: 5%;
+    }
+    .three-stars-box {
+        padding: 2px;
+    }
+    .three-stars-column {
+        font-size: xx-small;
+    }
+    .three-stars-formatting {
+        display: flex;
+        margin-left: 0px;
+        align-items: center;
+    }
+    .three-stars-stats {
+        justify-content: space-around;
+        width: 90%;
+    }
+    .vertical-line-category {
+        width: 30px;
+        display: flex;
+        justify-content: center;
+    }
+    .vertical-line-stars {
+        justify-content: flex-start;
+        margin-top: -97px;
+        margin-left: 113px;
+    }
 }
 </style>

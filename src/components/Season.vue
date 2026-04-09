@@ -1,8 +1,8 @@
 <template>
     <div><ProgressSpinner v-if="isLoading" /></div>
 
-    <div v-if="playerInfo" style="margin-top:2rem">
-        <strong style="padding-left:75px;font-size:large">{{ formatYears(playerInfo.seasonTotals[currentSeasonIndex].season) }}</strong>
+    <div v-if="playerInfo" class="player-season-section">
+        <strong class="player-season-year">{{ formatYears(playerInfo.seasonTotals[currentSeasonIndex].season) }}</strong>
 
         <div v-if="playerInfo.position!='G'" class="player-season-stats">
             <div class="player-season-stat"><strong>GP</strong><strong class="player-stat-value">{{ playerInfo.seasonTotals[currentSeasonIndex].gamesPlayed }}</strong></div>
@@ -39,9 +39,9 @@
             <div class="player-season-stat"><strong>A</strong><strong class="player-stat-value">{{ playerInfo.seasonTotals[currentSeasonIndex].assists }}</strong></div>
         </div>
 
+        <h3 class="game-log-header">Game Log</h3>
         <div v-if="playerInfo.position!='G'" class="game-log">
-            <h3>Game Log</h3>
-            <DataTable :value="gameLog" tableStyle="width: 100%">
+            <DataTable :value="gameLog">
                 <Column field="games" header="Games" style="width:15%;text-align:left;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
@@ -55,8 +55,7 @@
             </DataTable>
         </div>
         <div v-else class="game-log">
-            <h3>Game Log</h3>
-            <DataTable :value="gameLog" tableStyle="width: 100%">
+            <DataTable :value="gameLog">
                 <Column field="games" header="Games" style="width:15%;text-align:left;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="decision" header="W/L" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="goalsAgainst" header="GA" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
@@ -190,6 +189,10 @@ export default {
 </script>
 
 <style>
+.player-season-section {
+    margin-top: 1rem
+}
+
 .player-season-stats {
     display: flex;
     flex-wrap: wrap;
@@ -204,6 +207,11 @@ export default {
     padding: 10px;
 }
 
+.player-season-year {
+    padding-left: 11%;
+    font-size:large;
+}
+
 .player-stat-value {
     color: white;
     font-size: large;
@@ -213,5 +221,29 @@ export default {
     padding: 10px;
     width: 80%;
     margin-left: 10%;
+}
+
+.game-log-header {
+    margin-left: 10%;
+    padding-left: 10px;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .game-log {
+        width: 100%;
+        margin-left: 0%;
+        height: 250px;
+        overflow-y: scroll;
+    }
+    .game-log-header {
+        margin-left: 0%;
+    }
+    .player-season-stats .p-datatable-table {
+        width: 100%;
+    }
+    .player-season-year {
+        padding-left: 38%;
+    }
 }
 </style>

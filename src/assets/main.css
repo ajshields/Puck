@@ -25,6 +25,12 @@ a,
   }
 }
 
+@media (max-width: 640px) {
+  #app {
+    padding: 0.5rem;
+  }
+}
+
 :root {
   --link-color: #00F2FF;
   --main-color: #00F2FF;

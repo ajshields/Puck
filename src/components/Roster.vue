@@ -3,7 +3,7 @@
     <h3>Roster Stats</h3>
 
     <div class="roster-stats">
-        <DataTable :value="goalies" :sortField="'wins'" :sortOrder="-1" @row-click="goToPlayer" tableStyle="width: 100%">
+        <DataTable :value="goalies" :sortField="'wins'" :sortOrder="-1" @row-click="goToPlayer">
             <Column field="name" header="Goalie" sortable class="name-header" style="width:10%"></Column>
             <Column field="gamesPlayed" header="GP" sortable class="skaters-row"></Column>
             <Column field="gamesStarted" header="GS" sortable class="skaters-row"></Column>
@@ -24,7 +24,7 @@
         </DataTable>
     </div>
     <div class="roster-stats">
-        <DataTable :value="skaters" :sortField="'points'" :sortOrder="-1" @row-click="goToPlayer" tableStyle="width: 100%">
+        <DataTable :value="skaters" :sortField="'points'" :sortOrder="-1" @row-click="goToPlayer">
             <!--<Column>
                 <template #body="slotProps">
                   <img v-if="slotProps.data.headshot" :src="slotProps.data.headshot" :alt="headshot" style="width:50px"/>
@@ -196,6 +196,10 @@ export default {
     color: white;
 }
 
+.roster-stats .p-datatable-table {
+    width: 100%;
+}
+
 .skaters-row {
     width: 5%;
     height: 40px;
@@ -225,4 +229,11 @@ export default {
 /*.p-highlight {
      background-color: #01c58a94;
 } */
+
+ /* Mobile Device Styling */
+@media (max-width: 640px) {
+    .roster-stats .p-datatable-table {
+        width: 200%;
+    }
+}
 </style>

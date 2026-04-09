@@ -28,7 +28,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPointsInfo.points }}</strong>
           </div>
@@ -66,7 +66,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedGoalsInfo.goals }}</strong>
           </div>
@@ -104,7 +104,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedAssistsInfo.assists }}</strong>
           </div>
@@ -142,7 +142,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPlusMinusInfo.plusMinus }}</strong>
           </div>
@@ -180,7 +180,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPenaltyMinsInfo.penaltyMins }}</strong>
           </div>
@@ -218,7 +218,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedFaceoffsInfo.faceoffs }}%</strong>
           </div>
@@ -256,7 +256,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedWinsInfo.wins }}</strong>
           </div>
@@ -294,7 +294,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedShutoutsInfo.shutouts }}</strong>
           </div>
@@ -332,7 +332,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedSavePctgsInfo.savePctgs }}</strong>
           </div>
@@ -370,7 +370,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedGoalsAgainstAveragesInfo.goalsAgainstAverages }}</strong>
           </div>
@@ -467,6 +467,9 @@ export default {
     this.fetchGoalsAgainstAverages();
   },
   methods: {
+    isMobile() {
+      return window.innerWidth <= 640;
+    },
     //LEADERS METHODS
     async fetchPoints() {
       let statsType = 2;
@@ -1186,5 +1189,45 @@ tr:hover {
   border-width: thin;
   border-radius: 5px;
   border-color: #01c58a94;*/
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+  .custom-datatable .p-datatable-table {
+    width: 100%;
+    font-size: small;
+  }
+  .grid-container {
+    grid-template-columns: auto;
+  }
+  .grid-item {
+    flex-direction: column;
+  }
+  .left-section {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .player-picture {
+    max-width: 20%;
+  }
+  .right-section {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .stat-header {
+    font-size: larger;
+  }
+  .stat-leader-name {
+    font-size: medium;
+  }
+  .stat-leader-value {
+    font-size: larger;
+  }
 }
 </style>

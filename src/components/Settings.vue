@@ -49,11 +49,11 @@ export default {
                       icon: 'pi pi-fw pi-users',
                       command: () => this.navigateTo('/leaders/categories')
                     },
-                    {
+                    /*{
                       label: ' FANTASY',
                       icon: 'pi pi-fw pi-list',
                       command: () => this.navigateTo('/fantasy')
-                    },
+                    },*/
                     {
                       label: ' THEMES',
                       icon: 'pi pi-fw pi-palette',
@@ -145,6 +145,10 @@ export default {
   margin-left: 80%;
 }
 
+.settings-options .p-icon {
+  display: none;
+}
+
 .settings {
   cursor: pointer;
 }
@@ -180,5 +184,20 @@ export default {
     color: white;
     font-size: xxx-large;
     cursor: pointer;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+  .settings-options {
+    position: absolute;
+    top: 2%;
+    margin-left: 87%;
+  }
+  .p-submenu-list {
+    width: 500%;
+    position: absolute;
+    left: -93px;
+    z-index: 1;
+  }
 }
 </style>

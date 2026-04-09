@@ -373,9 +373,13 @@ export default {
     border-color: #dedede1c;
 }
 
-.powerplay-line, .penaltykill-line, .goalies-lines, .injuries-lines {
+.powerplay-line, .penaltykill-line, .goalies-lines {
     display: flex;
     justify-content: center;
+}
+
+.injuries-lines {
+    display: flex;
 }
 
 .player-spot {
@@ -388,5 +392,12 @@ export default {
 
 .player-jersey {
     width: 120px;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .player-spot {
+        width: 100%;
+    }
 }
 </style>

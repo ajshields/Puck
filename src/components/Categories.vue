@@ -6,7 +6,7 @@
       <v-button class="leaders-selector" :class="{ 'leaders-selector-selected': type === 'playoffs' }" @click="type=switchStatType('playoffs'), type='playoffs'">Playoffs</v-button>
   </div>
 
-    <div class="grid-container" style="margin-top: 20px">
+    <div v-if="this.points.length > 0" class="grid-container" style="margin-top: 20px">
       <!-- POINTS Leaders -->
       <div class="grid-item">
         <div class="left-section">
@@ -388,6 +388,9 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <strong>No Data Available</strong>
+    </div>
 </template>
 
 <script>
@@ -490,8 +493,8 @@ export default {
         this.pointsData = data;
         this.configurePoints(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchGoals() {
@@ -513,8 +516,8 @@ export default {
         this.goalsData = data;
         this.configureGoals(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchAssists() {
@@ -536,8 +539,8 @@ export default {
         this.assistsData = data;
         this.configureAssists(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchPlusMinus() {
@@ -559,8 +562,8 @@ export default {
         this.plusMinusData = data;
         this.configurePlusMinus(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchPenaltyMins() {
@@ -582,8 +585,8 @@ export default {
         this.penaltyMinsData = data;
         this.configurePenaltyMins(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchFaceoffs() {
@@ -605,8 +608,8 @@ export default {
         this.faceoffsData = data;
         this.configureFaceoffs(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchWins() {
@@ -628,8 +631,8 @@ export default {
         this.winsData = data;
         this.configureWins(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchShutouts() {
@@ -651,8 +654,8 @@ export default {
         this.shutoutsData = data;
         this.configureShutouts(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchSavePctgs() {
@@ -674,8 +677,8 @@ export default {
         this.savePctgsData = data;
         this.configureSavePctgs(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchGoalsAgainstAverages() {
@@ -698,8 +701,8 @@ export default {
         this.configureGoalsAgainstAverages(data);
         this.isLoading = false;
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     changeView(view) {

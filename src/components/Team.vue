@@ -4,7 +4,7 @@
     <!-- <div class="settings-options">
       <PanelMenu :model="settingsItems" class="settings" />
     </div> -->
-    <router-link :to="'/scores'" class="app-header">PuckIt</router-link>
+    <router-link :to="'/scores'" class="app-header">Puck</router-link>
     <div style="margin-top:10px">
         <Dropdown v-model="selectedTeam" :options="configureTeams" optionLabel="team" placeholder="Select Team" @change="teamChange" class="options-dropdown"/>
     </div>
@@ -16,7 +16,7 @@
         </div>
         <div class="team-info-team-middle">
             <img :src="teamInfo.teamLogo" alt="Team Logo" class="team-page-logo">
-            <strong style="font-size:xx-large;color:whitesmoke">{{ teamInfo.teamName.default }}</strong>
+            <strong class="team-info-name">{{ teamInfo.teamName.default }}</strong>
             <strong>{{ getRecord(teamInfo.wins, teamInfo.losses, teamInfo.otLosses) }}, {{ getPlacement(teamInfo) }}</strong>
         </div>
         <div class="team-info-team">
@@ -227,6 +227,11 @@ export default {
     align-items: center;
 }
 
+.team-info-name {
+    font-size: xx-large;
+    color: whitesmoke;
+}
+
 .team-info-team-middle {
     display: flex;
     flex-direction: column;
@@ -236,5 +241,22 @@ export default {
 
 .team-page-logo {
     width: 200px
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .team-header-team {
+        padding-top: 1rem;
+    }
+    .team-info-team-middle {
+        width: 44%;
+    }
+    .team-info-name {
+        font-size: medium;
+    }
+    .team-page-logo {
+        width: 100px
+    }
+    
 }
 </style>

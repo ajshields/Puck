@@ -300,21 +300,21 @@
     <div class="bracket-logo-section"><img :src="bracket.bracketLogo" alt="PLAYOFFS" class="bracket-logo"></div>
     <div class="bracket-grid">
       <!-- Right cascade -->
-      <strong class="series-header" style="grid-column: 41 / span 6; grid-row: 1">R1</strong>
+      <strong class="series-header mobile-er1">R1</strong>
       <div v-if="bracket.series[0].topSeedTeam" class="series series1">
         <div class="series-team" :class="{'series-team-loss': bracket.series[0].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[0].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[0].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[0].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[0].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[0].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[0].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[0].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[0].topSeedWins==4}">
           <img :src="bracket.series[0].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[0].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[0].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[0].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[0].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[0].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[0].bottomSeedWins }}</strong>
         </div>
@@ -323,16 +323,16 @@
         <div class="series-team" :class="{'series-team-loss': bracket.series[1].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[1].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[1].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[1].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[1].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[1].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[1].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[1].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[1].topSeedWins==4}">
           <img :src="bracket.series[1].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[1].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[1].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[1].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[1].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[1].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[1].bottomSeedWins }}</strong>
         </div>
@@ -341,16 +341,16 @@
         <div class="series-team" :class="{'series-team-loss': bracket.series[2].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[2].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[2].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[2].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[2].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[2].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[2].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[2].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[2].topSeedWins==4}">
           <img :src="bracket.series[2].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[2].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[2].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[2].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[2].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[2].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[2].bottomSeedWins }}</strong>
         </div>
@@ -359,22 +359,22 @@
         <div class="series-team" :class="{'series-team-loss': bracket.series[3].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[3].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[3].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[3].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[3].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[3].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[3].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[3].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[3].topSeedWins==4}">
           <img :src="bracket.series[3].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[3].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[3].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[3].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[3].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[3].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[3].bottomSeedWins }}</strong>
         </div>
       </div>
-      <strong class="series-header" style="grid-column: 41 / span 6; grid-row: 24">R1</strong>
-      <strong class="series-header" style="grid-column: 33 / span 6; grid-row: 4">R2</strong>
+      <strong v-if="!isMobile()" class="series-header" style="grid-column: 41 / span 6; grid-row: 24">R1</strong>
+      <strong class="series-header mobile-er2">R2</strong>
       <div v-if="bracket.series[8].topSeedTeam" class="series series9">
         <div class="series-team" :class="{'series-team-loss': bracket.series[8].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[8].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[8].bottomSeedWins==4}"/>
@@ -399,8 +399,8 @@
           <strong class="series-team-wins">{{ bracket.series[9].bottomSeedWins }}</strong>
         </div>
       </div>
-      <strong class="series-header" style="grid-column: 33 / span 6; grid-row: 21">R2</strong>
-      <strong class="series-header" style="grid-column: 28 / span 6; grid-row: 10">ECF</strong>
+      <strong v-if="!isMobile()" class="series-header" style="grid-column: 33 / span 6; grid-row: 21">R2</strong>
+      <strong class="series-header mobile-ecf">ECF</strong>
       <div v-if="bracket.series[12].topSeedTeam" class="series series13">
         <div class="series-team" :class="{'series-team-loss': bracket.series[12].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[12].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[12].bottomSeedWins==4}"/>
@@ -419,7 +419,7 @@
       
 
       <!-- Center -->
-      <strong v-if="bracket.series[14].topSeedTeam" class="series-header" style="grid-column: 21 / span 6; grid-row: 8">SCF</strong>
+      <strong v-if="bracket.series[14].topSeedTeam" class="series-header mobile-scf">SCF</strong>
       <div v-if="bracket.series[14].topSeedTeam" class="series stanley-cup-series">
         <div class="series-team" :class="{'series-team-loss': bracket.series[14].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[14].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[14].bottomSeedWins==4}"/>
@@ -437,21 +437,21 @@
       </div>
 
       <!-- Left cascade -->
-      <strong class="series-header" style="grid-column: 1 / span 6; grid-row: 1">R1</strong>
+      <strong class="series-header mobile-wr1">R1</strong>
       <div v-if="bracket.series[4].topSeedTeam" class="series series5">
         <div class="series-team" :class="{'series-team-loss': bracket.series[4].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[4].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[4].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[4].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[4].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[4].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[4].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[4].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[4].topSeedWins==4}">
           <img :src="bracket.series[4].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[4].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[4].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[4].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[4].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[4].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[4].bottomSeedWins }}</strong>
         </div>
@@ -460,16 +460,16 @@
         <div class="series-team" :class="{'series-team-loss': bracket.series[5].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[5].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[5].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[5].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[5].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[5].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[5].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[5].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[5].topSeedWins==4}">
           <img :src="bracket.series[5].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[5].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[5].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[5].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[5].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[5].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[5].bottomSeedWins }}</strong>
         </div>
@@ -478,16 +478,16 @@
         <div class="series-team" :class="{'series-team-loss': bracket.series[6].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[6].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[6].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[6].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[6].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[6].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[6].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[6].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[6].topSeedWins==4}">
           <img :src="bracket.series[6].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[6].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[6].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[6].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[6].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[6].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[6].bottomSeedWins }}</strong>
         </div>
@@ -496,22 +496,22 @@
         <div class="series-team" :class="{'series-team-loss': bracket.series[7].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[7].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[7].bottomSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[7].topSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[7].topSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[7].topSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[7].topSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[7].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[7].topSeedWins==4}">
           <img :src="bracket.series[7].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[7].topSeedWins==4}"/>
           <div class="series-team-info">
-            <strong style="font-size:large;font-weight:bold">{{ bracket.series[7].bottomSeedTeam.abbrev }}</strong>
-            <strong style="font-size:small">({{ bracket.series[7].bottomSeedRankAbbrev }})</strong>
+            <strong class="playoffs-team-name">{{ bracket.series[7].bottomSeedTeam.abbrev }}</strong>
+            <strong class="playoffs-team-seed">({{ bracket.series[7].bottomSeedRankAbbrev }})</strong>
           </div>
           <strong class="series-team-wins">{{ bracket.series[7].bottomSeedWins }}</strong>
         </div>
       </div>
-      <strong class="series-header" style="grid-column: 1 / span 6; grid-row: 24">R1</strong>
-      <strong class="series-header" style="grid-column: 9 / span 6; grid-row: 4">R2</strong>
+      <strong v-if="!isMobile()" class="series-header" style="grid-column: 1 / span 6; grid-row: 24">R1</strong>
+      <strong class="series-header mobile-wr2">R2</strong>
       <div v-if="bracket.series[10].topSeedTeam" class="series series11">
         <div class="series-team" :class="{'series-team-loss': bracket.series[10].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[10].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[10].bottomSeedWins==4}"/>
@@ -536,8 +536,8 @@
           <strong class="series-team-wins">{{ bracket.series[11].bottomSeedWins }}</strong>
         </div>
       </div>
-      <strong class="series-header" style="grid-column: 9 / span 6; grid-row: 21">R2</strong>
-      <strong class="series-header" style="grid-column: 14 / span 6; grid-row: 10">WCF</strong>
+      <strong v-if="!isMobile()" class="series-header" style="grid-column: 9 / span 6; grid-row: 21">R2</strong>
+      <strong class="series-header mobile-wcf">WCF</strong>
       <div v-if="bracket.series[12].topSeedTeam" class="series series14">
         <div class="series-team" :class="{'series-team-loss': bracket.series[13].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
           <img :src="bracket.series[13].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[13].bottomSeedWins==4}"/>
@@ -597,6 +597,9 @@ export default {
     this.fetchBracket();
   },
   methods: {
+    isMobile() {
+      return window.innerWidth <= 640;
+    },
     async fetchSchedule() {
       try {
         this.isLoading = true;
@@ -931,6 +934,15 @@ tr {
   justify-content: center;
 }
 
+.playoffs-team-name {
+  font-size: large;
+  font-weight: bold;
+}
+
+.playoffs-team-seed {
+  font-size: small;
+}
+
 /* East (right) side cascade */
 .series1 {grid-column: 41 / span 6; grid-row: 2 / span 4}
 .series2 {grid-column: 41 / span 6; grid-row: 8 / span 4}
@@ -957,6 +969,16 @@ tr {
 .series12 {grid-column: 9 / span 6; grid-row: 17 / span 4}
 .series14 {grid-column: 14 / span 6; grid-row: 11 / span 4}
 
+.series-header.mobile-er1 {grid-column: 41 / span 6; grid-row: 1}
+.series-header.mobile-er2 {grid-column: 33 / span 6; grid-row: 4}
+.series-header.mobile-ecf {grid-column: 28 / span 6; grid-row: 10}
+/* Stanley Cup Finals Header */
+.series-header.mobile-scf {grid-column: 21 / span 6; grid-row: 8}
+/* West Series Headers */
+.series-header.mobile-wr1 {grid-column: 1 / span 6; grid-row: 1}
+.series-header.mobile-wr2 {grid-column: 9 / span 6; grid-row: 4}
+.series-header.mobile-wcf {grid-column: 14 / span 6; grid-row: 10}
+
 /*.p-row-even {
   border-bottom-style: solid;
   border-color: #0066ff;
@@ -966,4 +988,69 @@ tr {
   border-bottom-style: solid;
   border-color: #ff1500;
 }*/
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+  .bracket-grid {
+    height: 630px;
+  }
+  .bracket-logo {
+    width: 100%;
+  }
+  .header {
+    font-size: small;
+    margin-bottom: 0px;
+  }
+  .p-datatable-table {
+    width: 200%;
+  }
+  .playoffs-team-name {
+    font-size: small;
+  }
+  .playoffs-team-seed {
+    font-size: xx-small;
+  }
+  .series-team-info {
+    width: 50%;
+  }
+  .series-team-logo {
+    width: 35%;
+  }
+  .series-team-wins {
+    font-size: x-large;
+  }
+  /* East (right) side cascade */
+  .series1 {grid-column: 28 / span 10; grid-row: 2 / span 3}
+  .series2 {grid-column: 28 / span 10; grid-row: 5 / span 3}
+  .series3 {grid-column: 28 / span 10; grid-row: 13 / span 3}
+  .series4 {grid-column: 28 / span 10; grid-row: 16 / span 3}
+  .series9 {grid-column: 20 / span 8; grid-row: 3 / span 4}
+  .series10 {grid-column: 20 / span 8; grid-row: 14 / span 4}
+  .series13 {grid-column: 26 / span 11; grid-row: 9 / span 4}
+  /* Center box */
+  .stanley-cup-series {grid-column: 13 / span 13; grid-row: 7 / span 4}
+  .stanley-cup {
+    grid-column: 15 / span 9;
+    grid-row: 8 / span 6;
+    background: #181818;
+  }
+  /* West (left) side cascade (mirrored) */
+  .series5  {grid-column: 1 / span 10; grid-row: 2 / span 3}
+  .series6  {grid-column: 1 / span 10; grid-row: 5 / span 3}
+  .series7 {grid-column: 1 / span 10; grid-row: 13 / span 3}
+  .series8 {grid-column: 1 / span 10; grid-row: 16 / span 3}
+  .series11 {grid-column: 11 / span 8; grid-row: 3 / span 4}
+  .series12 {grid-column: 11 / span 8; grid-row: 14 / span 4}
+  .series14 {grid-column: 2 / span 11; grid-row: 9 / span 4}
+  /* East Series Headers */
+  .series-header.mobile-er1 {grid-column: 30 / span 6; grid-row: 1}
+  .series-header.mobile-er2 {grid-column: 21 / span 6; grid-row: 2}
+  .series-header.mobile-ecf {grid-column: 29 / span 5; grid-row: 8}
+  /* Stanley Cup Finals Header */
+  .series-header.mobile-scf {grid-column: 17 / span 5; grid-row: 6}
+  /* West Series Headers */
+  .series-header.mobile-wr1 {grid-column: 3 / span 6; grid-row: 1}
+  .series-header.mobile-wr2 {grid-column: 12 / span 6; grid-row: 2}
+  .series-header.mobile-wcf {grid-column: 5 / span 5; grid-row: 8}
+}
 </style>

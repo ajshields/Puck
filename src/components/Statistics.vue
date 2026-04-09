@@ -1,14 +1,14 @@
 <template>
   <div><ProgressSpinner v-if="isLoading" /></div>
-    <div>
+    <div class="overall-stats-table">
         <div class="statistics-table-options">
             <div class="years-options">
-                <Dropdown v-model="startYear" :options="years" optionLabel="label" placeholder="2023-24" @change="yearStartChange" class="options-dropdown"/>
-                <Dropdown v-model="endYear" :options="years" optionLabel="label" placeholder="2023-24" @change="yearEndChange" class="options-dropdown" style="padding-left:10px"/>
+                <Dropdown v-model="startYear" :options="years" optionLabel="label" placeholder="2023-24" @change="yearStartChange" class="overall-stats-options-dropdown"/>
+                <Dropdown v-model="endYear" :options="years" optionLabel="label" placeholder="2023-24" @change="yearEndChange" class="overall-stats-options-dropdown" style="padding-left:10px"/>
             </div>
-            <Dropdown v-model="selectedFranchise" :options="franchises" optionLabel="fullName" placeholder="Franchise" @change="optionChange" class="options-dropdown"/>
-            <Dropdown v-model="selectedPosition" :options="positions" optionLabel="type" placeholder="Position" @change="optionChange" class="options-dropdown"/>
-            <Dropdown v-model="selectedExperience" :options="experience" optionLabel="type" placeholder="Experience" @change="optionChange" class="options-dropdown"/>
+            <Dropdown v-model="selectedFranchise" :options="franchises" optionLabel="fullName" placeholder="Franchise" @change="optionChange" class="overall-stats-options-dropdown"/>
+            <Dropdown v-model="selectedPosition" :options="positions" optionLabel="type" placeholder="Position" @change="optionChange" class="overall-stats-options-dropdown"/>
+            <Dropdown v-model="selectedExperience" :options="experience" optionLabel="type" placeholder="Experience" @change="optionChange" class="overall-stats-options-dropdown"/>
         </div>
         <div>
           <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer">
@@ -321,7 +321,7 @@ export default {
     padding-right: 30px;
 }
 
-.options-dropdown {
+.overall-stats-options-dropdown {
     width: 200px; /* Adjust width as needed */
 }
 
@@ -367,5 +367,19 @@ export default {
 
 .p-inputtext {
     cursor: pointer;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .overall-stats-table .p-datatable-table {
+        width: 260%;
+    }
+    .overall-stats-table .p-dropdown-trigger {
+        width: 90%;
+    }
+    .years-options {
+        width: 85%;
+        margin-left: 30px;
+    }
 }
 </style>

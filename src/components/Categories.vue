@@ -6,7 +6,7 @@
       <v-button class="leaders-selector" :class="{ 'leaders-selector-selected': type === 'playoffs' }" @click="type=switchStatType('playoffs'), type='playoffs'">Playoffs</v-button>
   </div>
 
-    <div class="grid-container" style="margin-top: 20px">
+    <div v-if="this.points.length > 0" class="grid-container" style="margin-top: 20px">
       <!-- POINTS Leaders -->
       <div class="grid-item">
         <div class="left-section">
@@ -28,7 +28,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPointsInfo.points }}</strong>
           </div>
@@ -66,7 +66,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedGoalsInfo.goals }}</strong>
           </div>
@@ -104,7 +104,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedAssistsInfo.assists }}</strong>
           </div>
@@ -142,7 +142,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPlusMinusInfo.plusMinus }}</strong>
           </div>
@@ -180,7 +180,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPenaltyMinsInfo.penaltyMins }}</strong>
           </div>
@@ -218,7 +218,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedFaceoffsInfo.faceoffs }}%</strong>
           </div>
@@ -256,7 +256,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedWinsInfo.wins }}</strong>
           </div>
@@ -294,7 +294,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedShutoutsInfo.shutouts }}</strong>
           </div>
@@ -332,7 +332,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedSavePctgsInfo.savePctgs }}</strong>
           </div>
@@ -370,7 +370,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedGoalsAgainstAveragesInfo.goalsAgainstAverages }}</strong>
           </div>
@@ -387,6 +387,9 @@
           </table>
         </div>
       </div>
+    </div>
+    <div v-else>
+      <strong>No Data Available</strong>
     </div>
 </template>
 
@@ -467,6 +470,9 @@ export default {
     this.fetchGoalsAgainstAverages();
   },
   methods: {
+    isMobile() {
+      return window.innerWidth <= 640;
+    },
     //LEADERS METHODS
     async fetchPoints() {
       let statsType = 2;
@@ -487,8 +493,8 @@ export default {
         this.pointsData = data;
         this.configurePoints(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchGoals() {
@@ -510,8 +516,8 @@ export default {
         this.goalsData = data;
         this.configureGoals(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchAssists() {
@@ -533,8 +539,8 @@ export default {
         this.assistsData = data;
         this.configureAssists(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchPlusMinus() {
@@ -556,8 +562,8 @@ export default {
         this.plusMinusData = data;
         this.configurePlusMinus(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchPenaltyMins() {
@@ -579,8 +585,8 @@ export default {
         this.penaltyMinsData = data;
         this.configurePenaltyMins(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchFaceoffs() {
@@ -602,8 +608,8 @@ export default {
         this.faceoffsData = data;
         this.configureFaceoffs(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchWins() {
@@ -625,8 +631,8 @@ export default {
         this.winsData = data;
         this.configureWins(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchShutouts() {
@@ -648,8 +654,8 @@ export default {
         this.shutoutsData = data;
         this.configureShutouts(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchSavePctgs() {
@@ -671,8 +677,8 @@ export default {
         this.savePctgsData = data;
         this.configureSavePctgs(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     async fetchGoalsAgainstAverages() {
@@ -695,8 +701,8 @@ export default {
         this.configureGoalsAgainstAverages(data);
         this.isLoading = false;
       } catch (error) {
-        console.error('Error fetching teams:', error);
-        alert('Error fetching teams. See console for details.');
+        //console.error('Error fetching teams:', error);
+        //alert('Error fetching teams. See console for details.');
       }
     },
     changeView(view) {
@@ -1186,5 +1192,45 @@ tr:hover {
   border-width: thin;
   border-radius: 5px;
   border-color: #01c58a94;*/
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+  .custom-datatable .p-datatable-table {
+    width: 100%;
+    font-size: small;
+  }
+  .grid-container {
+    grid-template-columns: auto;
+  }
+  .grid-item {
+    flex-direction: column;
+  }
+  .left-section {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .player-picture {
+    max-width: 20%;
+  }
+  .right-section {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+  .stat-header {
+    font-size: larger;
+  }
+  .stat-leader-name {
+    font-size: medium;
+  }
+  .stat-leader-value {
+    font-size: larger;
+  }
 }
 </style>

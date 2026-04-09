@@ -2,12 +2,12 @@
   <Settings></Settings>
     <div class="layout-container">
         <header class="layout-header">
-            <router-link :to="'/scores'" class="app-header">PuckIt</router-link>
+            <router-link :to="'/scores'" class="app-header">Puck</router-link>
             <nav class="app-nav">
                 <router-link to="/scores">SCORES</router-link>
                 <router-link to="/standings">STANDINGS</router-link>
                 <router-link to="/leaders/categories">LEADERS</router-link>
-                <router-link to="/fantasy">FANTASY</router-link>
+                <!-- <router-link to="/fantasy">FANTASY</router-link> -->
             </nav>
         </header>
         <router-view></router-view>
@@ -30,12 +30,6 @@ export default {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
- /* display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-    background-color: #333;
-    color: #fff;*/
 }
 
 .layout-header {
@@ -72,5 +66,17 @@ export default {
 
 .nav-link:hover {
   text-decoration: underline; /* Add an underline on hover if desired */
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+  .layout-container {
+    max-width: none;
+    margin: 0px;
+    padding: 0px;
+  }
+  .layout-header {
+    margin-bottom: 5px;
+  }
 }
 </style>

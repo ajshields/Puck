@@ -2,7 +2,7 @@
     <div><ProgressSpinner v-if="isLoading" /></div>
 
     <!-- Month and Year Display with navigation buttons -->
-    <div class="calendar-header">
+    <div v-if="(!isMobile()) || (isMobile && !gameClicked)" class="calendar-header">
         <button @click="prevMonth">&lt;</button>
         <span style="font-size:x-large;color:#ccc">{{ currentMonthAndYear() }}</span>
         <button @click="nextMonth">&gt;</button>
@@ -10,12 +10,12 @@
     <div class="schedule-section">
         <div class="calendar">
             <!-- Days of the Week -->
-            <div class="weekdays">
+            <div v-if="(!isMobile()) || (isMobile && !gameClicked)" class="weekdays">
                 <div v-for="day in daysOfWeek()" :key="day">{{ day }}</div>
             </div>
 
             <!-- Calendar Days -->
-            <div class="calendar-days">
+            <div v-if="!isMobile()" class="calendar-days">
                 <div v-for="week in weeks" :key="week" style="display:flex;justify-content:space-between">
                     <div v-for="(day, index) in week" :key="index" @click="openGamePopup(day, false)" :class="{ 'no-game-style': checkTeamWin(day)=='none', 'win-style': checkTeamWin(day)=='win', 'lose-style': checkTeamWin(day)=='loss' }" class="calendar-day">
                         <!--MAKE SURE YOU ADD A checkTeamWin VALUE FOR PRESEASON TOO-->
@@ -24,14 +24,14 @@
                             <div v-for="game in getGamesForDay(day)" :key="game.id" class="game-details">
                                 <div class="game-details-row">
                                     <div class="game-details-team">
-                                        <img :src="game.awayTeam.logo" alt="Away Team Logo" style="width:35px">
+                                        <img :src="game.awayTeam.logo" alt="Away Team Logo" class="calendar-team-logo">
                                         <strong>{{ game.awayTeam.abbrev }}</strong>
                                     </div>
                                     <strong>{{ game.awayTeam.score }}</strong>
                                 </div>
                                 <div class="game-details-row">
                                     <div class="game-details-team">
-                                        <img :src="game.homeTeam.logo" alt="Home Team Logo" style="width:35px">
+                                        <img :src="game.homeTeam.logo" alt="Home Team Logo" class="calendar-team-logo">
                                         <strong>{{ game.homeTeam.abbrev }}</strong>
                                     </div>
                                     <strong>{{ game.homeTeam.score }}</strong>
@@ -49,10 +49,31 @@
                     </div>
                 </div>
             </div>
+            <div v-if="isMobile() && !gameClicked">
+                <div v-for="week in weeks" :key="week" style="display:flex;justify-content:space-between">
+                    <div v-for="(day, index) in week" :key="index" @click="openGamePopup(day, false)" :class="{ 'no-game-style': checkTeamWin(day)=='none', 'win-style': checkTeamWin(day)=='win', 'lose-style': checkTeamWin(day)=='loss' }" class="calendar-day">
+                        <template v-if="day !== ''">
+                            <strong style="color:white;width:15%">{{ day }}</strong>
+                            <div v-for="game in getGamesForDay(day)" :key="game.id" class="game-details">
+                                <div v-if="!(this.id == game.awayTeam.abbrev)" class="game-details-row">
+                                    <div class="game-details-team">
+                                        <img :src="game.awayTeam.logo" alt="Away Team Logo" class="calendar-team-logo">
+                                    </div>
+                                </div>
+                                <div v-if="!(this.id == game.homeTeam.abbrev)" class="game-details-row">
+                                    <div class="game-details-team">
+                                        <img :src="game.homeTeam.logo" alt="Home Team Logo" class="calendar-team-logo">
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Scrolling Schedule -->
-        <div v-if="!gameClicked" class="scroll-calendar" ref="scrollPanel">
+        <div v-if="!isMobile() && !gameClicked" class="scroll-calendar" ref="scrollPanel">
             <div v-for="game in schedule" :key="game.id" @click="openGamePopup(game, true)" class="scroll-game-details">
                 <div class="scroll-game-date">
                     <strong style="color:white;font-size:small">{{ getDate(game, 'date') }}</strong>
@@ -79,6 +100,7 @@
                         <img :src="gameClickedInfo.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(gameClickedInfo.awayTeam.abbrev)" style="width:100px;cursor:pointer">
                         <strong style="color:white">{{ gameClickedInfo.awayTeam.commonName.default }}</strong>
                         <strong v-if="gameClickedInfo.gameState=='OFF' || gameClickedInfo.gameState=='FINAL'" style="font-size:x-small">SOG: {{ gameClickedInfo.awayTeam.sog }}</strong>
+                        <strong v-if="gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT'" style="font-size:x-small">{{ gameClickedInfo.awayTeam.record }}</strong>
                     </div>
                     <strong style="font-size:xx-large;color:white;height:75px">{{ gameClickedInfo.awayTeam.score }}</strong>
                 </div>
@@ -88,6 +110,7 @@
                         <img :src="gameClickedInfo.homeTeam.logo" alt="Home Team Logo" @click="goToTeam(gameClickedInfo.homeTeam.abbrev)" style="width:100px;cursor:pointer">
                         <strong style="color:white">{{ gameClickedInfo.homeTeam.commonName.default }}</strong>
                         <strong v-if="gameClickedInfo.gameState=='OFF' || gameClickedInfo.gameState=='FINAL'" style="font-size:x-small">SOG: {{ gameClickedInfo.homeTeam.sog }}</strong>
+                        <strong v-if="gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT'" style="font-size:x-small">{{ gameClickedInfo.homeTeam.record }}</strong>
                     </div>
                 </div>
             </div>
@@ -166,7 +189,7 @@
                 </div>
             </div>
             <!-- SEASON SERIES -->
-            <div v-if="gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT'">
+            <div v-if="(gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT') && gameClickedInfo.matchup.seasonSeries">
                 <strong style="padding:5px">Season Series</strong>
                 <div class="season-series-games">
                     <div v-for="(seriesGame, index) in gameClickedInfo.matchup.seasonSeries" :key="index" @click="openGame(seriesGame)" class="season-series-game">
@@ -200,7 +223,7 @@
                 </div>
             </div>
             <!-- TEAM STATS -->
-            <div v-if="gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT'" class="team-stats">
+            <div v-if="(gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT') && gameClickedInfo.matchup.teamSeasonStats" class="team-stats">
                 <div class="popup-game-stat" style="margin-bottom:5px">
                     <div class="away-game-stat"><img :src="gameClickedInfo.awayTeam.logo" alt="Team Stats Logo" style="width: 30px"><strong style="color:white">{{ gameClickedInfo.awayTeam.abbrev }}</strong></div>
                     <strong style="color:white">Team Stats</strong>
@@ -208,48 +231,48 @@
                 </div>
                 <!-- pp% category -->
                 <div class="popup-game-stat">
-                    <div class="away-game-stat"><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.ppPctg, 1) }}%</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.awayTeam.ppPctgRank) }})</strong></div>
+                    <div class="away-game-stat"><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.ppPctg, 1) }}%</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.ppPctgRank) }})</strong></div>
                     <strong>Power Play %</strong>
-                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.homeTeam.ppPctgRank) }})</strong><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats.homeTeam.ppPctg, 1) }}%</strong></div>
+                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.ppPctgRank) }})</strong><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.ppPctg, 1) }}%</strong></div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.ppPctg, gameClickedInfo.matchup.teamSeasonStats.homeTeam.ppPctg) + '%' }"></div>
+                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.ppPctg, gameClickedInfo.matchup.teamSeasonStats?.homeTeam.ppPctg) + '%' }"></div>
                 </div>
                 <!-- pk% category -->
                 <div class="popup-game-stat">
-                    <div class="away-game-stat"><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.pkPctg, 1) }}%</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.awayTeam.pkPctgRank) }})</strong></div>
+                    <div class="away-game-stat"><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.pkPctg, 1) }}%</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.pkPctgRank) }})</strong></div>
                     <strong>Penalty Kill %</strong>
-                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.homeTeam.pkPctgRank) }})</strong><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats.homeTeam.pkPctg, 1) }}%</strong></div>
+                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.pkPctgRank) }})</strong><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.pkPctg, 1) }}%</strong></div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.pkPctg, gameClickedInfo.matchup.teamSeasonStats.homeTeam.pkPctg) + '%' }"></div>
+                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.pkPctg, gameClickedInfo.matchup.teamSeasonStats?.homeTeam.pkPctg) + '%' }"></div>
                 </div>
                 <!-- fo% category -->
                 <div class="popup-game-stat">
-                    <div class="away-game-stat"><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.faceoffWinningPctg, 1) }}%</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.awayTeam.faceoffWinningPctgRank) }})</strong></div>
+                    <div class="away-game-stat"><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.faceoffWinningPctg, 1) }}%</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.faceoffWinningPctgRank) }})</strong></div>
                     <strong>Faceoff %</strong>
-                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.homeTeam.faceoffWinningPctgRank) }})</strong><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats.homeTeam.faceoffWinningPctg, 1) }}%</strong></div>
+                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.faceoffWinningPctgRank) }})</strong><strong>{{ calculatePercentage(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.faceoffWinningPctg, 1) }}%</strong></div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.faceoffWinningPctg, gameClickedInfo.matchup.teamSeasonStats.homeTeam.faceoffWinningPctg) + '%' }"></div>
+                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.faceoffWinningPctg, gameClickedInfo.matchup.teamSeasonStats?.homeTeam.faceoffWinningPctg) + '%' }"></div>
                 </div>
                 <!-- gf/g% category -->
                 <div class="popup-game-stat">
-                    <div class="away-game-stat"><strong>{{ gameClickedInfo.matchup.teamSeasonStats.awayTeam.goalsForPerGamePlayed }}</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.awayTeam.goalsForPerGamePlayedRank) }})</strong></div>
+                    <div class="away-game-stat"><strong>{{ gameClickedInfo.matchup.teamSeasonStats?.awayTeam.goalsForPerGamePlayed }}</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.goalsForPerGamePlayedRank) }})</strong></div>
                     <strong>GF/GP</strong>
-                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.homeTeam.goalsForPerGamePlayedRank) }})</strong><strong>{{ gameClickedInfo.matchup.teamSeasonStats.homeTeam.goalsForPerGamePlayed }}</strong></div>
+                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.goalsForPerGamePlayedRank) }})</strong><strong>{{ gameClickedInfo.matchup.teamSeasonStats?.homeTeam.goalsForPerGamePlayed }}</strong></div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.goalsForPerGamePlayed, gameClickedInfo.matchup.teamSeasonStats.homeTeam.goalsForPerGamePlayed) + '%' }"></div>
+                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.goalsForPerGamePlayed, gameClickedInfo.matchup.teamSeasonStats?.homeTeam.goalsForPerGamePlayed) + '%' }"></div>
                 </div>
                 <!-- ga/g% category -->
                 <div class="popup-game-stat">
-                    <div class="away-game-stat"><strong>{{ gameClickedInfo.matchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayed }}</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayedRank) }})</strong></div>
+                    <div class="away-game-stat"><strong>{{ gameClickedInfo.matchup.teamSeasonStats?.awayTeam.goalsAgainstPerGamePlayed }}</strong><strong style="font-size:x-small;margin-left:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.goalsAgainstPerGamePlayedRank) }})</strong></div>
                     <strong>GA/GP</strong>
-                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayedRank) }})</strong><strong>{{ gameClickedInfo.matchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayed }}</strong></div>
+                    <div class="home-game-stat"><strong style="font-size:x-small;margin-right:4px">({{ getRanking(gameClickedInfo.matchup.teamSeasonStats?.homeTeam.goalsAgainstPerGamePlayedRank) }})</strong><strong>{{ gameClickedInfo.matchup.teamSeasonStats?.homeTeam.goalsAgainstPerGamePlayed }}</strong></div>
                 </div>
                 <div class="progress-bar">
-                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayed, gameClickedInfo.matchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayed) + '%' }"></div>
+                    <div class="progress" :style="{ width: calculateProgressPercentage(gameClickedInfo.matchup.teamSeasonStats?.awayTeam.goalsAgainstPerGamePlayed, gameClickedInfo.matchup.teamSeasonStats?.homeTeam.goalsAgainstPerGamePlayed) + '%' }"></div>
                 </div>
             </div>
         </div>
@@ -302,6 +325,9 @@ export default {
         };
     },
     methods: {
+        isMobile() {
+            return window.innerWidth <= 640;
+        },
         async fetchTeamSchedule() {
             try {
                 const year = this.date.getFullYear();
@@ -555,27 +581,37 @@ export default {
         },
         configureLineScore() {
             this.popupLineScore = [];
-            if((this.gameClickedInfo.gameState == "OFF" || this.gameClickedInfo.gameState == "FINAL") && (this.gameClickedInfo.summary.linescore)) {
-                let tempScoreAway = {"logo": this.gameClickedInfo.awayTeam.logo, "team": this.gameClickedInfo.awayTeam.abbrev, "first": "", "second": "", "third": "", "overtime": "", "total": this.gameClickedInfo.awayTeam.score};
-                let tempScoreHome = {"logo": this.gameClickedInfo.homeTeam.logo, "team": this.gameClickedInfo.homeTeam.abbrev, "first": "", "second": "", "third": "", "overtime": "", "total": this.gameClickedInfo.homeTeam.score};
-                for(let i = 0; i < this.gameClickedInfo.summary.linescore.byPeriod.length; i++) {
-                    switch(i) {
-                        case 0:
-                            tempScoreAway.first = this.gameClickedInfo.summary.linescore.byPeriod[i].away;
-                            tempScoreHome.first = this.gameClickedInfo.summary.linescore.byPeriod[i].home;
-                            break;
-                        case 1:
-                            tempScoreAway.second = this.gameClickedInfo.summary.linescore.byPeriod[i].away;
-                            tempScoreHome.second = this.gameClickedInfo.summary.linescore.byPeriod[i].home;
-                            break;
-                        case 2:
-                            tempScoreAway.third = this.gameClickedInfo.summary.linescore.byPeriod[i].away;
-                            tempScoreHome.third = this.gameClickedInfo.summary.linescore.byPeriod[i].home;
-                            break;
-                        case 3:
-                            tempScoreAway.overtime = this.gameClickedInfo.summary.linescore.byPeriod[i].away;
-                            tempScoreHome.overtime = this.gameClickedInfo.summary.linescore.byPeriod[i].home;
-                            break;
+            if((this.gameClickedInfo.gameState == "OFF" || this.gameClickedInfo.gameState == "FINAL") && (this.gameClickedInfo.summary.scoring)) {
+                let tempScoreAway = {"logo": this.gameClickedInfo.awayTeam.logo, "team": this.gameClickedInfo.awayTeam.abbrev, "first": 0, "second": 0, "third": 0, "overtime": 0, "total": this.gameClickedInfo.awayTeam.score};
+                let tempScoreHome = {"logo": this.gameClickedInfo.homeTeam.logo, "team": this.gameClickedInfo.homeTeam.abbrev, "first": 0, "second": 0, "third": 0, "overtime": 0, "total": this.gameClickedInfo.homeTeam.score};
+                for(let i = 0; i < this.gameClickedInfo.summary.scoring.length; i++) {
+                    for(let j = 0; j < this.gameClickedInfo.summary.scoring[i].goals.length; j++) {
+                        switch(i) {
+                            case 0:
+                                if(this.gameClickedInfo.summary.scoring[i].goals[j].isHome)
+                                    tempScoreHome.first += 1;
+                                else
+                                    tempScoreAway.first += 1;
+                                break;
+                            case 1:
+                                if(this.gameClickedInfo.summary.scoring[i].goals[j].isHome)
+                                    tempScoreHome.second += 1;
+                                else
+                                    tempScoreAway.second += 1;
+                                break;
+                            case 2:
+                                if(this.gameClickedInfo.summary.scoring[i].goals[j].isHome)
+                                    tempScoreHome.third += 1;
+                                else
+                                    tempScoreAway.third += 1;
+                                break;
+                            case 3:
+                                if(this.gameClickedInfo.summary.scoring[i].goals[j].isHome)
+                                    tempScoreHome.overtime += 1;
+                                else
+                                    tempScoreAway.overtime += 1;
+                                break;
+                        }
                     }
                 }
                 this.popupLineScore.push(tempScoreAway);
@@ -775,6 +811,10 @@ export default {
     align-items: center;
 }
 
+.calendar-team-logo {
+    width: 35px;
+}
+
 .game-details-result {
     align-self: flex-end;
     margin-top: -5px;
@@ -961,5 +1001,50 @@ export default {
     justify-content: space-between;
     font-size: small;
     margin-top: 3px;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .calendar {
+        width: 100%;
+    }
+    .calendar-header {
+    margin-top: 0rem;
+    margin-bottom: 0px;
+}
+    .calendar-team-logo {
+        width: 42px;
+        height: 42px;
+        margin-right: -7px;
+    }
+    .calendar-day {
+        height: 65px;
+    }
+    .game-details {
+        margin-top: 11px;
+        margin-left: -18px;
+    }
+    .game-details-team {
+        margin-left: 8px;
+    }
+    .popup-open-game {
+        height: 20px;
+    }
+    .popup-open-game button {
+        margin-top: -15px;
+    }
+    .game-popup {
+        margin-top: 0rem;
+        width: 100%;
+        border: none;
+    }
+    .game-popup .p-datatable-table {
+        width: 100%;
+    }
+    
+    .schedule-section {
+        flex-direction: column;
+        margin-top: 0rem;
+    }
 }
 </style>

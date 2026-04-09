@@ -153,4 +153,12 @@ export default {
     justify-content: center;
     padding-top: 10px;
 }
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .awards-section {
+        width: 100%;
+        margin-left: 0%;
+    }
+}
 </style>

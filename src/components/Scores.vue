@@ -6,7 +6,7 @@
   <div><ProgressSpinner v-if="isLoading" /></div>
   <!-- Date navigation bar -->
   <div class="date-navigation">
-    <button @mousedown="startScroll(-1, 10)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button left">&lt;</button>
+    <button v-if="!isMobile()" @mousedown="startScroll(-1, 10)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button left">&lt;</button>
     <div class="dates" ref="datesContainer" @wheel="handleWheel">
       <div
         v-for="(date, index) in dateRange"
@@ -18,11 +18,11 @@
         {{ formatDate(date) }}
       </div>
     </div>
-    <button @mousedown="startScroll(1, 10)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button right">&gt;</button>
+    <button v-if="!isMobile()" @mousedown="startScroll(1, 10)" @mouseup="stopScroll" @mouseleave="stopScroll" class="scroll-button right">&gt;</button>
   </div>
 
     <!-- Display fetched data -->
-    <h3 style="color:white;margin-bottom:1rem">{{ dateDesc(selectedDate) }}</h3>
+    <h3 class="date-header">{{ dateDesc(selectedDate) }}</h3>
     <h5 v-if="games.games && games.games.length==0" style="color:white">No games today</h5>
     <div v-if="games.games && games.games.length > 0">
       <ul>
@@ -142,6 +142,9 @@ export default {
     'schedule.regularSeasonEndDate': 'setupDateRange',
   },
   methods: {
+    isMobile() {
+      return window.innerWidth <= 640;
+    },
     async fetchGames() {
       try {
         this.isLoading = true;
@@ -304,7 +307,10 @@ export default {
           const containerWidth = datesContainer.offsetWidth;
           const elementWidth = dateElement.offsetWidth;
         
-          datesContainer.scrollLeft = (dateElement.offsetLeft - 250) - (containerWidth - elementWidth) / 2;
+          if(!this.isMobile())
+            datesContainer.scrollLeft = (dateElement.offsetLeft - 250) - (containerWidth - elementWidth) / 2;
+          else
+            datesContainer.scrollLeft = dateElement.offsetLeft - (containerWidth / 2) + (elementWidth / 2);
         }
       }
     },
@@ -410,6 +416,11 @@ export default {
   border-radius: 10px;
 }
 
+.date-header {
+  color:white;
+  margin-bottom:1rem;
+}
+
 .scroll-button {
     background-color: transparent;
     color: #EBEBEBA3;
@@ -484,11 +495,13 @@ export default {
 
 .game-score {
   margin-left: 10px; /* Adjust margin as needed */
+  color: white;
 }
 
 .game-score-win {
   margin-left: 10px;
   color: white;
+  font-weight: bold;
 }
 
 .powerplay-tag {
@@ -528,5 +541,40 @@ ul {
 
 li {
   margin-bottom: 1rem;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+  .dates {
+    width: 100%;
+    gap: 0.8rem;
+  }
+  .date-header {
+    margin-top:0rem;
+    margin-bottom:1rem;
+  }
+  .date-navigation {
+    margin-top: 0.5rem;
+    margin-bottom: 0rem;
+  }
+  .game-box {
+    padding: 0.2rem;
+  }
+  .game-section {
+    padding: 4px;
+  }
+  .game-team {
+    width: 140%;
+  }
+  .powerplay-tag {
+    margin-left: -53%;
+  }
+  .team-container {
+    width: 50%;
+  }
+  .team-logo {
+    height: 25px;
+    margin-left: -7px;
+  }
 }
 </style>

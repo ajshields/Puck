@@ -290,6 +290,8 @@ import ScrollPanel from 'primevue/scrollpanel';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Schedule',
     components: {
@@ -338,16 +340,7 @@ export default {
                 else //if after september set season to 2025-2026
                     seasonYears = year + '' + (year + 1);
 
-                const response = await fetch(`/api/v1/club-schedule-season/${this.id}/${seasonYears}`, { //club-schedule-season/TOR/20232024
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-          
+                const response = await fetchApi(`/api/v1/club-schedule-season/${this.id}/${seasonYears}`);
                 const data = await response.json();
                 console.log(data);
                 this.schedule = data.games;
@@ -368,16 +361,7 @@ export default {
                 this.date = new Date(game.startTimeUTC);
                 this.isLoading = true;
                 try {
-                    const response = await fetch(`/api/v1/gamecenter/${game.id}/landing`, {
-                        method: 'GET',
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                        },
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                
+                    const response = await fetchApi(`/api/v1/gamecenter/${game.id}/landing`);
                     const data = await response.json();
                     this.gameClicked = true;
                     this.gameClickedInfo = data;
@@ -388,16 +372,7 @@ export default {
                 }
 
                 try {
-                    const response = await fetch(`/api/v1/gamecenter/${game.id}/boxscore`, {
-                        method: 'GET',
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                        },
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                
+                    const response = await fetchApi(`/api/v1/gamecenter/${game.id}/boxscore`);
                     const data = await response.json();
                     this.boxScore = data;
                     this.isLoading = false;

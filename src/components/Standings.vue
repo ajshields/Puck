@@ -568,6 +568,8 @@ import Layout from '@/components/Layout.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
   name: 'Standings',
   components: {
@@ -603,16 +605,7 @@ export default {
     async fetchSchedule() {
       try {
         this.isLoading = true;
-        const response = await fetch(`/api/v1/schedule/${this.todaysDate}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/schedule/${this.todaysDate}`);
         const data = await response.json();
         this.schedule = data;
         this.isLoading = false;
@@ -628,17 +621,7 @@ export default {
     },
     async fetchTeams(standingsDate) {
       try {
-        const response = await fetch(`/api/v1/standings/${standingsDate}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
+        const response = await fetchApi(`/api/v1/standings/${standingsDate}`);
         const data = await response.json();
         this.configureStandings(data);
         // Handle the fetched data as needed
@@ -651,16 +634,7 @@ export default {
     async fetchBracket() {
       try {
         this.isLoading = true;
-        const response = await fetch(`/api/v1/playoff-bracket/${new Date().getFullYear()}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/playoff-bracket/${new Date().getFullYear()}`);
         const data = await response.json();
         console.log(data);
         this.bracket = data;

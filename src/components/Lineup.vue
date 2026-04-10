@@ -107,6 +107,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Lineup',
     components: {
@@ -140,7 +142,7 @@ export default {
         async fetchLineup() {
             this.setupTeamChange();
             try {
-                const response = await fetch(`/dailyFaceoff/teams/${this.lineupTeam.value}/line-combinations`); // Make a GET request to the server endpoint for scraping lineup data
+                const response = await fetchApi(`/dailyFaceoff/teams/${this.lineupTeam.value}/line-combinations`); // Make a GET request to the server endpoint for scraping lineup data
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }

@@ -54,6 +54,8 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Leaders',
     components: {
@@ -91,7 +93,7 @@ export default {
           try {
             this.isLoading = true;
             this.statistics = [];
-            const url = '/restApi/stats/rest/en/skater/summary';
+            const url = `/restApi/stats/rest/en/skater/summary`;
             const queryParams = new URLSearchParams({
                 isAggregate: false,
                 isGame: false,
@@ -121,15 +123,7 @@ export default {
                     gameTypeId=2 and seasonId<=${this.endYear.seasonId} and 
                     seasonId>=${this.startYear.seasonId}`
             });
-            const response = await fetch(`${url}?${queryParams}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            const response = await fetchApi(`${url}?${queryParams}`);
             const data = await response.json();
             this.configureStatistics(data.data);
             this.isLoading = false;
@@ -140,15 +134,7 @@ export default {
         },
         async fetchFranchises() {
             try {
-                const response = await fetch(`/restApi/stats/rest/en/franchise`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/restApi/stats/rest/en/franchise`);
                 const data = await response.json();
                 this.franchises = data.data;
                 this.sortFranchises();
@@ -160,7 +146,7 @@ export default {
         async fetchYears() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/restApi/stats/rest/en/season`, {
+                const response = await fetchApi(`/restApi/stats/rest/en/season`, {
                   method: 'GET',
                   headers: {
                     'Cache-Control': 'no-cache',

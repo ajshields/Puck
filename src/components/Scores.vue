@@ -91,6 +91,8 @@
 import ProgressSpinner from './ProgressSpinner.vue';
 import Layout from '@/components/Layout.vue';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
   name: 'Scores',
   components: {
@@ -147,20 +149,12 @@ export default {
     },
     async fetchGames() {
       try {
-        this.isLoading = true;
-        const response = await fetch(`/api/v1/score/${this.selectedDate}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
+        this.isLoading = true;    
+        const response = await fetchApi(`/api/v1/score/${this.selectedDate}`);
         const data = await response.json();
         this.games = data;
+        console.log('DATA:', data);
+        console.log('GAMES BEFORE SORT:', this.games);
         this.sortGames(this.games);
         this.isLoading = false;
       } catch (error) {
@@ -171,17 +165,7 @@ export default {
     async fetchSchedule() {
       try {
         this.isLoading = true;
-        const response = await fetch(`/api/v1/schedule/${this.selectedDate}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
+        const response = await fetchApi(`/api/v1/schedule/${this.selectedDate}`);
         const data = await response.json();
         this.schedule = data;
         // Handle the fetched data as needed

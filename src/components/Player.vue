@@ -33,6 +33,8 @@ import Settings from '@/components/Settings.vue';
 import AutoComplete from 'primevue/autocomplete';
 import Dropdown from 'primevue/dropdown';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Player',
     components: {
@@ -61,17 +63,7 @@ export default {
     methods: {
         async fetchPlayerInfo() {
             try {
-                const response = await fetch(`/api/v1/player/${this.id}/landing`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                  // You can add more options here if needed
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
+                const response = await fetchApi(`/api/v1/player/${this.id}/landing`);
                 const data = await response.json();
                 this.playerInfo = data;
                 this.isLoading = false;
@@ -95,7 +87,7 @@ export default {
             }
             const seasonYear = `${currentYear}${nextYear}`;
 
-            const url = '/restApi/stats/rest/en/skater/summary';
+            const url = `/restApi/stats/rest/en/skater/summary`;
             const queryParams = new URLSearchParams({
                 isAggregate: false,
                 isGame: false,
@@ -106,15 +98,7 @@ export default {
                     gameTypeId=2 and seasonId<=${seasonYear} and 
                     seasonId>=${seasonYear}`
             });
-            const response = await fetch(`${url}?${queryParams}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            const response = await fetchApi(`${url}?${queryParams}`);
             const data = await response.json();
             this.configureAllSearchPlayers(data);
             this.isLoading = false;

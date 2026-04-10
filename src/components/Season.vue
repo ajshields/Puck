@@ -78,6 +78,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Season',
     components: {
@@ -104,15 +106,7 @@ export default {
         async fetchGameLog() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/player/${this.id}/game-log/${this.playerInfo.featuredStats.season}/2`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/player/${this.id}/game-log/${this.playerInfo.featuredStats.season}/2`);
                 const data = await response.json();
                 this.configureGameLog(data);
                 this.isLoading = false;

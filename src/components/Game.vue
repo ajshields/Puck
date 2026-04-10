@@ -725,6 +725,8 @@ import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Button from 'primevue/button';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Game',
     components: {
@@ -793,16 +795,7 @@ export default {
         async fetchGame() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/gamecenter/${this.id}/landing`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-          
+                const response = await fetchApi(`/api/v1/gamecenter/${this.id}/landing`);
                 const data = await response.json();
                 this.game = data;
                 console.log(this.game);
@@ -819,15 +812,7 @@ export default {
         async fetchGameBox() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/gamecenter/${this.id}/boxscore`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/gamecenter/${this.id}/boxscore`);
                 const data = await response.json();
                 this.boxScore = data;
                 console.log(this.boxScore);
@@ -841,15 +826,7 @@ export default {
         async fetchGameStory() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/wsc/game-story/${this.id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/wsc/game-story/${this.id}`);
                 const data = await response.json();
                 this.gameStory = data;
                 console.log(data);
@@ -861,15 +838,7 @@ export default {
         async fetchPlays() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/gamecenter/${this.id}/play-by-play`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/gamecenter/${this.id}/play-by-play`);
                 const data = await response.json();
                 this.configurePlays(data);
                 this.isLoading = false;

@@ -45,6 +45,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import Settings from '@/components/Settings.vue';
 import Dropdown from 'primevue/dropdown';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Team',
     components: {
@@ -71,16 +73,7 @@ export default {
         async fetchSchedule() {
           try {
             this.isLoading = true;
-            const response = await fetch(`/api/v1/schedule/${this.todaysDate}`, {
-              method: 'GET',
-              headers: {
-                'Cache-Control': 'no-cache',
-              },
-              // You can add more options here if needed
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            const response = await fetchApi(`/api/v1/schedule/${this.todaysDate}`);
             const data = await response.json();
             this.schedule = data;
             this.isLoading = false;
@@ -96,17 +89,7 @@ export default {
         },
         async fetchTeamInfo(date) {
             try {
-                const response = await fetch(`/api/v1/standings/${date}`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                  // You can add more options here if needed
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
+                const response = await fetchApi(`/api/v1/standings/${date}`);
                 const data = await response.json();
                 this.configureTeamInfo(data);
                 console.log(data);

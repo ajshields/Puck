@@ -77,3 +77,50 @@ export async function fetchApi(url, options = {}) {
         throw error;
     }
 }
+
+export async function fetchApiHtml(url, options = {}) {
+    const finalUrl = isDevWeb ? url : resolveUrl(url);
+
+    try {
+        // NATIVE (iOS / Android)
+        if (isNative) {
+            const response = await CapacitorHttp.request({
+                url: finalUrl,
+                method: (options.method || 'GET').toUpperCase(),
+                headers: {
+                    Accept: 'text/plain',
+                    ...(options.headers || {}),
+                },
+                data: options.body || undefined,
+            });
+
+            return {
+                text: async () =>
+                    typeof response.data === 'string'
+                        ? response.data
+                        : JSON.stringify(response.data),
+                status: response.status,
+                data: response.data,
+            };
+        }
+
+        // WEB (browser)
+        const response = await fetch(finalUrl, {
+            method: options.method || 'GET',
+            headers: {
+                ...(options.headers || {}),
+            },
+            body: options.body
+                ? JSON.stringify(options.body)
+                : undefined,
+        });
+
+        return {
+            text: async () => response.text(),
+            status: response.status,
+        };
+
+    } catch (error) {
+        throw error;
+    }
+}

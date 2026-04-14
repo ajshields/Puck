@@ -145,7 +145,7 @@
                                     <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
                                     <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
                                 </div>
-                                <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info" style="align-items:flex-end;padding-right:15px">
+                                <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info away">
                                     <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
                                     <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
                                     <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
@@ -160,7 +160,7 @@
                         <div class="goalie-stats-content-home">
                             <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.homeTeam" class="goalie-stats-content-away-section">
                                 <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
-                                <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info" style="align-items:flex-start;padding-left:15px">
+                                <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info home">
                                     <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
                                     <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
                                     <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
@@ -1646,7 +1646,7 @@ export default {
 }
 
 .goalie-stat-values {
-    width: 100%;
+    width: 75%;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -1660,12 +1660,23 @@ export default {
     margin-right: -30px;
 }
 
-.goalie-stat-info {
+.goalie-stat-info.away{
     display: flex;
     flex-direction: column;
     width: 125px;
     align-self: center;
     cursor: pointer;
+    align-items: flex-end;
+    padding-right: 5px;
+}
+.goalie-stat-info.home {
+    display: flex;
+    flex-direction: column;
+    width: 125px;
+    align-self: center;
+    cursor: pointer;
+    align-items: flex-start;
+    padding-left: 5px;
 }
 
 .goalie-compare.record{color:white}
@@ -2259,6 +2270,8 @@ export default {
     }
     .game-summary {
         flex-direction: column;
+        height: calc(100dvh - 160px);
+        overflow-y: auto;
     }
     .goalie-compare.record{font-size:x-small}
     .goalie-compare.record-text{font-size:xx-small}
@@ -2284,9 +2297,21 @@ export default {
     .goalie-stat-values {
         flex-direction: column;
     }
+    .goalie-stat-info.away{
+        padding-right: 5px;
+    }
+    .goalie-stat-info.home {
+        padding-right: 5px;
+    }
     .goalie-stat-values.away {
-        margin-right: -25px;
-        margin-left: -30px;
+        margin-left: -10px;
+        display: flex;
+        align-items: flex-start;
+    }
+    .goalie-stat-values.home {
+        margin-right: -10px;
+        display: flex;
+        align-items: flex-end;
     }
     .home-team-score-layout {
         display: flex;
@@ -2296,6 +2321,9 @@ export default {
         align-items: center;
     }
     .middle-scoreboard {
+        font-size: small;
+    }
+    .overall-game-info-section {
         font-size: small;
     }
     .players-stats-section .p-datatable-table {
@@ -2378,7 +2406,7 @@ export default {
         width: 85px;
         height: 100px;
         position: absolute;
-        right: -2px;
+        right: 0px;
         top: 5%;
     }
     .three-stars-box {

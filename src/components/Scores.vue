@@ -24,7 +24,7 @@
     <!-- Display fetched data -->
     <h3 class="date-header">{{ dateDesc(selectedDate) }}</h3>
     <h5 v-if="games.games && games.games.length==0" style="color:white">No games today</h5>
-    <div v-if="games.games && games.games.length > 0">
+    <div class="all-games" v-if="games.games && games.games.length > 0">
       <ul>
         <li v-for="game in games.games" :key="game.id" @click="openGame(game)" class="game-box">
           <div v-if="game.gameType==1" class="game-type"> <!--preseason tag-->
@@ -529,6 +529,10 @@ li {
 
 /* Mobile Device Styling */
 @media (max-width: 640px) {
+  .all-games {
+    height: calc(100dvh - 185px);
+    overflow-y: auto;
+  }
   .dates {
     width: 100%;
     gap: 0.8rem;

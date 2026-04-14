@@ -9,7 +9,7 @@
 
     <div v-if="playerInfo.playerId" class="player-info-header">
         <img :src="playerInfo.headshot" alt="Team Logo" class="player-info-logo">
-        <strong style="font-size:xx-large;color:whitesmoke">{{ playerInfo.firstName.default }} {{ playerInfo.lastName.default }}</strong>
+        <strong class="player-info-name">{{ playerInfo.firstName.default }} {{ playerInfo.lastName.default }}</strong>
         <strong style="display:flex;align-items: center"><strong @click="goToTeam(playerInfo.currentTeamAbbrev)" style="cursor:pointer;display:flex;align-items: center"><img :src="playerInfo.teamLogo" alt="Player Logo" style="width:30px">{{ playerInfo.fullTeamName.default }}</strong> &nbsp;&nbsp;&#10242; {{ playerInfo.position }} &nbsp;&#10242; #{{ playerInfo.sweaterNumber }}</strong>
     </div>
     
@@ -157,6 +157,11 @@ export default {
     border-radius: 50px;
 }
 
+.player-info-name {
+    font-size: xx-large;
+    color:whitesmoke;
+}
+
 .p-dropdown-items {
     display: block;
     border: 1px solid #ccc;
@@ -185,6 +190,9 @@ export default {
 @media (max-width: 640px) {
     .options-dropdown{
         margin-left: 7%;
+    }
+    .player-info-name {
+        font-size: x-large;
     }
 }
 </style>

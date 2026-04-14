@@ -1,9 +1,9 @@
 <template>
     <!-- <div><ProgressSpinner v-if="isLoading" /></div> -->
 
-    <div>
+    <div class="info-content">
         <div class="info-section">
-            <h3 style="color:white">Player Info</h3>
+            <h3 style="margin-top:0rem;color:white">Player Info</h3>
             <div><strong>Birth Date: </strong><strong style="color:white">{{ playerInfo.birthDate }} (Age {{ getAge(playerInfo.birthDate) }})</strong></div>
             <div><strong>Birth Place: </strong><strong style="color:white">{{ playerInfo.birthCity.default }}, <strong v-if="playerInfo.birthStateProvince">{{ playerInfo.birthStateProvince.default }}, </strong>{{ playerInfo.birthCountry }}</strong></div>
             <div><strong>Height: </strong><strong style="color:white">{{ getHeight(playerInfo.heightInInches) }}</strong></div>
@@ -135,6 +135,10 @@ export default {
 </script>
 
 <style>
+.info-content {
+    margin-top: 1rem;
+}
+
 .info-section {
     display: flex;
     flex-direction: column;
@@ -159,6 +163,10 @@ export default {
     .awards-section {
         width: 100%;
         margin-left: 0%;
+    }
+    .info-content {
+        height: calc(100dvh - 300px);
+        overflow-y: auto;
     }
 }
 </style>

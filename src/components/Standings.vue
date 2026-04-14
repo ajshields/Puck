@@ -19,7 +19,7 @@
         <a @click="changeView('overall')" :class="{ active: currentView === 'overall' }">OVERALL</a>
     </div>
 
-    <div v-if="currentView === 'division'">
+    <div class="standings-content" v-if="currentView === 'division'">
       <h3>EASTERN</h3>
       <DataTable :value="divisionStandings.atlantic" @row-click="goToTeam">
         <h3 class="sub-section">ATLANTIC</h3>
@@ -104,7 +104,7 @@
       </DataTable>
     </div>
 
-    <div v-else-if="currentView === 'wildCard'">
+    <div class="standings-content" v-else-if="currentView === 'wildCard'">
       <h3>EASTERN</h3>
       <DataTable :value="wildCardStandings.atlantic" @row-click="goToTeam">
         <h3 class="sub-section">ATLANTIC</h3>
@@ -229,7 +229,7 @@
       </DataTable>
     </div>
 
-    <div v-else-if="currentView === 'conference'">
+    <div class="standings-content" v-else-if="currentView === 'conference'">
       <DataTable :value="conferenceStandings.eastern" @row-click="goToTeam">
         <h3 class="sub-section">EASTERN</h3>
         <Column field="place" header="" sortable style="width: 5%"></Column>
@@ -272,7 +272,7 @@
       </DataTable>
     </div>
 
-    <div v-else-if="currentView === 'overall'">
+    <div class="standings-content" v-else-if="currentView === 'overall'">
       <DataTable :value="overallStandings" @row-click="goToTeam">
         <h3 class="sub-section">TEAM</h3>
         <Column field="place" header="" sortable style="width: 5%"></Column>
@@ -992,6 +992,10 @@ tr {
   }
   .series-team-wins {
     font-size: x-large;
+  }
+  .standings-content {
+    height: calc(100dvh - 160px);
+    overflow-y: auto;
   }
   /* East (right) side cascade */
   .series1 {grid-column: 28 / span 10; grid-row: 2 / span 3}

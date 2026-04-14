@@ -6,7 +6,7 @@
       <v-button class="leaders-selector" :class="{ 'leaders-selector-selected': type === 'playoffs' }" @click="type=switchStatType('playoffs'), type='playoffs'">Playoffs</v-button>
   </div>
 
-    <div v-if="this.points.length > 0" class="grid-container" style="margin-top: 20px">
+    <div v-if="this.points.length > 0" class="grid-container">
       <!-- POINTS Leaders -->
       <div class="grid-item">
         <div class="left-section">
@@ -958,6 +958,7 @@ export default {
     border-color: #ffffff14;
     border-radius: 8px;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .leaders-selector {
@@ -1114,9 +1115,16 @@ tr:hover {
   }
   .grid-container {
     grid-template-columns: auto;
+    height: calc(100dvh - 160px);
+    overflow-y: auto;
+    margin-top: 1rem;
   }
   .grid-item {
     flex-direction: column;
+  }
+  .leaders-options {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
   }
   .left-section {
     width: 100%;

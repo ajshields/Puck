@@ -984,9 +984,9 @@ export default {
         width: 100%;
     }
     .calendar-header {
-    margin-top: 0rem;
-    margin-bottom: 0px;
-}
+        margin-top: 0rem;
+        margin-bottom: 0px;
+    }
     .calendar-team-logo {
         width: 42px;
         height: 42px;
@@ -1012,11 +1012,15 @@ export default {
         margin-top: 0rem;
         width: 100%;
         border: none;
+        height: calc(100dvh - 255px);
+        overflow-y: auto;
+    }
+    .game-popup-teams {
+        height: 100px;
     }
     .game-popup .p-datatable-table {
         width: 100%;
     }
-    
     .schedule-section {
         flex-direction: column;
         margin-top: 0rem;

@@ -233,6 +233,9 @@ export default {
     .game-log-header {
         margin-left: 0%;
     }
+    .player-info-logo {
+        width: 80px;
+    }
     .player-season-stats .p-datatable-table {
         width: 100%;
     }

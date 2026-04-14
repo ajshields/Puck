@@ -228,7 +228,7 @@ export default {
 @media (max-width: 640px) {
     .roster-stats-content {
         margin-top: 0px;
-        height: calc(100dvh - 320px);
+        height: calc(100dvh - 375px);
         overflow-y: auto;
     }
     .roster-stats .p-datatable-table {

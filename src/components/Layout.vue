@@ -1,8 +1,10 @@
 <template>
-  <Settings></Settings>
     <div class="layout-container">
         <header class="layout-header">
-            <router-link :to="'/scores'" class="app-header">Puck</router-link>
+            <div class="layout-header-nav">
+              <router-link :to="'/scores'" class="app-header">Puck</router-link>
+              <Settings></Settings>
+            </div>
             <nav class="app-nav">
                 <router-link to="/scores">SCORES</router-link>
                 <router-link to="/standings">STANDINGS</router-link>
@@ -38,6 +40,12 @@ export default {
   flex-direction: column; /* Adjusted flex direction to column */
   align-items: flex-start; /* Adjusted alignment to start */
   margin-bottom: 20px;
+}
+
+.layout-header-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 100%
 }
 
 .layout-title {
@@ -77,6 +85,9 @@ export default {
   }
   .layout-header {
     margin-bottom: 5px;
+  }
+  .layout-header-nav {
+    align-items: flex-end;
   }
 }
 </style>

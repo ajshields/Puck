@@ -165,7 +165,7 @@ export default {
         margin-left: 0%;
     }
     .info-content {
-        height: calc(100dvh - 300px);
+        height: calc(100dvh - 360px);
         overflow-y: auto;
     }
 }

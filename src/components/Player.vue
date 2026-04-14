@@ -1,7 +1,9 @@
 <template>
     <!-- <div><ProgressSpinner v-if="isLoading" /></div> -->
-    <Settings></Settings>
-    <router-link :to="'/scores'" class="app-header">Puck</router-link>
+    <div class="player-info-header-nav">
+        <router-link :to="'/scores'" class="app-header">Puck</router-link>
+        <Settings></Settings>
+    </div>
     <!-- <AutoComplete v-model="searchPlayer" :suggestions="allSearchPlayers" field="label" placeholder="Search Players" :minLength="3" @complete="searchPlayerGo" /> -->
     <div v-if="allSearchPlayers.length>0">
         <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Select a Player" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
@@ -136,6 +138,12 @@ export default {
 </script>
 
 <style>
+.player-info-header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
 .player-nav {
   width: 100%;
   margin-top: 1rem;

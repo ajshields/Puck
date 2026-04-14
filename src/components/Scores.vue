@@ -530,7 +530,7 @@ li {
 /* Mobile Device Styling */
 @media (max-width: 640px) {
   .all-games {
-    height: calc(100dvh - 185px);
+    height: calc(100dvh - 240px);
     overflow-y: auto;
   }
   .dates {

@@ -160,7 +160,7 @@ export default {
                     this.years.push({label: data.data[i].formattedSeasonId, seasonId: data.data[i].id});
             } catch (error) {
                 console.error('Error fetching years:', error);
-                alert('Error fetching years. See console for details.');
+                //alert('Error fetching years. See console for details.');
             }
         },
         configureStatistics(data) {
@@ -364,7 +364,7 @@ export default {
         width: 90%;
     }
     .stats-content {
-        height: calc(100dvh - 320px);
+        height: calc(100dvh - 375px);
         overflow-y: auto;
     }
     .years-options {

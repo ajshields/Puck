@@ -994,7 +994,7 @@ tr {
     font-size: x-large;
   }
   .standings-content {
-    height: calc(100dvh - 160px);
+    height: calc(100dvh - 215px);
     overflow-y: auto;
   }
   /* East (right) side cascade */

@@ -1,10 +1,12 @@
 <template>
     <div><ProgressSpinner v-if="isLoading" /></div>
-    <Settings></Settings>
     <!-- <div class="settings-options">
       <PanelMenu :model="settingsItems" class="settings" />
     </div> -->
-    <router-link :to="'/scores'" class="app-header">Puck</router-link>
+    <div class="team-info-header-nav">
+        <router-link :to="'/scores'" class="app-header">Puck</router-link>
+        <Settings></Settings>
+    </div>
     <div style="margin-top:10px">
         <Dropdown v-model="selectedTeam" :options="configureTeams" optionLabel="team" placeholder="Select Team" @change="teamChange" class="options-dropdown"/>
     </div>
@@ -190,6 +192,12 @@ export default {
 </script>
 
 <style>
+.team-info-header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
 .team-nav {
   width: 100%;
   display: flex;

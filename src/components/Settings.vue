@@ -141,9 +141,15 @@ export default {
 
 <style>
 .settings-options {
-  position: absolute;
-  margin-left: 80%;
+  width: 3%;
 }
+
+.settings-options .p-submenu-list {
+    width: 10%;
+    position: absolute;
+    z-index: 1;
+    margin-left: -8%;
+  }
 
 .settings-options .p-icon {
   display: none;
@@ -189,14 +195,12 @@ export default {
 /* Mobile Device Styling */
 @media (max-width: 640px) {
   .settings-options {
-    position: absolute;
-    top: 2%;
-    margin-left: 87%;
+    margin-left: 0%;
+    margin-right: 3%;
   }
-  .p-submenu-list {
-    width: 500%;
-    position: absolute;
-    left: -93px;
+  .settings-options .p-submenu-list {
+    width: auto;
+    margin-left: -29%;
     z-index: 1;
   }
 }

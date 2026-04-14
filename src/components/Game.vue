@@ -5,7 +5,6 @@
       <!-- ... (other content) -->
     </div>
     <div><ProgressSpinner v-if="isLoading" /></div>
-    <Settings></Settings>
 
     <div class="highlight-modal" v-if="showHighlight">
       <div class="highlight-modal-content">
@@ -15,12 +14,15 @@
     </div>
 
     <div v-if="game.gameType">
-        <strong class="date-formatting">{{ dateDesc() }}</strong>
+        <div class="game-nav-header">
+            <button @click="goBack" class="back-button">&#9664;</button>
+            <strong class="date-formatting">{{ dateDesc() }}</strong>
+            <Settings></Settings>
+        </div>
         <!-- SCOREBOARD -->
         <div class="scoreboard">
-            <button @click="goBack" class="back-button">&#9664;</button>
             <!-- Away Scoreboard -->
-            <div style="display:flex">
+            <div class="away-scoreboard">
                 <img :src="game.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-logo-game away">
                 <div @click="goToTeam(game.awayTeam.abbrev)" class="scoreboard-layout away">
                     <strong class="scoreboard-city-name">{{ game.awayTeam.placeName.default }}</strong>
@@ -45,7 +47,7 @@
                 </div>
             </div>
             <!-- Home Scoreboard -->
-            <div style="display:flex">
+            <div class="home-scoreboard">
                 <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="home-team-score-layout">{{ game.homeTeam.score }}</strong>
                 <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="game-powerplay-tag home">PP</strong>
                 <div @click="goToTeam(game.homeTeam.abbrev)" class="scoreboard-layout home">
@@ -343,8 +345,8 @@
                             <div style="display:flex">
                                 <div class="three-stars-column">
                                     <strong>{{ getStarNum(index) }}</strong>
-                                    <!-- <img src="@/assets/star.svg" alt="Star" style="margin-top:5px"/> -->
-                                    <strong style="font-size:xx-large;color:var(--main-color)">&#128970;</strong>
+                                    <img src="@/assets/star.svg" alt="Star" style="margin-top:5px"/>
+                                    <!-- <strong style="font-size:xx-large;color:var(--main-color)">&#128970;</strong> -->
                                 </div>
                                 <div class="three-stars-formatting">
                                     <img :src="player.headshot" @click="goToPlayer(player.playerId)" alt="Player Category Headshot" class="category-headshot three-stars">
@@ -372,7 +374,7 @@
                                         <strong style="font-size:x-small">SV</strong>
                                     </div>
                                     <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'savePctg') }}</strong>
+                                        <strong style="color:white">{{ getSavePctg(configureThreeStars(player, 'savePctg')) }}</strong>
                                         <strong style="font-size:x-small">SV%</strong>
                                     </div>
                                 </div>
@@ -798,15 +800,14 @@ export default {
                 const response = await fetchApi(`/api/v1/gamecenter/${this.id}/landing`);
                 const data = await response.json();
                 this.game = data;
-                console.log(this.game);
                 this.configureLineScore();
                 this.configurePeriodShots();
                 this.configurePenaltySummary();
                 this.switchPlayerStats(data.awayTeam.id);
                 this.isLoading = false;
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching gamecenter:', error);
+              //alert('Error fetching gamecenter. See console for details.');
             }
         },
         async fetchGameBox() {
@@ -819,8 +820,8 @@ export default {
                 this.switchPlayerGameStats('away');
                 this.isLoading = false;
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching boxscore:', error);
+              alert('Error fetching boxscore. See console for details.');
             }
         },
         async fetchGameStory() {
@@ -831,8 +832,8 @@ export default {
                 this.gameStory = data;
                 console.log(data);
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching game-story:', error);
+              alert('Error fetching game-story. See console for details.');
             }
         },
         async fetchPlays() {
@@ -843,8 +844,8 @@ export default {
                 this.configurePlays(data);
                 this.isLoading = false;
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching play-by-play:', error);
+              //alert('Error fetching play-by-play. See console for details.');
             }
         },
         gameStartTime(utcDateTime) {
@@ -1535,6 +1536,10 @@ export default {
     cursor: pointer;
 }
 
+.game-nav-header {
+    display: flex;
+}
+
 .back-button {
     background: none;
     border: none;
@@ -1542,13 +1547,12 @@ export default {
     color: #fff;
     cursor: pointer;
     position: absolute;
-    left: 20px; /* Adjust the left position as needed */
-    top: 2%; /* Vertically center the button */
-    transform: translateY(-50%);
 }
 
 .date-formatting {
     color: white;
+    width: 93%;
+    margin-left: 4%;
 }
 
 .scoreboard {
@@ -1849,7 +1853,7 @@ export default {
     border-radius: 5px;
     display:flex;
     justify-content:space-between;
-    padding: 10px;
+    padding: 25px;
 }
 
 .three-stars-column {
@@ -1990,9 +1994,17 @@ export default {
     margin-right:130px;
 }
 
+.away-scoreboard {
+    display: flex;
+}
+
 .middle-scoreboard {
     display: flex;
     flex-direction: column;
+}
+
+.home-scoreboard {
+    display: flex;
 }
 
 .scoring-summary {
@@ -2230,8 +2242,8 @@ export default {
 @media (max-width: 640px) {
     .away-team-score-layout {
         display: flex;
-        margin-left: 5px;
-        margin-right: -5px;
+        margin-left: 10px;
+        margin-right: 0px;
         font-size: 35px;
         align-items: center;
     }
@@ -2257,20 +2269,20 @@ export default {
         margin-left: 0px;
     }
     .game-powerplay-tag.away {
-        margin-top: 0px;
+        margin-top: 4px;
         width: 16px;
-        font-size: xx-small;
+        font-size: x-small;
         margin-left: 0px;
     }
     .game-powerplay-tag.home {
-        margin-top: 0px;
+        margin-top: 4px;
         width: 16px;
-        font-size: xx-small;
+        font-size: x-small;
         margin-right: 0px;
     }
     .game-summary {
         flex-direction: column;
-        height: calc(100dvh - 160px);
+        height: calc(100dvh - 230px);
         overflow-y: auto;
     }
     .goalie-compare.record{font-size:x-small}
@@ -2315,13 +2327,23 @@ export default {
     }
     .home-team-score-layout {
         display: flex;
-        margin-left: 10px;
-        margin-right: 0px;
+        margin-left: 0px;
+        margin-right: 10px;
         font-size: 35px;
         align-items: center;
     }
+    .away-scoreboard {
+        display: flex;
+        width: 42%;
+        justify-content: flex-start;
+    }
     .middle-scoreboard {
         font-size: small;
+    }
+    .home-scoreboard {
+        display: flex;
+        width: 42%;
+        justify-content: flex-end;
     }
     .overall-game-info-section {
         font-size: small;
@@ -2337,16 +2359,20 @@ export default {
     .scoreboard {
         display: flex;
         padding: 0px;
-        justify-content: center;
+        justify-content: space-between;
     }
     .scoreboard-city-name {
         font-size: smaller;
     }
+    .scoreboard-layout-middle {
+        width: 20%;
+    }
     .scoreboard-layout.away {
-        margin-left: -22%;
+        margin-left: 0%;
     }
     .scoreboard-layout.home {
-        margin-left: 15%;
+        margin-left: 0%;
+        font-size: small;
     }
     .scoreboard-team-name {
         font-weight: bold;
@@ -2396,24 +2422,19 @@ export default {
         width: 66px;
     }
     .team-logo-game.away {
-        width: 85px;
+        width: 70px;
         height: 100px;
-        position: absolute;
-        left: -7px;
-        top: 5%;
     }
     .team-logo-game.home {
-        width: 85px;
+        width: 70px;
         height: 100px;
-        position: absolute;
-        right: 0px;
-        top: 5%;
     }
     .three-stars-box {
-        padding: 2px;
+        padding: 10px;
     }
     .three-stars-column {
         font-size: xx-small;
+        margin-right: 5px;
     }
     .three-stars-formatting {
         display: flex;
@@ -2431,7 +2452,7 @@ export default {
     }
     .vertical-line-stars {
         justify-content: flex-start;
-        margin-top: -97px;
+        margin-top: -80px;
         margin-left: 113px;
     }
 }

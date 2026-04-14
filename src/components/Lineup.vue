@@ -384,7 +384,7 @@ export default {
     }
     .lineup-content {
         margin-top: 1rem;
-        height: calc(100dvh - 270px);
+        height: calc(100dvh - 330px);
         overflow-y: auto;
         overflow-x: hidden;
     }

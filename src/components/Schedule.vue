@@ -1012,7 +1012,7 @@ export default {
         margin-top: 0rem;
         width: 100%;
         border: none;
-        height: calc(100dvh - 255px);
+        height: calc(100dvh - 310px);
         overflow-y: auto;
     }
     .game-popup-teams {

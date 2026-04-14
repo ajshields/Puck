@@ -1115,7 +1115,7 @@ tr:hover {
   }
   .grid-container {
     grid-template-columns: auto;
-    height: calc(100dvh - 160px);
+    height: calc(100dvh - 230px);
     overflow-y: auto;
     margin-top: 1rem;
   }

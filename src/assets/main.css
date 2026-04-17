@@ -25,13 +25,6 @@ a,
   }
 }
 
-@media (max-width: 640px) {
-  #app {
-    padding: 0.5rem;
-    padding-top: env(safe-area-inset-top);
-  }
-}
-
 :root {
   --link-color: #00F2FF;
   --main-color: #00F2FF;
@@ -39,16 +32,9 @@ a,
   --hover-dark-color: #00F2FF3D;
 }
 
-/*
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
+@media (max-width: 640px) {
   #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
+    padding: 0.5rem;
+    padding-top: env(safe-area-inset-top);
   }
-}*/
+}

@@ -14,12 +14,12 @@
     <div v-if="teamInfo.teamAbbrev" class="team-header-team">
         <div class="team-info-team">
             <strong>{{ getRecord(teamInfo.l10Wins, teamInfo.l10Losses, teamInfo.l10OtLosses) }}</strong>
-            <strong>L10</strong>
+            <strong>LAST10</strong>
         </div>
         <div class="team-info-team-middle">
             <img :src="teamInfo.teamLogo" alt="Team Logo" class="team-page-logo">
             <strong class="team-info-name">{{ teamInfo.teamName.default }}</strong>
-            <strong>{{ getRecord(teamInfo.wins, teamInfo.losses, teamInfo.otLosses) }}, {{ getPlacement(teamInfo) }}</strong>
+            <strong style="width:110%;display:flex;justify-content:center">{{ getRecord(teamInfo.wins, teamInfo.losses, teamInfo.otLosses) }}, {{ getPlacement(teamInfo) }}</strong>
         </div>
         <div class="team-info-team">
             <strong>{{ teamInfo.streakCode }}{{ teamInfo.streakCount }}</strong>
@@ -34,7 +34,7 @@
         <!-- <router-link :to="'/team/' + id + '/salarycap'">SALARY CAP</router-link> -->
     </nav>
     
-    <router-view name="team-content"></router-view>
+    <router-view name="team-content" :key="$route.fullPath"></router-view>
 
     <!-- Display error if any -->
     <div v-if="error">
@@ -63,13 +63,13 @@ export default {
         this.fetchSchedule();
     },
     data() {
-      return {
-          isLoading: true,
-          todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
-          error: null,
-          teamInfo: {},
-          selectedTeam: null,
-      };
+        return {
+            isLoading: true,
+            todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
+            error: null,
+            teamInfo: {},
+            selectedTeam: null,
+        };
     },
     methods: {
         async fetchSchedule() {
@@ -137,23 +137,21 @@ export default {
             return `${teamInfo.divisionSequence}${ending} ${teamInfo.divisionName}`;
         },
         teamChange() {
-            const currentPath = this.$route.path;
-            // Extract the current team abbreviation from the path
-            const currentTeamAbbreviation = currentPath.match(/\/team\/([A-Z]+)\//)[1];
-            // Construct the new team-specific path by replacing the current team abbreviation with the selected one
-            const newTeamPath = currentPath.replace(`/${currentTeamAbbreviation}/`, `/${this.selectedTeam.value}/`);
-            // Push the new path to the router
-            this.$router.push(newTeamPath);
-            setTimeout(() => {
-                window.location.reload();
-            }, 50);
+          const currentPath = this.$route.path;
+
+          const newPath = currentPath.replace(
+            /\/team\/[^/]+/,
+            `/team/${this.selectedTeam.value}`
+          );
+
+          this.$router.push(newPath);
+          this.fetchSchedule();
         },
     },
     computed: {
         configureTeams() {
             return [
                 {team: 'Anaheim Ducks', value: 'ANA'},
-                {team: 'Arizona Coyotes', value: 'ARI'},
                 {team: 'Boston Bruins', value: 'BOS'},
                 {team: 'Buffalo Sabres', value: 'BUF'},
                 {team: 'Calgary Flames', value: 'CGY'},
@@ -180,6 +178,7 @@ export default {
                 {team: 'St Louis Blues', value: 'STL'},
                 {team: 'Tampa Bay Lightning', value: 'TBL'},
                 {team: 'Toronto Maple Leafs', value: 'TOR'},
+                {team: 'Utah Mammoth', value: 'UTA'},
                 {team: 'Vancouver Canucks', value: 'VAN'},
                 {team: 'Vegas Golden Knights', value: 'VGK'},
                 {team: 'Washington Capitals', value: 'WSH'},

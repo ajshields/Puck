@@ -23,10 +23,10 @@ import Career from './components/Career.vue';
 import Info from './components/Info.vue';
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/scores:date?', name: 'scores', component: Scores },
-  { path: '/standings', component: Standings },
-  { path: '/leaders', component: Leaders, children: [
+  { path: '/', component: Home, meta: {disableSwipeBack: true} },
+  { path: '/scores:date?', name: 'scores', component: Scores, meta: {disableSwipeBack: true} },
+  { path: '/standings', component: Standings, meta: {disableSwipeBack: true} },
+  { path: '/leaders', component: Leaders, meta: {disableSwipeBack: true}, children: [
     {
       path: 'categories',
       name: 'leaders.categories',

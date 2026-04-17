@@ -196,9 +196,6 @@ export default {
                 case 'ANA':
                     this.lineupTeam = {team: 'Anaheim Ducks', value: 'anaheim-ducks'};
                     break;
-                case 'ARI':
-                    this.lineupTeam = {team: 'Arizona Coyotes', value: 'arizona-coyotes'};
-                    break;
                 case 'BOS':
                     this.lineupTeam = {team: 'Boston Bruins', value: 'boston-bruins'};
                     break;
@@ -276,6 +273,9 @@ export default {
                     break;
                 case 'TOR':
                     this.lineupTeam = {team: 'Toronto Maple Leafs', value: 'toronto-maple-leafs'};
+                    break;
+                case 'UTA':
+                    this.lineupTeam = {team: 'Utah Mammoth', value: 'utah-mammoth'};
                     break;
                 case 'VAN':
                     this.lineupTeam = {team: 'Vancouver Canucks', value: 'vancouver-canucks'};

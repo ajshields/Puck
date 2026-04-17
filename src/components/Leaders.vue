@@ -5,8 +5,8 @@
   </Layout>
 
   <nav class="leaders-nav">
-    <router-link :to="'/leaders/categories'">LEADERS</router-link>
-    <router-link :to="'/leaders/statistics'">STATISTICS</router-link>
+    <router-link :to="'/leaders/categories'" :class="{active: activeTab === 'categories'}">LEADERS</router-link>
+    <router-link :to="'/leaders/statistics'" :class="{active: activeTab === 'statistics'}">STATISTICS</router-link>
   </nav>
 
   <router-view name="leaders-content"></router-view>
@@ -14,11 +14,29 @@
   
 <script>
 import Layout from '@/components/Layout.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 export default {
   name: 'Leaders',
   components: {
     Layout,
+  },
+  setup() {
+    const route = useRoute();
+
+    const activeTab = computed(() => {
+      const path = route.fullPath;
+
+      if (path.includes('categories')) return 'categories';
+      if (path.includes('statistics')) return 'statistics';
+
+      return '';
+    });
+
+    return {
+      activeTab,
+    };
   },
   data() {
     return {
@@ -38,5 +56,12 @@ export default {
   display: flex;
   justify-content: space-around;
   color: var(--link-color);
+}
+
+.leaders-nav a.active {
+  background-color: var(--hover-dark-color);
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
 }
 </style>

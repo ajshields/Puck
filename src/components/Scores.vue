@@ -23,63 +23,67 @@
 
     <!-- Display fetched data -->
     <h3 class="date-header">{{ dateDesc(selectedDate) }}</h3>
-    <h5 v-if="games.games && games.games.length==0" style="color:white">No games today</h5>
-    <div class="all-games" v-if="games.games && games.games.length > 0">
-      <ul>
-        <li v-for="game in games.games" :key="game.id" @click="openGame(game)" class="game-box">
-          <div v-if="game.gameType==1" class="game-type"> <!--preseason tag-->
-            <img src="@/assets/greenDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
-            <strong >preseason</strong>
-          </div>
-          <div v-else-if="game.gameType==3" class="game-type"> <!--playoffs tag-->
-            <img src="@/assets/blueDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
-            <strong >playoffs</strong>
-          </div>
-          <div v-else-if="game.specialEvent" class="game-type"> <!--special event tag-->
-            <img src="@/assets/yellowDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
-            <strong >{{ game.specialEvent.default }}</strong>
-          </div>
-          <div class="game-section">
-            <div class="team-container">
-              <div class="game-team">
-                <div style="display:flex;width:250px;color:white">
-                  <img :src="game.awayTeam.logo" alt="Away Team Logo" class="team-logo">
-                  <strong>{{ game.awayTeam.abbrev }} {{ game.awayTeam.name.default }}</strong>
+    <PullToRefresh scrollSelector=".all-games" @refresh="refreshGames">
+      <div class="all-games" ref="gamesScroll" v-if="games.games && games.games.length > 0" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+        <ul>
+          <li v-for="game in games.games" :key="game.id" @click="openGame(game)" class="game-box">
+            <div v-if="game.gameType==1" class="game-type"> <!--preseason tag-->
+              <img src="@/assets/greenDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
+              <strong >preseason</strong>
+            </div>
+            <div v-else-if="game.gameType==3" class="game-type"> <!--playoffs tag-->
+              <img src="@/assets/blueDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
+              <strong >playoffs</strong>
+            </div>
+            <div v-else-if="game.specialEvent" class="game-type"> <!--special event tag-->
+              <img src="@/assets/yellowDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
+              <strong >{{ game.specialEvent.default }}</strong>
+            </div>
+            <div class="game-section">
+              <div class="team-container">
+                <div class="game-team">
+                  <div style="display:flex;width:250px;color:white">
+                    <img :src="game.awayTeam.logo" alt="Away Team Logo" class="team-logo">
+                    <strong>{{ game.awayTeam.abbrev }} {{ game.awayTeam.name.default }}</strong>
+                  </div>
+                  <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ getOdds(game.awayTeam.odds) }}</strong>
                 </div>
-                <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ getOdds(game.awayTeam.odds) }}</strong>
+                <div class="game-score-container">
+                  <div v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">
+                    <strong v-if="game.situation && game.situation.awayTeam.situationDescriptions" class="powerplay-tag">{{ getPPLabel(game, 'away') }}</strong>
+                    <strong :class="((game.awayTeam.score>game.homeTeam.score) && (game.gameState=='OFF' || game.gameState=='FINAL')) ? 'game-score-win' : 'game-score'">{{ game.awayTeam.score }}</strong>
+                  </div>
+                </div>
               </div>
-              <div class="game-score-container">
-                <div v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">
-                  <strong v-if="game.situation && game.situation.awayTeam.situationDescriptions" class="powerplay-tag">{{ getPPLabel(game, 'away') }}</strong>
-                  <strong :class="((game.awayTeam.score>game.homeTeam.score) && (game.gameState=='OFF' || game.gameState=='FINAL')) ? 'game-score-win' : 'game-score'">{{ game.awayTeam.score }}</strong>
+              <div class="period-clock">
+                <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'">{{ setTime(game.startTimeUTC) }}</strong>
+                <strong v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">{{ currentGameTime(game.gameState, game.periodDescriptor, game.clock) }}</strong>
+              </div>
+            </div>
+            <div class="game-section">
+              <div class="team-container">
+                <div class="game-team">
+                  <div style="display:flex;width:250px;color:white">
+                    <img :src="game.homeTeam.logo" alt="Home Team Logo" class="team-logo">
+                    <strong>{{ game.homeTeam.abbrev }} {{ game.homeTeam.name.default }}</strong>
+                  </div>
+                  <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ getOdds(game.homeTeam.odds) }}</strong>
+                </div>
+                <div class="game-score-container">
+                  <div v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">
+                    <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="powerplay-tag">{{ getPPLabel(game, 'home') }}</strong>
+                    <strong :class="((game.homeTeam.score>game.awayTeam.score) && (game.gameState=='OFF' || game.gameState=='FINAL')) ? 'game-score-win' : 'game-score'">{{ game.homeTeam.score }}</strong>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="period-clock">
-              <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'">{{ setTime(game.startTimeUTC) }}</strong>
-              <strong v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">{{ currentGameTime(game.gameState, game.periodDescriptor, game.clock) }}</strong>
-            </div>
-          </div>
-          <div class="game-section">
-            <div class="team-container">
-              <div class="game-team">
-                <div style="display:flex;width:250px;color:white">
-                  <img :src="game.homeTeam.logo" alt="Home Team Logo" class="team-logo">
-                  <strong>{{ game.homeTeam.abbrev }} {{ game.homeTeam.name.default }}</strong>
-                </div>
-                <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ getOdds(game.homeTeam.odds) }}</strong>
-              </div>
-              <div class="game-score-container">
-                <div v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">
-                  <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="powerplay-tag">{{ getPPLabel(game, 'home') }}</strong>
-                  <strong :class="((game.homeTeam.score>game.awayTeam.score) && (game.gameState=='OFF' || game.gameState=='FINAL')) ? 'game-score-win' : 'game-score'">{{ game.homeTeam.score }}</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </div>
+          </li>
+        </ul>
+      </div>
+      <div class="all-games" ref="gamesScroll" v-else @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+        <h5 style="color:white">No games today</h5>
+      </div>
+    </PullToRefresh>
 
     <!-- Display error if any -->
     <div v-if="error">
@@ -89,6 +93,7 @@
   
 <script>
 import ProgressSpinner from './ProgressSpinner.vue';
+import PullToRefresh from '@/components/PullToRefresh.vue';
 import Layout from '@/components/Layout.vue';
 
 import { fetchApi } from '@/services/fetchApi';
@@ -97,6 +102,7 @@ export default {
   name: 'Scores',
   components: {
     ProgressSpinner,
+    PullToRefresh,
     Layout,
   },
   data() {
@@ -110,6 +116,9 @@ export default {
       daysToShow: 7, // Number of days to show in the navigation bar
       centerIndex: 0, // Added centerIndex to keep track of the center position
       scrollInterval: null,
+      touchStartX: 0,
+      touchStartY: 0,
+      isSwiping: false,
       error: null,
     };
   },
@@ -146,6 +155,54 @@ export default {
   methods: {
     isMobile() {
       return window.innerWidth <= 640;
+    },
+    async refreshGames() {
+      try {
+        this.isLoading = true;
+        await this.fetchGames();
+        await this.fetchSchedule();
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    handleTouchStart(e) {
+      this.touchStartX = e.touches[0].clientX;
+      this.touchStartY = e.touches[0].clientY;
+      this.isSwiping = true;
+    },
+    handleTouchMove(e) {
+      if (!this.isSwiping) return;
+      const deltaX = e.touches[0].clientX - this.touchStartX;
+      const deltaY = e.touches[0].clientY - this.touchStartY;
+      // If user is scrolling vertically, cancel swipe detection
+      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        this.isSwiping = false;
+      }
+    },
+
+    handleTouchEnd(e) {
+      if (!this.isSwiping) return;
+      const touchEndX = e.changedTouches[0].clientX;
+      const deltaX = touchEndX - this.touchStartX;
+      const swipeThreshold = 50; // adjust sensitivity
+      if (deltaX > swipeThreshold) {
+        // swipe RIGHT → previous day
+        this.goToAdjacentDate(-1);
+      } else if (deltaX < -swipeThreshold) {
+        // swipe LEFT → next day
+        this.goToAdjacentDate(1);
+      }
+      this.isSwiping = false;
+    },
+    goToAdjacentDate(direction) {
+      const currentIndex = this.dateRange.indexOf(this.selectedDate);
+      if (currentIndex === -1) return;
+      const newIndex = currentIndex + direction;
+
+      if (newIndex < 0 || newIndex >= this.dateRange.length) return;
+      const newDate = this.dateRange[newIndex];
+      
+      this.selectDate(newDate);
     },
     async fetchGames() {
       try {
@@ -531,7 +588,9 @@ li {
 @media (max-width: 640px) {
   .all-games {
     height: calc(100dvh - 240px);
+    padding-top: 1rem;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .dates {
     width: 100%;
@@ -539,7 +598,7 @@ li {
   }
   .date-header {
     margin-top:0rem;
-    margin-bottom:1rem;
+    margin-bottom:0rem;
   }
   .date-navigation {
     margin-top: 0.5rem;
@@ -547,6 +606,9 @@ li {
   }
   .game-box {
     padding: 0.2rem;
+  }
+  .game-box:hover {
+    background-color: #ffffff00;
   }
   .game-section {
     padding: 4px;

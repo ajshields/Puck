@@ -6,7 +6,7 @@
     </div>
     <!-- <AutoComplete v-model="searchPlayer" :suggestions="allSearchPlayers" field="label" placeholder="Search Players" :minLength="3" @complete="searchPlayerGo" /> -->
     <div v-if="allSearchPlayers.length>0">
-        <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Select a Player" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
+        <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Search Players" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
     </div>
 
     <div v-if="playerInfo.playerId" class="player-info-header">
@@ -21,7 +21,7 @@
         <router-link :to="'/player/' + id + '/info'">INFO</router-link>
     </nav>
     
-    <router-view v-if="playerInfo.playerId" name="player-content" :playerInfo="playerInfo"></router-view>
+    <router-view v-if="playerInfo.playerId" name="player-content" :playerInfo="playerInfo" :key="id"></router-view>
 
     <!-- Display error if any -->
     <div v-if="error">
@@ -52,15 +52,24 @@ export default {
         this.fetchPlayerInfo();
         this.fetchAllPlayers();
     },
+    watch: {
+      id(newId, oldId) {
+        if (newId !== oldId) {
+          this.playerInfo = {};
+          this.isLoading = true;
+          this.fetchPlayerInfo();
+        }
+      }
+    },
     data() {
-      return {
-          isLoading: true,
-          todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
-          playerInfo: {},
-          searchPlayer: null,
-          allSearchPlayers: [],
-          error: null,
-      };
+        return {
+            isLoading: true,
+            todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
+            playerInfo: {},
+            searchPlayer: null,
+            allSearchPlayers: [],
+            error: null,
+        };
     },
     methods: {
         async fetchPlayerInfo() {
@@ -119,19 +128,13 @@ export default {
             });
         },
         searchPlayerGo(event) {
-            this.$router.push({ name: 'player.season', params: { id: event.value.value }});
-            setTimeout(() => {
-                window.location.reload();
-            }, 50);
+            const playerId = event.value.value;
 
-            const currentPath = this.$route.path;
-            // Construct the new team-specific path by replacing the current team abbreviation with the selected one
-            const newPlayerPath = currentPath.replace(/\/player\/\d+/, `/player/${event.value.value}`);
-            // Push the new path to the router
-            this.$router.push(newPlayerPath);
-            setTimeout(() => {
-                window.location.reload();
-            }, 50);
+            this.$router.push({
+              name: this.$route.name, // stay on same sub-route (season/career/info)
+              params: { id: playerId },
+              query: this.$route.query // preserve any query params if needed
+            });
         },
     },
 };
@@ -192,6 +195,10 @@ export default {
     overflow-y: auto;
     width: 100%;
     margin-left: -20px;
+}
+
+.p-inputtext {
+    font-size: 16px !important;
 }
 
 /* Mobile Device Styling */

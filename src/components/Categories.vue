@@ -1090,10 +1090,6 @@ export default {
 .selected-row {
   background-color: var(--hover-color);
   color: white;
-  /*border: solid;
-  border-width: thin;
-  border-radius: 5px;
-  border-color: #01c58a94;*/
 }
 
 /* Add this style for row hover effect */
@@ -1143,6 +1139,9 @@ tr:hover {
       flex-direction: column;
       align-items: center;
   }
+  .selected-row {
+    background-color: #ffffff00;
+  }
   .stat-header {
     font-size: larger;
   }
@@ -1151,6 +1150,10 @@ tr:hover {
   }
   .stat-leader-value {
     font-size: larger;
+  }
+  tr:hover {
+    cursor: none;
+    background-color: #ffffff00;
   }
 }
 </style>

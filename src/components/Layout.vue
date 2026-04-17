@@ -6,9 +6,9 @@
               <Settings></Settings>
             </div>
             <nav class="app-nav">
-                <router-link to="/scores">SCORES</router-link>
-                <router-link to="/standings">STANDINGS</router-link>
-                <router-link to="/leaders/categories">LEADERS</router-link>
+                <router-link to="/scores" class="app-nav-tab" :class="{active: activeTab === 'scores'}">SCORES</router-link>
+                <router-link to="/standings" class="app-nav-tab" :class="{active: activeTab === 'standings'}">STANDINGS</router-link>
+                <router-link to="/leaders/categories" class="app-nav-tab" :class="{active: activeTab === 'leaders'}">LEADERS</router-link>
                 <!-- <router-link to="/fantasy">FANTASY</router-link> -->
             </nav>
         </header>
@@ -18,11 +18,30 @@
   
 <script>
 import Settings from '@/components/Settings.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 export default {
   name: 'Layout',
   components: {
     Settings,
+  },
+  setup() {
+    const route = useRoute();
+
+    const activeTab = computed(() => {
+      const path = route.fullPath;
+
+      if (path.includes('scores')) return 'scores';
+      if (path.includes('standings')) return 'standings';
+      if (path.includes('leaders')) return 'leaders';
+
+      return '';
+    });
+
+    return {
+      activeTab,
+    };
   },
 };
 </script>
@@ -62,6 +81,19 @@ export default {
   color: var(--link-color);
 }
 
+.app-nav-tab {
+  width: 15%;
+  display: flex;
+  justify-content: center;
+}
+
+.app-nav a.active {
+  background-color: var(--hover-dark-color);
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
 .app-header {
   font-size: x-large;
 }
@@ -78,6 +110,9 @@ export default {
 
 /* Mobile Device Styling */
 @media (max-width: 640px) {
+  .app-nav-tab {
+    width: 27%;
+  }
   .layout-container {
     max-width: none;
     margin: 0px;

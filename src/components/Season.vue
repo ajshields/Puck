@@ -42,13 +42,13 @@
         <h3 class="game-log-header">Game Log</h3>
         <div v-if="playerInfo.position!='G'" class="game-log">
             <DataTable :value="gameLog">
-                <Column field="games" header="Games" style="width:15%;text-align:left;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                <Column field="games" header="Games" style="width:18%;text-align:left;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="points" header="P" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="plusMinus" header="+/-" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                <Column field="pim" header="PIM" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                <Column field="shots" header="SOG" style="width:4%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                <Column field="pim" header="PIM" style="width:2%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                <Column field="shots" header="SOG" style="width:2%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="toi" header="TOI" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="powerPlayGoals" header="PPG" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="shorthandedGoals" header="SHG" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
@@ -227,8 +227,11 @@ export default {
     .game-log {
         width: 100%;
         margin-left: 0%;
-        height: 250px;
+        height: 450px;
         overflow-y: scroll;
+    }
+    .game-log .p-datatable-table {
+        width: 125%;
     }
     .game-log-header {
         margin-left: 0%;

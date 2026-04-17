@@ -5,7 +5,6 @@
       <!-- ... (other content) -->
     </div>
     <div><ProgressSpinner v-if="isLoading" /></div>
-    <Settings></Settings>
 
     <div class="highlight-modal" v-if="showHighlight">
       <div class="highlight-modal-content">
@@ -15,12 +14,15 @@
     </div>
 
     <div v-if="game.gameType">
-        <strong class="date-formatting">{{ dateDesc() }}</strong>
+        <div class="game-nav-header">
+            <button @click="goBack" class="back-button">&#9664;</button>
+            <strong class="date-formatting">{{ dateDesc() }}</strong>
+            <Settings></Settings>
+        </div>
         <!-- SCOREBOARD -->
         <div class="scoreboard">
-            <button @click="goBack" class="back-button">&#9664;</button>
             <!-- Away Scoreboard -->
-            <div style="display:flex">
+            <div class="away-scoreboard">
                 <img :src="game.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-logo-game away">
                 <div @click="goToTeam(game.awayTeam.abbrev)" class="scoreboard-layout away">
                     <strong class="scoreboard-city-name">{{ game.awayTeam.placeName.default }}</strong>
@@ -28,8 +30,10 @@
                     <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ game.awayTeam.record }}</strong>
                     <strong v-if="game.awayTeam.sog" class="scoreboard-team-sog">SOG: {{ game.awayTeam.sog }}</strong>
                 </div>
-                <strong v-if="game.situation && game.situation.awayTeam.situationDescriptions" class="game-powerplay-tag away">PP</strong>
-                <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="away-team-score-layout">{{ game.awayTeam.score }}</strong>
+                <div class="game-score-layout away">
+                    <strong v-if="game.situation && game.situation.awayTeam.situationDescriptions" class="game-powerplay-tag away">PP</strong>
+                    <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="away-team-score-layout" :class="{pp: game.situation && game.situation.awayTeam.situationDescriptions}">{{ game.awayTeam.score }}</strong>
+                </div>
             </div>
             <!-- Middle Scoreboard -->
             <div class="scoreboard-layout-middle">
@@ -45,9 +49,11 @@
                 </div>
             </div>
             <!-- Home Scoreboard -->
-            <div style="display:flex">
-                <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="home-team-score-layout">{{ game.homeTeam.score }}</strong>
-                <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="game-powerplay-tag home">PP</strong>
+            <div class="home-scoreboard">
+                <div class="game-score-layout home">
+                    <strong v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="home-team-score-layout" :class="{pp: game.situation && game.situation.homeTeam.situationDescriptions}">{{ game.homeTeam.score }}</strong>
+                    <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="game-powerplay-tag home">PP</strong>
+                </div>
                 <div @click="goToTeam(game.homeTeam.abbrev)" class="scoreboard-layout home">
                     <strong class="scoreboard-city-name">{{ game.homeTeam.placeName.default }}</strong>
                     <strong class="scoreboard-team-name">{{ game.homeTeam.commonName.default }}</strong>
@@ -58,656 +64,657 @@
             </div>
         </div>
         <div style="margin-top:20px;"></div>
+        <PullToRefresh scrollSelector=".game-summary" @refresh="refreshGame">
+            <div class="game-summary">
+                <div class="game-left-side">
+                    <!-- GAME PLAYS -->
+                    <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT') && plays.length>0" style="margin-top:1rem">
+                        <h3 style="margin-top:-1rem;color:white">Last Play</h3>
+                        <div class="last-play-box">
+                            <div class="last-play">
+                                <img v-if="plays[0].team" :src="plays[0].team" :alt="plays[0].team" style="padding-right:3%;width:50px"/>
+                                <strong style="padding-right:5%">{{ plays[0].time }}</strong>
+                                <strong>{{ plays[0].event }}</strong>
+                            </div>
+                            <!-- <Accordion class="plays-section"> //Only use this if you want all plays in game displayed
+                                <AccordionTab header="">
+                                    <div class="plays-section-dropdown">
+                                        <DataTable :value="plays" tableStyle="width: 100%">
+                                            <Column style="width:5%">
+                                                <template #body="slotProps">
+                                                    <img :src="slotProps.data.team" :alt="slotProps.data.team" style="width:30px"/>
+                                                </template>
+                                            </Column>
+                                            <Column field="time" header="" style="width:5%"></Column>
+                                            <Column field="event" header="" style="width:50%;text-align:left"></Column>
+                                        </DataTable>
+                                    </div>
+                                </AccordionTab>
+                            </Accordion> -->
+                        </div>
+                    </div>
 
-        <div class="game-summary">
-            <div class="game-left-side">
-                <!-- GAME PLAYS -->
-                <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT') && plays.length>0" style="margin-top:1rem">
-                    <h3 style="margin-top:-1rem;color:white">Last Play</h3>
-                    <div class="last-play-box">
-                        <div class="last-play">
-                            <img v-if="plays[0].team" :src="plays[0].team" :alt="plays[0].team" style="padding-right:3%;width:50px"/>
-                            <strong style="padding-right:5%">{{ plays[0].time }}</strong>
-                            <strong>{{ plays[0].event }}</strong>
-                        </div>
-                        <Accordion class="plays-section">
-                            <AccordionTab header="">
-                                <div class="plays-section-dropdown">
-                                    <DataTable :value="plays" tableStyle="width: 100%">
-                                        <Column style="width:5%">
-                                            <template #body="slotProps">
-                                                <img :src="slotProps.data.team" :alt="slotProps.data.team" style="width:30px"/>
-                                            </template>
-                                        </Column>
-                                        <Column field="time" header="" style="width:5%"></Column>
-                                        <Column field="event" header="" style="width:50%;text-align:left"></Column>
-                                    </DataTable>
+                    <!-- SCORING SUMMARY -->
+                    <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="scoring-summary">
+                        <div v-for="period in game.summary.scoring">
+                            <h3 v-if="period.goals[0]">{{ getPeriod(period) }}</h3>
+                            <div v-if="period.periodDescriptor.periodType!='SO'" v-for="goal in period.goals" :key="goal.id" class="goal-box">
+                                <img :src="goal.headshot" @click="goToPlayer(goal.playerId)" alt="Player Logo" class="player-logo">
+                                <img :src="getPlayerTeamLogo(goal.teamAbbrev.default)" alt="Player Team Logo" class="player-team-logo">
+                                <div class="summary-players">
+                                    <div>
+                                        <strong @click="goToPlayer(goal.playerId)" class="goal-text">{{ goal.name.default }} <strong class="goal-text-amount">{{ getGoalsInGame(goal.playerId, goal.goalsToDate) }}</strong><strong class="goal-text-amount"> ({{ goal.goalsToDate }})</strong></strong>
+                                        <strong v-if="goal.strength!='ev'" class="special-teams">{{ goal.strength }}</strong>
+                                        <strong v-if="goal.goalModifier!='none'" class="special-teams">{{ getGoalModifier(goal.goalModifier) }}</strong>
+                                    </div>
+                                    <div>
+                                        <strong style="font-size:small"> {{ goal.timeInPeriod }}</strong>
+                                        <strong v-if="goal.assists.length>0 || goal.goalModifier!='penalty-shot'" class="assist-text"> - </strong>
+                                        <strong v-if="goal.assists[0]" @click="goToPlayer(goal.assists[0].playerId)" class="assist-text" style="cursor:pointer">{{ goal.assists[0].name.default }} ({{ goal.assists[0].assistsToDate }})</strong>
+                                        <strong v-if="goal.assists[1]" @click="goToPlayer(goal.assists[1].playerId)" class="assist-text" style="cursor:pointer">, {{ goal.assists[1].name.default }} ({{ goal.assists[1].assistsToDate }})</strong>
+                                        <strong v-if="goal.assists.length==0 && goal.goalModifier!='penalty-shot'" class="assist-text">Unassisted</strong>
+                                    </div>
                                 </div>
-                            </AccordionTab>
-                        </Accordion>
+                                <!-- <button @click="playHighlight(goal)" class="highlight-button">&#11208;</button> -->
+                            </div>
+                            <div v-else v-for="attempt in game.summary.shootout.events" class="goal-box">
+                                <img :src="attempt.headshot" alt="Player Logo" class="player-logo">
+                                <img :src="getPlayerTeamLogo(attempt.teamAbbrev)" alt="Player Team Logo" class="player-team-logo">
+                                <div class="summary-players" style="width:100%">
+                                    <div style="display:inline-flex;align-items:center">
+                                        <strong class="goal-text" style="width:30%">{{ getAbbrevName(attempt.firstName.default, attempt.lastName.default) }}<strong v-if="attempt.gameWinner" class="goal-text-amount"> (GW)</strong></strong>
+                                        <img v-if="attempt.result=='goal'" src="@/assets/puck.svg" alt="Puck" class="penalty-shot-logo"/>
+                                        <img v-else src="@/assets/mask.svg" alt="Mask" class="penalty-shot-logo"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- SCORING SUMMARY -->
-                <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="scoring-summary">
-                    <div v-for="period in game.summary.scoring">
-                        <h3 v-if="period.goals[0]">{{ getPeriod(period) }}</h3>
-                        <div v-if="period.periodDescriptor.periodType!='SO'" v-for="goal in period.goals" :key="goal.id" class="goal-box">
-                            <img :src="goal.headshot" @click="goToPlayer(goal.playerId)" alt="Player Logo" class="player-logo">
-                            <img :src="getPlayerTeamLogo(goal.teamAbbrev.default)" alt="Player Team Logo" class="player-team-logo">
-                            <div class="summary-players">
-                                <div>
-                                    <strong @click="goToPlayer(goal.playerId)" class="goal-text">{{ goal.name.default }} <strong class="goal-text-amount">{{ getGoalsInGame(goal.playerId, goal.goalsToDate) }}</strong><strong class="goal-text-amount"> ({{ goal.goalsToDate }})</strong></strong>
-                                    <strong v-if="goal.strength!='ev'" class="special-teams">{{ goal.strength }}</strong>
-                                    <strong v-if="goal.goalModifier!='none'" class="special-teams">{{ getGoalModifier(goal.goalModifier) }}</strong>
-                                </div>
-                                <div>
-                                    <strong style="font-size:small"> {{ goal.timeInPeriod }}</strong>
-                                    <strong v-if="goal.assists.length>0 || goal.goalModifier!='penalty-shot'" class="assist-text"> - </strong>
-                                    <strong v-if="goal.assists[0]" @click="goToPlayer(goal.assists[0].playerId)" class="assist-text" style="cursor:pointer">{{ goal.assists[0].name.default }} ({{ goal.assists[0].assistsToDate }})</strong>
-                                    <strong v-if="goal.assists[1]" @click="goToPlayer(goal.assists[1].playerId)" class="assist-text" style="cursor:pointer">, {{ goal.assists[1].name.default }} ({{ goal.assists[1].assistsToDate }})</strong>
-                                    <strong v-if="goal.assists.length==0 && goal.goalModifier!='penalty-shot'" class="assist-text">Unassisted</strong>
-                                </div>
-                            </div>
-                            <!-- <button @click="playHighlight(goal)" class="highlight-button">&#11208;</button> -->
-                        </div>
-                        <div v-else v-for="attempt in game.summary.shootout.events" class="goal-box">
-                            <img :src="attempt.headshot" alt="Player Logo" class="player-logo">
-                            <img :src="getPlayerTeamLogo(attempt.teamAbbrev)" alt="Player Team Logo" class="player-team-logo">
-                            <div class="summary-players" style="width:100%">
-                                <div style="display:inline-flex;align-items:center">
-                                    <strong class="goal-text" style="width:30%">{{ getAbbrevName(attempt.firstName.default, attempt.lastName.default) }}<strong v-if="attempt.gameWinner" class="goal-text-amount"> (GW)</strong></strong>
-                                    <img v-if="attempt.result=='goal'" src="@/assets/puck.svg" alt="Puck" class="penalty-shot-logo"/>
-                                    <img v-else src="@/assets/mask.svg" alt="Mask" class="penalty-shot-logo"/>
-                                </div>
+                    <!-- GOALIE COMPARISON STATS -->
+                    <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="goalie-stats" style="margin-top:1rem">
+                        <div class="team-leaders-header">
+                            <strong class="team-leaders-header-text">Goalie Comparison</strong>
+                            <!-- <strong style="font-size:small">Goalie Comparison</strong> -->
+                            <div class="team-leaders-header-bar"></div>
+                            <div class="team-leaders-logos">
+                                <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-leaders-logo-size">
+                                <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-leaders-logo-size">
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- GOALIE COMPARISON STATS -->
-                <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="goalie-stats" style="margin-top:1rem">
-                    <div class="team-leaders-header">
-                        <strong class="team-leaders-header-text">Goalie Comparison</strong>
-                        <!-- <strong style="font-size:small">Goalie Comparison</strong> -->
-                        <div class="team-leaders-header-bar"></div>
-                        <div class="team-leaders-logos">
-                            <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-leaders-logo-size">
-                            <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-leaders-logo-size">
-                        </div>
-                    </div>
-                    <div class="goalie-stats-content">
-                        <!-- goalies away side -->
-                        <div v-if="gameStory.preGameMatchup" class="goalie-stats-content-away">
-                            <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.awayTeam" class="goalie-stats-content-away-section">
-                                <div v-if="goalie.record" class="goalie-stat-values away">
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
-                                </div>
-                                <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info" style="align-items:flex-end;padding-right:15px">
-                                    <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
-                                    <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
-                                    <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
-                                </div>
-                                <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
-                            </div>
-                        </div>
-                        <div class="stat-leader-column">
-                            <div class="vertical-line-container"><div class="vertical-line"></div></div>
-                        </div>
-                        <!-- goalies home side -->
-                        <div class="goalie-stats-content-home">
-                            <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.homeTeam" class="goalie-stats-content-away-section">
-                                <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
-                                <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info" style="align-items:flex-start;padding-left:15px">
-                                    <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
-                                    <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
-                                    <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
-                                </div>
-                                <div v-if="goalie.record" class="goalie-stat-values home">
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
-                                    <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" style="margin-top:1rem">
-                    <h3 style="color:white">Goaltending</h3>
-                    <div class="goalie-stats">
-                        <div style="display:flex"> <!-- awayGoalie -->
-                            <div class="goalies-column" style="width:10%">
-                                <img :src="game.awayTeam.logo" @click="goToTeam(game.awayTeam.abbrev)" alt="Away Team Logo" style="width:50px;cursor:pointer">
-                                <strong>#{{ getGoalieInfo(game.awayTeam.abbrev, 'jerseyNumber') }}</strong>
-                            </div>
-                            <!-- Goalie Headshot Image -->
-                            <div style="width:90%">
-                                <div style="color:white;cursor:pointer">
-                                    <strong @click="goToPlayer(getGoalieInfo(game.awayTeam.abbrev, 'id'))">{{ getGoalieInfo(game.awayTeam.abbrev, 'name') }}</strong>
-                                    <!-- <span>{{ getGoalieInfo(game.awayTeam.abbrev, 'record') }}</span> -->
-                                </div>
-                                <div style="display:flex;justify-content:space-around">
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'SA') }}</strong>
-                                        <strong style="font-size:x-small">SA</strong>
+                        <div v-if="gameStory.preGameMatchup" class="goalie-stats-content">
+                            <!-- goalies away side -->
+                            <div class="goalie-stats-content-away">
+                                <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.awayTeam" class="goalie-stats-content-away-section">
+                                    <div v-if="goalie.record" class="goalie-stat-values away">
+                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
+                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
+                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
                                     </div>
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'GA') }}</strong>
-                                        <strong style="font-size:x-small">GA</strong>
+                                    <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info away">
+                                        <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
+                                        <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
+                                        <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
                                     </div>
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'SV') }}</strong>
-                                        <strong style="font-size:x-small">SV</strong>
-                                    </div>
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'SV%') }}</strong>
-                                        <strong style="font-size:x-small">SV%</strong>
-                                    </div>
+                                    <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
                                 </div>
-                            </div>
-                        </div>
-                        <div style="display:flex"> <!-- homeGoalie -->
-                            <div class="goalies-column" style="width:10%">
-                                <img :src="game.homeTeam.logo" @click="goToTeam(game.homeTeam.abbrev)" alt="Away Team Logo" style="width:50px;cursor:pointer">
-                                <strong>#{{ getGoalieInfo(game.homeTeam.abbrev, 'jerseyNumber') }}</strong>
-                            </div>
-                            <!-- goalie player image -->
-                            <div style="width:90%">
-                                <div style="color:white;cursor:pointer">
-                                    <strong @click="goToPlayer(getGoalieInfo(game.homeTeam.abbrev, 'id'))">{{ getGoalieInfo(game.homeTeam.abbrev, 'name') }}</strong>
-                                    <!-- <span>{{ getGoalieInfo(game.homeTeam.abbrev, 'record') }}</span> -->
-                                </div>
-                                <div style="display:flex;justify-content:space-around">
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'SA') }}</strong>
-                                        <strong style="font-size:x-small">SA</strong>
-                                    </div>
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'GA') }}</strong>
-                                        <strong style="font-size:x-small">GA</strong>
-                                    </div>
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'SV') }}</strong>
-                                        <strong style="font-size:x-small">SV</strong>
-                                    </div>
-                                    <div class="goalies-column">
-                                        <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'SV%') }}</strong>
-                                        <strong style="font-size:x-small">SV%</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PENALTY SUMMARY -->
-                <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && penaltySummary.length>0" style="margin-top:1rem">
-                    <h3 style="color:white">Penalties</h3>
-                    <Accordion class="penalties-box">
-                            <AccordionTab v-for="(penalties, index) in penaltySummary" :key="index" :header="getPenaltyPeriod(index)+' Period'">
-                                <DataTable :value="penalties" tableStyle="width: 100%">
-                                    <Column style="width: 1%">
-                                        <template #body="slotProps">
-                                            <img v-if="slotProps.data.team === game.awayTeam.abbrev" :src="game.awayTeam.logo" :alt="game.awayTeam.abbrev" class="penalties-team-logo"/>
-                                            <img v-else-if="slotProps.data.team === game.homeTeam.abbrev" :src="game.homeTeam.logo" :alt="game.homeTeam.abbrev" class="penalties-team-logo"/>
-                                        </template>
-                                    </Column>
-                                    <Column field="team" header="Team" style="width: 5%"></Column>
-                                    <Column field="player" header="Player" style="width: 10%"></Column>
-                                    <Column field="penalty" header="Penalty" style="width: 20%"></Column>
-                                    <Column field="time" header="Time" style="width: 5%"></Column>
-                                </DataTable>
-                            </AccordionTab>
-                    </Accordion>
-                </div>
-
-                <!-- TEAM LEADERS -->
-                <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && game.matchup" class="team-leaders">
-                    <div class="team-leaders-header">
-                        <strong class="team-leaders-header-text">Players to Watch</strong>
-                        <!-- <strong style="font-size:small">Last 5 Games</strong> -->
-                        <div class="team-leaders-header-bar"></div>
-                        <div class="team-leaders-logos">
-                            <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-leaders-logo-size">
-                            <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-leaders-logo-size">
-                        </div>
-                    </div>
-                    <div v-for="category in gameStory.preGameMatchup.skatingLeaders.leaders" class="stat-leader">
-                        <div class="stat-leader-column away">
-                            <strong style="font-size:xxx-large;color:white">{{ category.awayLeader.value }}</strong>
-                            <strong style="font-size:small;margin-top:-10px;">{{ getValueLetter(category.category, false) }}</strong>
-                        </div>
-                        <div class="stat-leader-middle">
-                            <div @click="goToPlayer(category.awayLeader.playerId)" class="stat-leader-player-info away">
-                                <strong class="player-compare first-name">{{ category.awayLeader.firstName.default }}</strong>
-                                <strong class="player-compare last-name">{{ category.awayLeader.lastName.default }}</strong>
-                                <strong class="player-compare position-num">#{{ category.awayLeader.sweaterNumber }} - {{ category.awayLeader.positionCode }}</strong>
-                            </div>
-                            <div class="stat-leader-column headshot">
-                                <img :src="category.awayLeader.headshot" @click="goToPlayer(category.awayLeader.playerId)" alt="Player Category Headshot" class="category-headshot">
                             </div>
                             <div class="stat-leader-column">
-                                <strong class="vertical-line-category">{{ category.category }}</strong>
                                 <div class="vertical-line-container"><div class="vertical-line"></div></div>
                             </div>
-                            <div class="stat-leader-column headshot">
-                                <img :src="category.homeLeader.headshot" @click="goToPlayer(category.homeLeader.playerId)" alt="Player Category Headshot" class="category-headshot">
-                            </div>
-                            <div @click="goToPlayer(category.homeLeader.playerId)" class="stat-leader-player-info home">
-                                <strong class="player-compare first-name">{{ category.homeLeader.firstName.default }}</strong>
-                                <strong class="player-compare last-name">{{ category.homeLeader.lastName.default }}</strong>
-                                <strong class="player-compare position-num">#{{ category.homeLeader.sweaterNumber }} - {{ category.homeLeader.positionCode }}</strong>
+                            <!-- goalies home side -->
+                            <div class="goalie-stats-content-home">
+                                <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.homeTeam" class="goalie-stats-content-away-section">
+                                    <img :src="goalie.headshot" @click="goToPlayer(goalie.playerId)" alt="Goalie Category Headshot" class="category-headshot">
+                                    <div v-if="goalie.playerId" @click="goToPlayer(goalie.playerId)" class="goalie-stat-info home">
+                                        <strong class="player-compare first-name">{{ goalie.firstName.default }}</strong>
+                                        <strong class="player-compare last-name">{{ goalie.lastName.default }}</strong>
+                                        <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
+                                    </div>
+                                    <div v-if="goalie.record" class="goalie-stat-values home">
+                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
+                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
+                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="stat-leader-column home">
-                            <strong style="font-size:xxx-large;color:white">{{ category.homeLeader.value }}</strong>
-                            <strong style="font-size:small;margin-top:-10px;">{{ getValueLetter(category.category, false) }}</strong>
+                    </div>
+                    <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" style="margin-top:1rem">
+                        <h3 style="color:white">Goaltending</h3>
+                        <div class="goalie-stats">
+                            <div style="display:flex"> <!-- awayGoalie -->
+                                <div class="goalies-column" style="width:10%">
+                                    <img :src="game.awayTeam.logo" @click="goToTeam(game.awayTeam.abbrev)" alt="Away Team Logo" style="width:50px;cursor:pointer">
+                                    <strong>#{{ getGoalieInfo(game.awayTeam.abbrev, 'jerseyNumber') }}</strong>
+                                </div>
+                                <!-- Goalie Headshot Image -->
+                                <div style="width:90%">
+                                    <div style="color:white;cursor:pointer">
+                                        <strong @click="goToPlayer(getGoalieInfo(game.awayTeam.abbrev, 'id'))">{{ getGoalieInfo(game.awayTeam.abbrev, 'name') }}</strong>
+                                        <!-- <span>{{ getGoalieInfo(game.awayTeam.abbrev, 'record') }}</span> -->
+                                    </div>
+                                    <div style="display:flex;justify-content:space-around">
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'SA') }}</strong>
+                                            <strong style="font-size:x-small">SA</strong>
+                                        </div>
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'GA') }}</strong>
+                                            <strong style="font-size:x-small">GA</strong>
+                                        </div>
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'SV') }}</strong>
+                                            <strong style="font-size:x-small">SV</strong>
+                                        </div>
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.awayTeam.abbrev, 'SV%') }}</strong>
+                                            <strong style="font-size:x-small">SV%</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display:flex"> <!-- homeGoalie -->
+                                <div class="goalies-column" style="width:10%">
+                                    <img :src="game.homeTeam.logo" @click="goToTeam(game.homeTeam.abbrev)" alt="Away Team Logo" style="width:50px;cursor:pointer">
+                                    <strong>#{{ getGoalieInfo(game.homeTeam.abbrev, 'jerseyNumber') }}</strong>
+                                </div>
+                                <!-- goalie player image -->
+                                <div style="width:90%">
+                                    <div style="color:white;cursor:pointer">
+                                        <strong @click="goToPlayer(getGoalieInfo(game.homeTeam.abbrev, 'id'))">{{ getGoalieInfo(game.homeTeam.abbrev, 'name') }}</strong>
+                                        <!-- <span>{{ getGoalieInfo(game.homeTeam.abbrev, 'record') }}</span> -->
+                                    </div>
+                                    <div style="display:flex;justify-content:space-around">
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'SA') }}</strong>
+                                            <strong style="font-size:x-small">SA</strong>
+                                        </div>
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'GA') }}</strong>
+                                            <strong style="font-size:x-small">GA</strong>
+                                        </div>
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'SV') }}</strong>
+                                            <strong style="font-size:x-small">SV</strong>
+                                        </div>
+                                        <div class="goalies-column">
+                                            <strong style="color:white">{{ getGoalieInfo(game.homeTeam.abbrev, 'SV%') }}</strong>
+                                            <strong style="font-size:x-small">SV%</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+
+                    <!-- PENALTY SUMMARY -->
+                    <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && penaltySummary.length>0" style="margin-top:1rem">
+                        <h3 style="color:white">Penalties</h3>
+                        <Accordion class="penalties-box">
+                                <AccordionTab v-for="(penalties, index) in penaltySummary" :key="index" :header="getPenaltyPeriod(index)+' Period'">
+                                    <DataTable :value="penalties" tableStyle="width: 100%">
+                                        <Column style="width: 1%">
+                                            <template #body="slotProps">
+                                                <img v-if="slotProps.data.team === game.awayTeam.abbrev" :src="game.awayTeam.logo" :alt="game.awayTeam.abbrev" class="penalties-team-logo"/>
+                                                <img v-else-if="slotProps.data.team === game.homeTeam.abbrev" :src="game.homeTeam.logo" :alt="game.homeTeam.abbrev" class="penalties-team-logo"/>
+                                            </template>
+                                        </Column>
+                                        <Column field="team" header="Team" style="width: 5%"></Column>
+                                        <Column field="player" header="Player" style="width: 10%"></Column>
+                                        <Column field="penalty" header="Penalty" style="width: 20%"></Column>
+                                        <Column field="time" header="Time" style="width: 5%"></Column>
+                                    </DataTable>
+                                </AccordionTab>
+                        </Accordion>
+                    </div>
+
+                    <!-- TEAM LEADERS -->
+                    <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && game.preGameMatchup" class="team-leaders">
+                        <div class="team-leaders-header">
+                            <strong class="team-leaders-header-text">Players to Watch</strong>
+                            <strong class="team-leaders-last-five">Last 5 Games</strong>
+                            <div class="team-leaders-header-bar"></div>
+                            <div class="team-leaders-logos">
+                                <img :src="game.awayTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-leaders-logo-size">
+                                <img :src="game.homeTeam.logo" alt="Team Stats Logo" @click="goToTeam(game.homeTeam.abbrev)" class="team-leaders-logo-size">
+                            </div>
+                        </div>
+                        <div v-for="category in gameStory.preGameMatchup.skatingLeaders.leaders" class="stat-leader">
+                            <div class="stat-leader-column away">
+                                <strong style="font-size:xxx-large;color:white">{{ category.awayLeader.value }}</strong>
+                                <strong style="font-size:small;margin-top:-10px;">{{ getValueLetter(category.category, false) }}</strong>
+                            </div>
+                            <div class="stat-leader-middle">
+                                <div @click="goToPlayer(category.awayLeader.playerId)" class="stat-leader-player-info away">
+                                    <strong class="player-compare first-name">{{ category.awayLeader.firstName.default }}</strong>
+                                    <strong class="player-compare last-name">{{ category.awayLeader.lastName.default }}</strong>
+                                    <strong class="player-compare position-num">#{{ category.awayLeader.sweaterNumber }} - {{ category.awayLeader.positionCode }}</strong>
+                                </div>
+                                <div class="stat-leader-column headshot">
+                                    <img :src="category.awayLeader.headshot" @click="goToPlayer(category.awayLeader.playerId)" alt="Player Category Headshot" class="category-headshot">
+                                </div>
+                                <div class="stat-leader-column">
+                                    <strong class="vertical-line-category">{{ category.category }}</strong>
+                                    <div class="vertical-line-container"><div class="vertical-line"></div></div>
+                                </div>
+                                <div class="stat-leader-column headshot">
+                                    <img :src="category.homeLeader.headshot" @click="goToPlayer(category.homeLeader.playerId)" alt="Player Category Headshot" class="category-headshot">
+                                </div>
+                                <div @click="goToPlayer(category.homeLeader.playerId)" class="stat-leader-player-info home">
+                                    <strong class="player-compare first-name">{{ category.homeLeader.firstName.default }}</strong>
+                                    <strong class="player-compare last-name">{{ category.homeLeader.lastName.default }}</strong>
+                                    <strong class="player-compare position-num">#{{ category.homeLeader.sweaterNumber }} - {{ category.homeLeader.positionCode }}</strong>
+                                </div>
+                            </div>
+                            <div class="stat-leader-column home">
+                                <strong style="font-size:xxx-large;color:white">{{ category.homeLeader.value }}</strong>
+                                <strong style="font-size:small;margin-top:-10px;">{{ getValueLetter(category.category, false) }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PLAYER STATS -->
+                    <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="players-stats-section">
+                        <div class="player-stats-box" style="margin-top:1rem">
+                            <h3 style="color:white">Player Stats</h3>
+                            <div class="player-stats-teams">
+                                <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.awayTeam.id }" @click="switchPlayerStats(game.awayTeam.id)">{{ game.awayTeam.commonName.default }}</v-button>
+                                <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerStats(game.homeTeam.id)">{{ game.homeTeam.commonName.default }}</v-button>
+                            </div>
+                        </div>
+                        <DataTable :value="playerStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer">
+                            <Column field="sweaterNumber" header="#" style="width:3%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="name" header="Player" class="stats-name-header" style="width:5%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="position" header="POS" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="gamesPlayed" header="GP" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="points" header="P" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="plusMinus" header="+/-" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="pim" header="PIM" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="shots" header="S" style="width:4%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="powerPlayGoals" header="PPG" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="hits" header="H" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="avgTimeOnIce" header="TOI/G" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="faceoffWinningPctg" header="FO%" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                        </DataTable>
+                    </div>
+
+                    <!-- THREE STARS -->
+                    <div v-if="game.gameState=='OFF' || game.gameState=='FINAL'" style="margin-top:1rem">
+                        <h3 style="color:white">Three Stars</h3>
+                        <div class="three-stars-box">
+                            <div v-for="(player, index) in game.summary.threeStars" :key="index">
+                                <div style="display:flex">
+                                    <div class="three-stars-column">
+                                        <strong>{{ getStarNum(index) }}</strong>
+                                        <img src="@/assets/star.svg" alt="Star" style="margin-top:5px"/>
+                                        <!-- <strong style="font-size:xx-large;color:var(--main-color)">&#128970;</strong> -->
+                                    </div>
+                                    <div class="three-stars-formatting">
+                                        <img :src="player.headshot" @click="goToPlayer(player.playerId)" alt="Player Category Headshot" class="category-headshot three-stars">
+                                        <img :src="getPlayerTeamLogo(player.teamAbbrev)" alt="Player Team Logo" class="player-team-logo three-stars">
+                                    </div>
+                                    <div class="three-stars-column">
+                                        <strong v-if="player.name.default" @click="goToPlayer(player.playerId)" style="cursor:pointer">{{ player.name.default }}</strong>
+                                        <strong v-else @click="goToPlayer(player.playerId)" style="cursor:pointer">{{ player.name }}</strong>
+                                        <strong>#{{ player.sweaterNo }} - {{ player.position }}</strong>
+                                        <strong></strong>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div v-if="player.position=='G'" class="three-stars-stats">
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'saveShotsAgainst', 'SA') }}</strong>
+                                            <strong style="font-size:x-small">SA</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'goalsAgainst') }}</strong>
+                                            <strong style="font-size:x-small">GA</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'saveShotsAgainst', 'SV') }}</strong>
+                                            <strong style="font-size:x-small">SV</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ getSavePctg(configureThreeStars(player, 'savePctg')) }}</strong>
+                                            <strong style="font-size:x-small">SV%</strong>
+                                        </div>
+                                    </div>
+                                    <div v-else class="three-stars-stats">
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'goals') }}</strong>
+                                            <strong style="font-size:x-small">G</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'assists') }}</strong>
+                                            <strong style="font-size:x-small">A</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'pim') }}</strong>
+                                            <strong style="font-size:x-small">PIM</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'plusMinus') }}</strong>
+                                            <strong style="font-size:x-small">+/-</strong>
+                                        </div>
+                                        <div class="three-stars-column">
+                                            <strong style="color:white">{{ configureThreeStars(player, 'toi') }}</strong>
+                                            <strong style="font-size:x-small">TOI</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="index==0 || index==1" class="vertical-line-stars"><div class="vertical-line" style="margin-right:-20px"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PLAYER GAME STATS -->
+                    <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="players-stats-section">
+                        <div class="player-stats-box" style="margin-top:1rem">
+                            <h3 style="color:white">Stats</h3>
+                            <div class="player-stats-teams">
+                                <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerGameStatsTeamSelected === game.awayTeam.id }" @click="switchPlayerGameStats('away')">{{ game.awayTeam.commonName.default }}</v-button>
+                                <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerGameStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerGameStats('home')">{{ game.homeTeam.commonName.default }}</v-button>
+                            </div>
+                        </div>
+                        <DataTable :value="playerGameStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer">
+                            <Column field="sweaterNumber" header="#" style="width:3%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="name" header="Player" class="stats-name-header" style="width:5%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="points" header="P" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="plusMinus" header="+/-" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="pim" header="PIM" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="shots" header="S" style="width:4%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="hits" header="H" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="powerPlayGoals" header="PPG" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="avgTimeOnIce" header="TOI" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                            <Column field="faceoffWinningPctg" header="FO%" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                        </DataTable>
                     </div>
                 </div>
 
-                <!-- PLAYER STATS -->
-                <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="players-stats-section">
-                    <div class="player-stats-box" style="margin-top:1rem">
-                        <h3 style="color:white">Player Stats</h3>
-                        <div class="player-stats-teams">
-                            <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.awayTeam.id }" @click="switchPlayerStats(game.awayTeam.id)">{{ game.awayTeam.commonName.default }}</v-button>
-                            <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerStats(game.homeTeam.id)">{{ game.homeTeam.commonName.default }}</v-button>
-                        </div>
+                <div class="game-right-side">
+                    <!-- LINE SCORE -->
+                    <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && (this.game.summary.shotsByPeriod)">
+                        <h3 style="color:white">Linescore</h3>
+                        <DataTable :value="lineScore">
+                            <Column style="width: 3%">
+                                <template #body="slotProps">
+                                  <img :src="slotProps.data.logo" :alt="slotProps.data.team"/>
+                                </template>
+                            </Column>
+                            <Column field="team" header="" style="width: 5%"></Column>
+                            <Column field="first" header="1st" sortable style="width: 5%"></Column>
+                            <Column field="second" header="2nd" style="width: 5%"></Column>
+                            <Column field="third" header="3rd" sortable style="width: 5%"></Column>
+                            <!-- <Column v-if="this.game.summary && this.game.summary.shotsByPeriod.length>3" field="overtime" header="OT" sortable style="width: 5%"></Column> -->
+                            <Column field="total" header="T" sortable style="width: 5%"></Column>
+                        </DataTable>
                     </div>
-                    <DataTable :value="playerStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer">
-                        <Column field="sweaterNumber" header="#" style="width:3%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="name" header="Player" class="stats-name-header" style="width:5%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="position" header="POS" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="gamesPlayed" header="GP" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="points" header="P" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="plusMinus" header="+/-" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="pim" header="PIM" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="shots" header="S" style="width:4%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="powerPlayGoals" header="PPG" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="hits" header="H" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="avgTimeOnIce" header="TOI/G" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="faceoffWinningPctg" header="FO%" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                    </DataTable>
-                </div>
 
-                <!-- THREE STARS -->
-                <div v-if="game.gameState=='OFF' || game.gameState=='FINAL'" style="margin-top:1rem">
-                    <h3 style="color:white">Three Stars</h3>
-                    <div class="three-stars-box">
-                        <div v-for="(player, index) in game.summary.threeStars" :key="index">
-                            <div style="display:flex">
-                                <div class="three-stars-column">
-                                    <strong>{{ getStarNum(index) }}</strong>
-                                    <!-- <img src="@/assets/star.svg" alt="Star" style="margin-top:5px"/> -->
-                                    <strong style="font-size:xx-large;color:var(--main-color)">&#128970;</strong>
-                                </div>
-                                <div class="three-stars-formatting">
-                                    <img :src="player.headshot" @click="goToPlayer(player.playerId)" alt="Player Category Headshot" class="category-headshot three-stars">
-                                    <img :src="getPlayerTeamLogo(player.teamAbbrev)" alt="Player Team Logo" class="player-team-logo three-stars">
-                                </div>
-                                <div class="three-stars-column">
-                                    <strong v-if="player.name.default" @click="goToPlayer(player.playerId)" style="cursor:pointer">{{ player.name.default }}</strong>
-                                    <strong v-else @click="goToPlayer(player.playerId)" style="cursor:pointer">{{ player.name }}</strong>
-                                    <strong>#{{ player.sweaterNo }} - {{ player.position }}</strong>
-                                    <strong></strong>
+                    <!-- PERIOD SHOTS -->
+                    <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && (this.game.summary.shotsByPeriod)" style="margin-top:1rem">
+                        <h3 style="color:white">Shots On Goal</h3>
+                        <DataTable :value="periodShots">
+                            <Column style="width: 3%">
+                                <template #body="slotProps">
+                                  <img :src="slotProps.data.logo" :alt="slotProps.data.team"/>
+                                </template>
+                            </Column>
+                            <Column field="team" header="" style="width: 5%"></Column>
+                            <Column field="first" header="1st" sortable style="width: 5%"></Column>
+                            <Column field="second" header="2nd" style="width: 5%"></Column>
+                            <Column field="third" header="3rd" sortable style="width: 5%"></Column>
+                            <!-- <Column v-if="this.game.summary && this.game.summary.shotsByPeriod.length>3" field="overtime" header="OT" sortable style="width: 5%"></Column> -->
+                            <Column field="total" header="T" sortable style="width: 5%"></Column>
+                        </DataTable>
+                    </div>
+
+                    <!-- SEASON SERIES -->
+                    <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (game.matchup.gameType==2) && (game.matchup.seasonSeries)" style="margin-top:1rem">
+                        <div class="season-series">
+                            <h3 style="margin-top:0rem;padding:5px;color:white">Season Series</h3>
+                            <div class="season-series-games">
+                                <div v-for="(seriesGame, index) in game.matchup.seasonSeries" :key="index" @click="openGame(seriesGame)" class="season-series-game">
+                                    <div class="season-series-content">
+                                        <!-- Away Team -->
+                                        <div class="team-info">
+                                            <div style="display:flex;align-items: center">
+                                                <img :src="seriesGame.awayTeam.logo" alt="Away Team Logo" style="width:35px">
+                                                <strong>{{ seriesGame.awayTeam.abbrev }}</strong>
+                                            </div>
+                                            <strong v-if="seriesGame.gameState=='OFF' || seriesGame.gameState=='FINAL'" class="team-score">{{ seriesGame.awayTeam.score }}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="season-series-content">
+                                        <!-- Home Team -->
+                                        <div class="team-info">
+                                            <div style="display:flex;align-items: center">
+                                                <img :src="seriesGame.homeTeam.logo" alt="Home Team Logo" style="width:35px">
+                                                <strong>{{ seriesGame.homeTeam.abbrev }}</strong>
+                                            </div>
+                                            <strong v-if="seriesGame.gameState=='OFF' || seriesGame.gameState=='FINAL'" class="team-score">{{ seriesGame.homeTeam.score }}</strong>
+                                        </div>
+                                    </div>
+                                    <div v-if="seriesGame.gameState=='OFF' || seriesGame.gameState=='FINAL'" class="game-info">
+                                        <strong v-if="seriesGame.periodDescriptor.number==3" style="font-size:small">FINAL</strong>
+                                        <strong v-if="seriesGame.periodDescriptor.number!=3" style="font-size:small">FINAL({{ seriesGame.periodDescriptor.periodType }})</strong>
+                                        <strong style="font-size:small">{{ seriesGameDateDesc(seriesGame.startTimeUTC) }}</strong>
+                                    </div>
+                                    <strong v-else style="display:flex;justify-content:flex-end;font-size:small">{{ seriesGameDateDesc(seriesGame.startTimeUTC) }}</strong>
                                 </div>
                             </div>
-                            <div>
-                                <div v-if="player.position=='G'" class="three-stars-stats">
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'saveShotsAgainst', 'SA') }}</strong>
-                                        <strong style="font-size:x-small">SA</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'goalsAgainst') }}</strong>
-                                        <strong style="font-size:x-small">GA</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'saveShotsAgainst', 'SV') }}</strong>
-                                        <strong style="font-size:x-small">SV</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'savePctg') }}</strong>
-                                        <strong style="font-size:x-small">SV%</strong>
-                                    </div>
+                        </div>
+                    </div>
+
+                    <!-- TEAM STATS -->
+                    <div class="team-stats">
+                        <!-- PRE GAME -->
+                        <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (gameStory.preGameMatchup)">
+                            <div class="game-stat" style="margin-bottom:20px">
+                                <div class="away-game-stat"><img :src="game.awayTeam.logo" alt="Team Stats Logo" style="width: 30px"><strong style="color:white">{{ game.awayTeam.abbrev }}</strong></div>
+                                <strong style="color:white">Team Stats</strong>
+                                <div class="home-game-stat"><strong style="color:white">{{ game.homeTeam.abbrev }}</strong><img :src="game.homeTeam.logo" alt="Team Stats Logo" style="width: 30px"></div>
+                            </div>
+                            <!-- pp% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.ppPctg, 1) }}%</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.ppPctgRank) }})</strong></div>
+                                <strong>Power Play %</strong>
+                                <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.ppPctgRank) }})</strong><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.homeTeam.ppPctg, 1) }}%</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.ppPctg, gameStory.preGameMatchup.teamSeasonStats.homeTeam.ppPctg) + '%' }"></div>
+                            </div>
+                            <!-- pk% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.pkPctg, 1) }}%</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.pkPctgRank) }})</strong></div>
+                                <strong>Penalty Kill %</strong>
+                                <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.pkPctgRank) }})</strong><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.homeTeam.pkPctg, 1) }}%</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.pkPctg, gameStory.preGameMatchup.teamSeasonStats.homeTeam.pkPctg) + '%' }"></div>
+                            </div>
+                            <!-- fo% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.faceoffWinningPctg, 1) }}%</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.faceoffWinningPctgRank) }})</strong></div>
+                                <strong>Faceoff %</strong>
+                                <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.faceoffWinningPctgRank) }})</strong><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.homeTeam.faceoffWinningPctg, 1) }}%</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.faceoffWinningPctg, gameStory.preGameMatchup.teamSeasonStats.homeTeam.faceoffWinningPctg) + '%' }"></div>
+                            </div>
+                            <!-- gf/g% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsForPerGamePlayed }}</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsForPerGamePlayedRank) }})</strong></div>
+                                <strong>GF/GP</strong>
+                                <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsForPerGamePlayedRank) }})</strong><strong>{{ gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsForPerGamePlayed }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsForPerGamePlayed, gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsForPerGamePlayed) + '%' }"></div>
+                            </div>
+                            <!-- ga/g% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayed }}</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayedRank) }})</strong></div>
+                                <strong>GA/GP</strong>
+                                <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayedRank) }})</strong><strong>{{ gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayed }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayed, gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayed) + '%' }"></div>
+                            </div>
+                        </div>
+
+                        <!-- DURING/POST GAME -->
+                        <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'">
+                            <div class="game-stat" style="margin-bottom:20px">
+                                <div class="away-game-stat"><img :src="game.awayTeam.logo" alt="Team Stats Logo" style="width: 30px"><strong style="color:white">{{ game.awayTeam.abbrev }}</strong></div>
+                                <strong style="color:white">Game Stats</strong>
+                                <div class="home-game-stat"><strong style="color:white">{{ game.homeTeam.abbrev }}</strong><img :src="game.homeTeam.logo" alt="Team Stats Logo" style="width: 30px"></div>
+                            </div>
+                            <!-- sog category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[0]?.awayValue }}</strong></div>
+                                <strong>Shots On Goal</strong>
+                                <div class="home-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[0]?.homeValue }}</strong></div>
+                            </div>
+                            <!-- progress bar below -->
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[0]?.awayValue, gameStory?.summary?.teamGameStats[0]?.homeValue) + '%' }"></div>
+                            </div>
+                            <!-- fo% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory?.summary?.teamGameStats[1]?.awayValue, 1) }}%</strong></div>
+                                <strong>Faceoff %</strong>
+                                <div class="home-game-stat"><strong>{{ calculatePercentage(gameStory?.summary?.teamGameStats[1]?.homeValue, 1) }}%</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[1]?.awayValue, gameStory?.summary?.teamGameStats[1]?.homeValue) + '%' }"></div>
+                            </div>
+                            <!-- pp% category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ fractionToPercentage(gameStory?.summary?.teamGameStats[2]?.awayValue) }}%</strong><strong style="font-size:small;margin-left:4px">({{ gameStory?.summary?.teamGameStats[2]?.awayValue }})</strong></div>
+                                <strong>Power Play %</strong>
+                                <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ gameStory?.summary?.teamGameStats[2]?.homeValue }})</strong><strong>{{ fractionToPercentage(gameStory?.summary?.teamGameStats[2]?.homeValue) }}%</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[2]?.awayValue, gameStory?.summary?.teamGameStats[2]?.homeValue, true) + '%' }"></div>
+                            </div>
+                            <!-- pim category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[4]?.awayValue }}</strong></div>
+                                <strong>Penalty Minutes</strong>
+                                <div class="home-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[4]?.homeValue }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[4]?.awayValue, gameStory?.summary?.teamGameStats[4]?.homeValue, true) + '%' }"></div>
+                            </div>
+                            <!-- hits category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[5]?.awayValue }}</strong></div>
+                                <strong>Hits</strong>
+                                <div class="home-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[5]?.homeValue }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[5]?.awayValue, gameStory?.summary?.teamGameStats[5]?.homeValue, true) + '%' }"></div>
+                            </div>
+                            <!-- blocked shots category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[6]?.awayValue }}</strong></div>
+                                <strong>Blocked Shots</strong>
+                                <div class="home-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[6]?.homeValue }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[6]?.awayValue, gameStory?.summary?.teamGameStats[6]?.homeValue, true) + '%' }"></div>
+                            </div>
+                            <!-- giveaways category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[7]?.awayValue }}</strong></div>
+                                <strong>Giveaways</strong>
+                                <div class="home-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[7]?.homeValue }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[7]?.awayValue, gameStory?.summary?.teamGameStats[7]?.homeValue, true) + '%' }"></div>
+                            </div>
+                            <!-- takeaways category -->
+                            <div class="game-stat">
+                                <div class="away-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[8]?.awayValue }}</strong></div>
+                                <strong>Takeaways</strong>
+                                <div class="home-game-stat"><strong>{{ gameStory?.summary?.teamGameStats[8]?.homeValue }}</strong></div>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" :style="{ width: calculateProgressPercentage(gameStory?.summary?.teamGameStats[8]?.awayValue, gameStory?.summary?.teamGameStats[8]?.homeValue, true) + '%' }"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LAST 10 GAMES -->
+                    <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (game.matchup)" style="margin-top:1rem">
+                        <h3 v-if="game.matchup.last10Record" style="margin-top:0rem;padding:5px;color:white">Last 10 Games</h3>
+                        <div v-if="game.matchup.last10Record">
+                            <div class="last-ten-box"> <!--away team-->
+                                <div class="last-ten-team">
+                                    <strong>{{ game.awayTeam.name.default }}</strong>
+                                    <strong>{{ game.matchup.last10Record.awayTeam.record }}</strong>
                                 </div>
-                                <div v-else class="three-stars-stats">
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'goals') }}</strong>
-                                        <strong style="font-size:x-small">G</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'assists') }}</strong>
-                                        <strong style="font-size:x-small">A</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'pim') }}</strong>
-                                        <strong style="font-size:x-small">PIM</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'plusMinus') }}</strong>
-                                        <strong style="font-size:x-small">+/-</strong>
-                                    </div>
-                                    <div class="three-stars-column">
-                                        <strong style="color:white">{{ configureThreeStars(player, 'toi') }}</strong>
-                                        <strong style="font-size:x-small">TOI</strong>
+                                <div class="last-ten-games">
+                                    <div v-for="game in game.matchup.last10Record.awayTeam.pastGameResults" class="last-ten-game">
+                                        <strong v-if="game.gameResult=='W' || game.gameResult=='OTW' || game.gameResult=='SOW'" class="last-ten-opp" style="background-color:var(--hover-color)">{{ game.opponentAbbrev }}</strong>
+                                        <strong v-else class="last-ten-opp">{{ game.opponentAbbrev }}</strong>
+                                        <strong style="font-size:small">{{ game.gameResult }}</strong>
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="index==0 || index==1" class="vertical-line-stars"><div class="vertical-line" style="margin-right:-20px"></div></div>
+                            <div class="last-ten-box"> <!--home team-->
+                                <div class="last-ten-team">
+                                    <strong>{{ game.homeTeam.name.default }}</strong>
+                                    <strong>{{ game.matchup.last10Record.homeTeam.record }}</strong>
+                                </div>
+                                <div class="last-ten-games">
+                                    <div v-for="game in game.matchup.last10Record.homeTeam.pastGameResults" class="last-ten-game">
+                                        <strong v-if="game.gameResult=='W' || game.gameResult=='OTW' || game.gameResult=='SOW'" class="last-ten-opp" style="background-color:var(--hover-color)">{{ game.opponentAbbrev }}</strong>
+                                        <strong v-else class="last-ten-opp">{{ game.opponentAbbrev }}</strong>
+                                        <strong style="font-size:small">{{ game.gameResult }}</strong>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- PLAYER GAME STATS -->
-                <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="players-stats-section">
-                    <div class="player-stats-box" style="margin-top:1rem">
-                        <h3 style="color:white">Stats</h3>
-                        <div class="player-stats-teams">
-                            <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerGameStatsTeamSelected === game.awayTeam.id }" @click="switchPlayerGameStats('away')">{{ game.awayTeam.commonName.default }}</v-button>
-                            <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerGameStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerGameStats('home')">{{ game.homeTeam.commonName.default }}</v-button>
+                    <!-- GAME INFO -->
+                    <div v-if="game" class="overall-game-info">
+                        <h3 style="margin-top:0rem;padding:5px;color:white">Game Info</h3>
+                        <div class="overall-game-info-section">
+                            <strong class="overall-game-info-label">Networks</strong>
+                            <strong v-for="(network, index) in game.tvBroadcasts" :key="index"><strong v-if="index!=0">, </strong>{{ network.network }}</strong>
                         </div>
+                        <div class="overall-game-info-section">
+                            <strong class="overall-game-info-label">Location</strong>
+                            <strong>{{ game.venue.default }}, {{ game.venueLocation.default }}</strong>
+                        </div>
+                        <!-- <div v-if="game.matchup" class="overall-game-info-section">
+                            <strong class="overall-game-info-label">{{ game.awayTeam.abbrev }} Coach</strong>
+                            <strong v-if="game.matchup.gameInfo">{{ game.matchup.gameInfo.awayTeam.headCoach.default }}</strong>
+                            <strong v-if="game.summary">{{ game.summary.gameInfo.awayTeam.headCoach.default }}</strong>
+                        </div>
+                        <div v-if="game.matchup" class="overall-game-info-section">
+                            <strong class="overall-game-info-label">{{ game.homeTeam.abbrev }} Coach</strong>
+                            <strong v-if="game.matchup.gameInfo">{{ game.matchup.gameInfo.homeTeam.headCoach.default }}</strong>
+                            <strong v-if="game.summary">{{ game.summary.gameInfo.homeTeam.headCoach.default }}</strong>
+                        </div> -->
+                        <!-- <div v-if="game.summary.referees" class="overall-game-info-section">
+                            <strong class="overall-game-info-label">Referees</strong>
+                            <strong v-for="(referee, index) in game.summary.gameInfo.referees" :key="index"><strong v-if="index!=0">, </strong>{{ referee.default }}</strong>
+                        </div>
+                        <div v-if="game.summary.linesmen" class="overall-game-info-section">
+                            <strong class="overall-game-info-label">Linesmen</strong>
+                            <strong v-for="(linesmen, index) in game.summary.gameInfo.linesmen" :key="index"><strong v-if="index!=0">, </strong>{{ linesmen.default }}</strong>
+                        </div> -->
                     </div>
-                    <DataTable :value="playerGameStats" :sortField="'points'" :sortOrder="-1" @row-click="rowGoToPlayer">
-                        <Column field="sweaterNumber" header="#" style="width:3%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="name" header="Player" class="stats-name-header" style="width:5%;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="points" header="P" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="plusMinus" header="+/-" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="pim" header="PIM" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="shots" header="S" style="width:4%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="hits" header="H" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="powerPlayGoals" header="PPG" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="avgTimeOnIce" header="TOI" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                        <Column field="faceoffWinningPctg" header="FO%" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                    </DataTable>
                 </div>
             </div>
-
-            <div class="game-right-side">
-                <!-- LINE SCORE -->
-                <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && (this.game.summary.shotsByPeriod)">
-                    <h3 style="color:white">Linescore</h3>
-                    <DataTable :value="lineScore">
-                        <Column style="width: 3%">
-                            <template #body="slotProps">
-                              <img :src="slotProps.data.logo" :alt="slotProps.data.team"/>
-                            </template>
-                        </Column>
-                        <Column field="team" header="" style="width: 5%"></Column>
-                        <Column field="first" header="1st" sortable style="width: 5%"></Column>
-                        <Column field="second" header="2nd" style="width: 5%"></Column>
-                        <Column field="third" header="3rd" sortable style="width: 5%"></Column>
-                        <!-- <Column v-if="this.game.summary && this.game.summary.shotsByPeriod.length>3" field="overtime" header="OT" sortable style="width: 5%"></Column> -->
-                        <Column field="total" header="T" sortable style="width: 5%"></Column>
-                    </DataTable>
-                </div>
-
-                <!-- PERIOD SHOTS -->
-                <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && (this.game.summary.shotsByPeriod)" style="margin-top:1rem">
-                    <h3 style="color:white">Shots On Goal</h3>
-                    <DataTable :value="periodShots">
-                        <Column style="width: 3%">
-                            <template #body="slotProps">
-                              <img :src="slotProps.data.logo" :alt="slotProps.data.team"/>
-                            </template>
-                        </Column>
-                        <Column field="team" header="" style="width: 5%"></Column>
-                        <Column field="first" header="1st" sortable style="width: 5%"></Column>
-                        <Column field="second" header="2nd" style="width: 5%"></Column>
-                        <Column field="third" header="3rd" sortable style="width: 5%"></Column>
-                        <!-- <Column v-if="this.game.summary && this.game.summary.shotsByPeriod.length>3" field="overtime" header="OT" sortable style="width: 5%"></Column> -->
-                        <Column field="total" header="T" sortable style="width: 5%"></Column>
-                    </DataTable>
-                </div>
-
-                <!-- SEASON SERIES -->
-                <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (game.matchup.gameType==2) && (game.matchup.seasonSeries)" style="margin-top:1rem">
-                    <div class="season-series">
-                        <h3 style="margin-top:0rem;padding:5px;color:white">Season Series</h3>
-                        <div class="season-series-games">
-                            <div v-for="(seriesGame, index) in game.matchup.seasonSeries" :key="index" @click="openGame(seriesGame)" class="season-series-game">
-                                <div class="season-series-content">
-                                    <!-- Away Team -->
-                                    <div class="team-info">
-                                        <div style="display:flex;align-items: center">
-                                            <img :src="seriesGame.awayTeam.logo" alt="Away Team Logo" style="width:35px">
-                                            <strong>{{ seriesGame.awayTeam.abbrev }}</strong>
-                                        </div>
-                                        <strong v-if="seriesGame.gameState=='OFF' || seriesGame.gameState=='FINAL'" class="team-score">{{ seriesGame.awayTeam.score }}</strong>
-                                    </div>
-                                </div>
-                                <div class="season-series-content">
-                                    <!-- Home Team -->
-                                    <div class="team-info">
-                                        <div style="display:flex;align-items: center">
-                                            <img :src="seriesGame.homeTeam.logo" alt="Home Team Logo" style="width:35px">
-                                            <strong>{{ seriesGame.homeTeam.abbrev }}</strong>
-                                        </div>
-                                        <strong v-if="seriesGame.gameState=='OFF' || seriesGame.gameState=='FINAL'" class="team-score">{{ seriesGame.homeTeam.score }}</strong>
-                                    </div>
-                                </div>
-                                <div v-if="seriesGame.gameState=='OFF' || seriesGame.gameState=='FINAL'" class="game-info">
-                                    <strong v-if="seriesGame.periodDescriptor.number==3" style="font-size:small">FINAL</strong>
-                                    <strong v-if="seriesGame.periodDescriptor.number!=3" style="font-size:small">FINAL({{ seriesGame.periodDescriptor.periodType }})</strong>
-                                    <strong style="font-size:small">{{ seriesGameDateDesc(seriesGame.startTimeUTC) }}</strong>
-                                </div>
-                                <strong v-else style="display:flex;justify-content:flex-end;font-size:small">{{ seriesGameDateDesc(seriesGame.startTimeUTC) }}</strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TEAM STATS -->
-                <div class="team-stats">
-                    <!-- PRE GAME -->
-                    <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (gameStory.preGameMatchup)">
-                        <div class="game-stat" style="margin-bottom:20px">
-                            <div class="away-game-stat"><img :src="game.awayTeam.logo" alt="Team Stats Logo" style="width: 30px"><strong style="color:white">{{ game.awayTeam.abbrev }}</strong></div>
-                            <strong style="color:white">Team Stats</strong>
-                            <div class="home-game-stat"><strong style="color:white">{{ game.homeTeam.abbrev }}</strong><img :src="game.homeTeam.logo" alt="Team Stats Logo" style="width: 30px"></div>
-                        </div>
-                        <!-- pp% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.ppPctg, 1) }}%</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.ppPctgRank) }})</strong></div>
-                            <strong>Power Play %</strong>
-                            <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.ppPctgRank) }})</strong><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.homeTeam.ppPctg, 1) }}%</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.ppPctg, gameStory.preGameMatchup.teamSeasonStats.homeTeam.ppPctg) + '%' }"></div>
-                        </div>
-                        <!-- pk% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.pkPctg, 1) }}%</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.pkPctgRank) }})</strong></div>
-                            <strong>Penalty Kill %</strong>
-                            <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.pkPctgRank) }})</strong><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.homeTeam.pkPctg, 1) }}%</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.pkPctg, gameStory.preGameMatchup.teamSeasonStats.homeTeam.pkPctg) + '%' }"></div>
-                        </div>
-                        <!-- fo% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.faceoffWinningPctg, 1) }}%</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.faceoffWinningPctgRank) }})</strong></div>
-                            <strong>Faceoff %</strong>
-                            <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.faceoffWinningPctgRank) }})</strong><strong>{{ calculatePercentage(gameStory.preGameMatchup.teamSeasonStats.homeTeam.faceoffWinningPctg, 1) }}%</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.faceoffWinningPctg, gameStory.preGameMatchup.teamSeasonStats.homeTeam.faceoffWinningPctg) + '%' }"></div>
-                        </div>
-                        <!-- gf/g% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsForPerGamePlayed }}</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsForPerGamePlayedRank) }})</strong></div>
-                            <strong>GF/GP</strong>
-                            <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsForPerGamePlayedRank) }})</strong><strong>{{ gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsForPerGamePlayed }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsForPerGamePlayed, gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsForPerGamePlayed) + '%' }"></div>
-                        </div>
-                        <!-- ga/g% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayed }}</strong><strong style="font-size:small;margin-left:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayedRank) }})</strong></div>
-                            <strong>GA/GP</strong>
-                            <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ getRanking(gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayedRank) }})</strong><strong>{{ gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayed }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.preGameMatchup.teamSeasonStats.awayTeam.goalsAgainstPerGamePlayed, gameStory.preGameMatchup.teamSeasonStats.homeTeam.goalsAgainstPerGamePlayed) + '%' }"></div>
-                        </div>
-                    </div>
-
-                    <!-- DURING/POST GAME -->
-                    <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'">
-                        <div class="game-stat" style="margin-bottom:20px">
-                            <div class="away-game-stat"><img :src="game.awayTeam.logo" alt="Team Stats Logo" style="width: 30px"><strong style="color:white">{{ game.awayTeam.abbrev }}</strong></div>
-                            <strong style="color:white">Game Stats</strong>
-                            <div class="home-game-stat"><strong style="color:white">{{ game.homeTeam.abbrev }}</strong><img :src="game.homeTeam.logo" alt="Team Stats Logo" style="width: 30px"></div>
-                        </div>
-                        <!-- sog category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.summary.teamGameStats[0].awayValue }}</strong></div>
-                            <strong>Shots On Goal</strong>
-                            <div class="home-game-stat"><strong>{{ gameStory.summary.teamGameStats[0].homeValue }}</strong></div>
-                        </div>
-                        <!-- progress bar below -->
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[0].awayValue, gameStory.summary.teamGameStats[0].homeValue) + '%' }"></div>
-                        </div>
-                        <!-- fo% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ calculatePercentage(gameStory.summary.teamGameStats[1].awayValue, 1) }}%</strong></div>
-                            <strong>Faceoff %</strong>
-                            <div class="home-game-stat"><strong>{{ calculatePercentage(gameStory.summary.teamGameStats[1].homeValue, 1) }}%</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[1].awayValue, gameStory.summary.teamGameStats[1].homeValue) + '%' }"></div>
-                        </div>
-                        <!-- pp% category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ fractionToPercentage(gameStory.summary.teamGameStats[2].awayValue) }}%</strong><strong style="font-size:small;margin-left:4px">({{ gameStory.summary.teamGameStats[2].awayValue }})</strong></div>
-                            <strong>Power Play %</strong>
-                            <div class="home-game-stat"><strong style="font-size:small;margin-right:4px">({{ gameStory.summary.teamGameStats[2].homeValue }})</strong><strong>{{ fractionToPercentage(gameStory.summary.teamGameStats[2].homeValue) }}%</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[2].awayValue, gameStory.summary.teamGameStats[2].homeValue, true) + '%' }"></div>
-                        </div>
-                        <!-- pim category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.summary.teamGameStats[4].awayValue }}</strong></div>
-                            <strong>Penalty Minutes</strong>
-                            <div class="home-game-stat"><strong>{{ gameStory.summary.teamGameStats[4].homeValue }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[4].awayValue, gameStory.summary.teamGameStats[4].homeValue, true) + '%' }"></div>
-                        </div>
-                        <!-- hits category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.summary.teamGameStats[5].awayValue }}</strong></div>
-                            <strong>Hits</strong>
-                            <div class="home-game-stat"><strong>{{ gameStory.summary.teamGameStats[5].homeValue }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[5].awayValue, gameStory.summary.teamGameStats[5].homeValue, true) + '%' }"></div>
-                        </div>
-                        <!-- blocked shots category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.summary.teamGameStats[6].awayValue }}</strong></div>
-                            <strong>Blocked Shots</strong>
-                            <div class="home-game-stat"><strong>{{ gameStory.summary.teamGameStats[6].homeValue }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[6].awayValue, gameStory.summary.teamGameStats[6].homeValue, true) + '%' }"></div>
-                        </div>
-                        <!-- giveaways category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.summary.teamGameStats[7].awayValue }}</strong></div>
-                            <strong>Giveaways</strong>
-                            <div class="home-game-stat"><strong>{{ gameStory.summary.teamGameStats[7].homeValue }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[7].awayValue, gameStory.summary.teamGameStats[7].homeValue, true) + '%' }"></div>
-                        </div>
-                        <!-- takeaways category -->
-                        <div class="game-stat">
-                            <div class="away-game-stat"><strong>{{ gameStory.summary.teamGameStats[8].awayValue }}</strong></div>
-                            <strong>Takeaways</strong>
-                            <div class="home-game-stat"><strong>{{ gameStory.summary.teamGameStats[8].homeValue }}</strong></div>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress" :style="{ width: calculateProgressPercentage(gameStory.summary.teamGameStats[8].awayValue, gameStory.summary.teamGameStats[8].homeValue, true) + '%' }"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LAST 10 GAMES -->
-                <div v-if="(game.gameState=='PRE' || game.gameState=='FUT') && (game.matchup)" style="margin-top:1rem">
-                    <h3 v-if="game.matchup.last10Record" style="margin-top:0rem;padding:5px;color:white">Last 10 Games</h3>
-                    <div v-if="game.matchup.last10Record">
-                        <div class="last-ten-box"> <!--away team-->
-                            <div class="last-ten-team">
-                                <strong>{{ game.awayTeam.name.default }}</strong>
-                                <strong>{{ game.matchup.last10Record.awayTeam.record }}</strong>
-                            </div>
-                            <div class="last-ten-games">
-                                <div v-for="game in game.matchup.last10Record.awayTeam.pastGameResults" class="last-ten-game">
-                                    <strong v-if="game.gameResult=='W' || game.gameResult=='OTW' || game.gameResult=='SOW'" class="last-ten-opp" style="background-color:var(--hover-color)">{{ game.opponentAbbrev }}</strong>
-                                    <strong v-else class="last-ten-opp">{{ game.opponentAbbrev }}</strong>
-                                    <strong style="font-size:small">{{ game.gameResult }}</strong>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="last-ten-box"> <!--home team-->
-                            <div class="last-ten-team">
-                                <strong>{{ game.homeTeam.name.default }}</strong>
-                                <strong>{{ game.matchup.last10Record.homeTeam.record }}</strong>
-                            </div>
-                            <div class="last-ten-games">
-                                <div v-for="game in game.matchup.last10Record.homeTeam.pastGameResults" class="last-ten-game">
-                                    <strong v-if="game.gameResult=='W' || game.gameResult=='OTW' || game.gameResult=='SOW'" class="last-ten-opp" style="background-color:var(--hover-color)">{{ game.opponentAbbrev }}</strong>
-                                    <strong v-else class="last-ten-opp">{{ game.opponentAbbrev }}</strong>
-                                    <strong style="font-size:small">{{ game.gameResult }}</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- GAME INFO -->
-                <div v-if="game" class="overall-game-info">
-                    <h3 style="margin-top:0rem;padding:5px;color:white">Game Info</h3>
-                    <div class="overall-game-info-section">
-                        <strong class="overall-game-info-label">Networks</strong>
-                        <strong v-for="(network, index) in game.tvBroadcasts" :key="index"><strong v-if="index!=0">, </strong>{{ network.network }}</strong>
-                    </div>
-                    <div class="overall-game-info-section">
-                        <strong class="overall-game-info-label">Location</strong>
-                        <strong>{{ game.venue.default }}, {{ game.venueLocation.default }}</strong>
-                    </div>
-                    <!-- <div v-if="game.matchup" class="overall-game-info-section">
-                        <strong class="overall-game-info-label">{{ game.awayTeam.abbrev }} Coach</strong>
-                        <strong v-if="game.matchup.gameInfo">{{ game.matchup.gameInfo.awayTeam.headCoach.default }}</strong>
-                        <strong v-if="game.summary">{{ game.summary.gameInfo.awayTeam.headCoach.default }}</strong>
-                    </div>
-                    <div v-if="game.matchup" class="overall-game-info-section">
-                        <strong class="overall-game-info-label">{{ game.homeTeam.abbrev }} Coach</strong>
-                        <strong v-if="game.matchup.gameInfo">{{ game.matchup.gameInfo.homeTeam.headCoach.default }}</strong>
-                        <strong v-if="game.summary">{{ game.summary.gameInfo.homeTeam.headCoach.default }}</strong>
-                    </div> -->
-                    <!-- <div v-if="game.summary.referees" class="overall-game-info-section">
-                        <strong class="overall-game-info-label">Referees</strong>
-                        <strong v-for="(referee, index) in game.summary.gameInfo.referees" :key="index"><strong v-if="index!=0">, </strong>{{ referee.default }}</strong>
-                    </div>
-                    <div v-if="game.summary.linesmen" class="overall-game-info-section">
-                        <strong class="overall-game-info-label">Linesmen</strong>
-                        <strong v-for="(linesmen, index) in game.summary.gameInfo.linesmen" :key="index"><strong v-if="index!=0">, </strong>{{ linesmen.default }}</strong>
-                    </div> -->
-                </div>
-            </div>
-        </div>
+        </PullToRefresh>
     </div>
 
     <!-- Display error message -->
@@ -718,6 +725,7 @@
   
 <script>
 import ProgressSpinner from './ProgressSpinner.vue';
+import PullToRefresh from '@/components/PullToRefresh.vue';
 import Settings from '@/components/Settings.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -725,10 +733,13 @@ import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Button from 'primevue/button';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Game',
     components: {
         ProgressSpinner,
+        PullToRefresh,
         Settings,
         DataTable,
         Column,
@@ -782,6 +793,29 @@ export default {
         goBack() {
             this.$router.push({ name: 'scores', params: { date: this.selectedDate } });
         },
+        async refreshGame() {
+          try {
+    this.isLoading = true;
+
+    const [game, box, plays, story] = await Promise.all([
+      fetchApi(`/api/v1/gamecenter/${this.id}/landing`).then(r => r.json()),
+      fetchApi(`/api/v1/gamecenter/${this.id}/boxscore`).then(r => r.json()),
+      fetchApi(`/api/v1/gamecenter/${this.id}/play-by-play`).then(r => r.json()),
+      fetchApi(`/api/v1/wsc/game-story/${this.id}`).then(r => r.json())
+    ]);
+
+    // assign AFTER all are ready
+    this.game = game;
+    this.boxScore = box;
+    this.configurePlays(plays);
+    this.gameStory = story;
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    this.isLoading = false;
+  }
+        },
         //fetchGame method
             //use one of two API calls: 
                 //https://api-web.nhle.com/v1/gamecenter/2023020778/boxscore
@@ -793,89 +827,55 @@ export default {
         async fetchGame() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/gamecenter/${this.id}/landing`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-          
+                const response = await fetchApi(`/api/v1/gamecenter/${this.id}/landing`);
                 const data = await response.json();
                 this.game = data;
-                console.log(this.game);
                 this.configureLineScore();
                 this.configurePeriodShots();
                 this.configurePenaltySummary();
                 this.switchPlayerStats(data.awayTeam.id);
                 this.isLoading = false;
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching gamecenter:', error);
+              //alert('Error fetching gamecenter. See console for details.');
             }
         },
         async fetchGameBox() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/gamecenter/${this.id}/boxscore`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/gamecenter/${this.id}/boxscore`);
                 const data = await response.json();
                 this.boxScore = data;
                 console.log(this.boxScore);
                 this.switchPlayerGameStats('away');
                 this.isLoading = false;
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching boxscore:', error);
+              alert('Error fetching boxscore. See console for details.');
             }
         },
         async fetchGameStory() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/wsc/game-story/${this.id}`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/wsc/game-story/${this.id}`);
                 const data = await response.json();
                 this.gameStory = data;
                 console.log(data);
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching game-story:', error);
+              alert('Error fetching game-story. See console for details.');
             }
         },
         async fetchPlays() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/gamecenter/${this.id}/play-by-play`, {
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/gamecenter/${this.id}/play-by-play`);
                 const data = await response.json();
                 this.configurePlays(data);
                 this.isLoading = false;
             } catch (error) {
-              console.error('Error fetching scores:', error);
-              alert('Error fetching scores. See console for details.');
+              console.error('Error fetching play-by-play:', error);
+              //alert('Error fetching play-by-play. See console for details.');
             }
         },
         gameStartTime(utcDateTime) {
@@ -908,7 +908,9 @@ export default {
         },
         configurePlays(data) {
             console.log(data);
-            for(let i = data.plays.length-1; i>=0; i--) {
+            //for(let i = data.plays.length-1; i>=0; i--) { //do this if you want all plays in game configured
+            if(data.plays.length>0) { //do this if you want only most recent play configured
+                let i = data.plays.length-1;
                 let team = '';
                 let event = '';
                 switch(data.plays[i].typeDescKey) {
@@ -1566,6 +1568,10 @@ export default {
     cursor: pointer;
 }
 
+.game-nav-header {
+    display: flex;
+}
+
 .back-button {
     background: none;
     border: none;
@@ -1573,13 +1579,12 @@ export default {
     color: #fff;
     cursor: pointer;
     position: absolute;
-    left: 20px; /* Adjust the left position as needed */
-    top: 2%; /* Vertically center the button */
-    transform: translateY(-50%);
 }
 
 .date-formatting {
     color: white;
+    width: 93%;
+    margin-left: 4%;
 }
 
 .scoreboard {
@@ -1677,7 +1682,7 @@ export default {
 }
 
 .goalie-stat-values {
-    width: 100%;
+    width: 75%;
     display: flex;
     align-items: center;
     justify-content: space-around;
@@ -1691,12 +1696,23 @@ export default {
     margin-right: -30px;
 }
 
-.goalie-stat-info {
+.goalie-stat-info.away{
     display: flex;
     flex-direction: column;
     width: 125px;
     align-self: center;
     cursor: pointer;
+    align-items: flex-end;
+    padding-right: 5px;
+}
+.goalie-stat-info.home {
+    display: flex;
+    flex-direction: column;
+    width: 125px;
+    align-self: center;
+    cursor: pointer;
+    align-items: flex-start;
+    padding-left: 5px;
 }
 
 .goalie-compare.record{color:white}
@@ -1736,6 +1752,10 @@ export default {
 .team-leaders-header-text {
     font-size: x-large;
     color: white;
+}
+
+.team-leaders-last-five {
+    font-size: small;
 }
 
 .team-leaders-header-bar {
@@ -1869,7 +1889,7 @@ export default {
     border-radius: 5px;
     display:flex;
     justify-content:space-between;
-    padding: 10px;
+    padding: 25px;
 }
 
 .three-stars-column {
@@ -1979,9 +1999,9 @@ export default {
 .game-powerplay-tag.away {
     margin-top: 17px;
     width: 35px;
-    height: 100%;
+    height: 17%;
     background-color: var(--main-color);
-    /* color: black; */
+    color: black;
     border-radius: 3px;
     font-size: smaller;
     text-align: center;
@@ -1989,30 +2009,57 @@ export default {
 }
 
 .game-powerplay-tag.home {
-    margin-top: 17px;
+    margin-bottom: -15px;
     width: 35px;
-    height: 100%;
+    height: 17%;
     background-color: var(--main-color);
-    /* color: black; */
+    color: black;
     border-radius: 3px;
     font-size: smaller;
     text-align: center;
-    margin-right: 10px
+    margin-left: 73%;
 }
 
 .away-team-score-layout {
     font-size:65px;
     margin-left:130px;
 }
+.away-team-score-layout.pp {
+    margin-top: -35px;
+    height: 75%;
+}
 
 .home-team-score-layout {
     font-size:65px;
     margin-right:130px;
 }
+.home-team-score-layout.pp {
+    margin-top: -20px;
+    height: 100%;
+}
+
+.away-scoreboard {
+    display: flex;
+}
 
 .middle-scoreboard {
     display: flex;
     flex-direction: column;
+}
+
+.home-scoreboard {
+    display: flex;
+}
+
+.game-score-layout.away {
+    display: flex;
+    flex-direction: column;
+    height: 104px;
+}
+.game-score-layout.home {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 104px;
 }
 
 .scoring-summary {
@@ -2250,10 +2297,15 @@ export default {
 @media (max-width: 640px) {
     .away-team-score-layout {
         display: flex;
-        margin-left: 5px;
-        margin-right: -5px;
+        margin-top: 25px;
+        margin-left: 10px;
+        margin-right: 0px;
         font-size: 35px;
         align-items: center;
+    }
+    .away-team-score-layout.pp {
+        margin-top: -7px;
+        height: 75%;
     }
     .back-button {
         left: 0px;
@@ -2277,19 +2329,27 @@ export default {
         margin-left: 0px;
     }
     .game-powerplay-tag.away {
-        margin-top: 0px;
+        margin-top: 5px;
         width: 16px;
-        font-size: xx-small;
+        height: 15%;
+        font-size: x-small;
         margin-left: 0px;
     }
     .game-powerplay-tag.home {
-        margin-top: 0px;
+        margin-top: 5px;
         width: 16px;
-        font-size: xx-small;
+        height: 15%;
+        font-size: x-small;
         margin-right: 0px;
     }
     .game-summary {
         flex-direction: column;
+        height: calc(100dvh - 230px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .game-type {
+        margin-left: 0px;
     }
     .goalie-compare.record{font-size:x-small}
     .goalie-compare.record-text{font-size:xx-small}
@@ -2315,18 +2375,54 @@ export default {
     .goalie-stat-values {
         flex-direction: column;
     }
+    .goalie-stat-info.away{
+        padding-right: 5px;
+    }
+    .goalie-stat-info.home {
+        padding-right: 5px;
+    }
     .goalie-stat-values.away {
-        margin-right: -25px;
-        margin-left: -30px;
+        margin-left: -10px;
+        display: flex;
+        align-items: flex-start;
+    }
+    .goalie-stat-values.home {
+        margin-right: -10px;
+        display: flex;
+        align-items: flex-end;
+    }
+    .penalties-box .p-datatable-tbody {
+        font-size: smaller;
     }
     .home-team-score-layout {
         display: flex;
-        margin-left: 10px;
-        margin-right: 0px;
+        margin-bottom: 23px;
+        margin-left: 0px;
+        margin-right: 10px;
         font-size: 35px;
         align-items: center;
     }
+    .home-team-score-layout.pp {
+        margin-top: 19px;
+        height: 75%;
+    }
+    .away-scoreboard {
+        display: flex;
+        width: 42%;
+        justify-content: flex-start;
+    }
     .middle-scoreboard {
+        font-size: small;
+    }
+    .home-scoreboard {
+        display: flex;
+        width: 42%;
+        justify-content: flex-end;
+    }
+    .last-play-box {
+        font-size: small;
+    }
+    .overall-game-info-section {
         font-size: small;
     }
     .players-stats-section .p-datatable-table {
@@ -2340,16 +2436,20 @@ export default {
     .scoreboard {
         display: flex;
         padding: 0px;
-        justify-content: center;
+        justify-content: space-between;
     }
     .scoreboard-city-name {
         font-size: smaller;
     }
+    .scoreboard-layout-middle {
+        width: 20%;
+    }
     .scoreboard-layout.away {
-        margin-left: -22%;
+        margin-left: 0%;
     }
     .scoreboard-layout.home {
-        margin-left: 15%;
+        margin-left: 0%;
+        font-size: small;
     }
     .scoreboard-team-name {
         font-weight: bold;
@@ -2392,6 +2492,11 @@ export default {
         display: flex;
         justify-content: center;
     }
+    .team-leaders-last-five {
+        display: flex;
+        justify-content: center;
+        font-size: x-small;
+    }
     .team-leaders-logos {
         justify-content: space-around;
     }
@@ -2399,24 +2504,21 @@ export default {
         width: 66px;
     }
     .team-logo-game.away {
-        width: 85px;
+        width: 70px;
         height: 100px;
-        position: absolute;
-        left: -7px;
-        top: 5%;
+        margin-left: -8px;
     }
     .team-logo-game.home {
-        width: 85px;
+        width: 70px;
         height: 100px;
-        position: absolute;
-        right: -2px;
-        top: 5%;
+        margin-right: -8px;
     }
     .three-stars-box {
-        padding: 2px;
+        padding: 10px;
     }
     .three-stars-column {
         font-size: xx-small;
+        margin-right: 5px;
     }
     .three-stars-formatting {
         display: flex;
@@ -2434,7 +2536,7 @@ export default {
     }
     .vertical-line-stars {
         justify-content: flex-start;
-        margin-top: -97px;
+        margin-top: -80px;
         margin-left: 113px;
     }
 }

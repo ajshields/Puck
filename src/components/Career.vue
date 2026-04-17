@@ -1,9 +1,9 @@
 <template>
     <!-- <div><ProgressSpinner v-if="isLoading" /></div> -->
 
-    <div v-if="playerInfo" style="margin-top:2rem">
+    <div class="career-stats-content" v-if="playerInfo">
         <div v-if="playerInfo.position!='G'">
-            <DataTable :value="careerStats" class="career-stats-table" :rowClass="getSeasonClass">
+            <DataTable :value="careerStats" class="career-stats-table" :rowClass="getSeasonClass" scrollable scrollHeight="400px">
                 <ColumnGroup type="header">
                     <Row>
                         <Column header="" :colspan="3" headerClass="nhl-total"/>
@@ -28,12 +28,12 @@
                     </Row>
                 </ColumnGroup>
                 <Column field="season" class="stat-cell" style="width:8%"></Column>
-                <Column field="team" class="stat-cell" style="text-align:left;width:18%"></Column>
+                <Column field="team" class="stat-cell" style="text-align:left;width:14%"></Column>
                 <Column field="league" class="stat-cell" style="text-align:left;width:8%;border-right:solid;border-color:#17203b"></Column>
-                <Column field="gamesPlayed" class="stat-cell" style="width:5%"></Column>
-                <Column field="goals" class="stat-cell" style="width:5%"></Column>
-                <Column field="assists" class="stat-cell" style="width:5%"></Column>
-                <Column field="points" class="stat-cell" style="width:5%;font-weight:bold"></Column>
+                <Column field="gamesPlayed" class="stat-cell" style="width:6%"></Column>
+                <Column field="goals" class="stat-cell" style="width:6%"></Column>
+                <Column field="assists" class="stat-cell" style="width:6%"></Column>
+                <Column field="points" class="stat-cell" style="width:6%;font-weight:bold"></Column>
                 <Column field="penaltyMinutes" class="stat-cell" style="width:5%"></Column>
                 <Column field="plusMinus" class="stat-cell" style="width:5%;border-right:solid;border-color:#17203b"></Column>
                 <Column field="gamesPlayedP" class="stat-cell" style="width:5%"></Column>
@@ -295,6 +295,9 @@ export default {
 </script>
 
 <style>
+.career-stats-content {
+    margin-top: 2rem;
+}
 .stat-cell {
     border: solid;
     border-width: thin;
@@ -311,5 +314,28 @@ export default {
 .default-season {
     background-color: #4CAF50;
     color: black;
+}
+
+/* Mobile Device Styling */
+@media (max-width: 640px) {
+    .career-stats-content {
+        margin-top: 0.5rem;
+    }
+    .career-stats-content .p-datatable {
+        height: calc(100dvh - 295px);
+        overflow-y: auto;
+        font-size: x-small;
+    }
+    .career-stats-content .p-datatable-tbody {
+        max-height: 100px;
+    }
+    .roster-stats-content {
+        margin-top: 0px;
+        height: calc(100dvh - 320px);
+        overflow-y: auto;
+    }
+    .roster-stats .p-datatable-table {
+        width: 200%;
+    }
 }
 </style>

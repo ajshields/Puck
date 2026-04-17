@@ -6,7 +6,7 @@
       <v-button class="leaders-selector" :class="{ 'leaders-selector-selected': type === 'playoffs' }" @click="type=switchStatType('playoffs'), type='playoffs'">Playoffs</v-button>
   </div>
 
-    <div v-if="this.points.length > 0" class="grid-container" style="margin-top: 20px">
+    <div v-if="this.points.length > 0" class="grid-container">
       <!-- POINTS Leaders -->
       <div class="grid-item">
         <div class="left-section">
@@ -398,6 +398,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
   name: 'Leaders',
   components: {
@@ -479,16 +481,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=points&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=points&limit=10`);
         const data = await response.json();
         this.pointsData = data;
         this.configurePoints(data);
@@ -502,16 +495,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=goals&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=goals&limit=10`);
         const data = await response.json();
         this.goalsData = data;
         this.configureGoals(data);
@@ -525,16 +509,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=assists&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=assists&limit=10`);
         const data = await response.json();
         this.assistsData = data;
         this.configureAssists(data);
@@ -548,16 +523,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=plusMinus&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=plusMinus&limit=10`);
         const data = await response.json();
         this.plusMinusData = data;
         this.configurePlusMinus(data);
@@ -571,16 +537,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=penaltyMins&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=penaltyMins&limit=10`);
         const data = await response.json();
         this.penaltyMinsData = data;
         this.configurePenaltyMins(data);
@@ -594,16 +551,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=faceoffLeaders&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/skater-stats-leaders/${this.seasonYears}/${statsType}?categories=faceoffLeaders&limit=10`);
         const data = await response.json();
         this.faceoffsData = data;
         this.configureFaceoffs(data);
@@ -617,16 +565,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=wins&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=wins&limit=10`);
         const data = await response.json();
         this.winsData = data;
         this.configureWins(data);
@@ -640,16 +579,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=shutouts&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=shutouts&limit=10`);
         const data = await response.json();
         this.shutoutsData = data;
         this.configureShutouts(data);
@@ -663,16 +593,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=savePctg&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=savePctg&limit=10`);
         const data = await response.json();
         this.savePctgsData = data;
         this.configureSavePctgs(data);
@@ -686,16 +607,7 @@ export default {
       if(this.type=='playoffs')
         statsType = 3;
       try {
-        const response = await fetch(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=goalsAgainstAverage&limit=10`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/goalie-stats-leaders/${this.seasonYears}/${statsType}?categories=goalsAgainstAverage&limit=10`);
         const data = await response.json();
         this.goalsAgainstAveragesData = data;
         this.configureGoalsAgainstAverages(data);
@@ -1046,6 +958,7 @@ export default {
     border-color: #ffffff14;
     border-radius: 8px;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .leaders-selector {
@@ -1177,10 +1090,6 @@ export default {
 .selected-row {
   background-color: var(--hover-color);
   color: white;
-  /*border: solid;
-  border-width: thin;
-  border-radius: 5px;
-  border-color: #01c58a94;*/
 }
 
 /* Add this style for row hover effect */
@@ -1202,9 +1111,16 @@ tr:hover {
   }
   .grid-container {
     grid-template-columns: auto;
+    height: calc(100dvh - 230px);
+    overflow-y: auto;
+    margin-top: 1rem;
   }
   .grid-item {
     flex-direction: column;
+  }
+  .leaders-options {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
   }
   .left-section {
     width: 100%;
@@ -1223,6 +1139,9 @@ tr:hover {
       flex-direction: column;
       align-items: center;
   }
+  .selected-row {
+    background-color: #ffffff00;
+  }
   .stat-header {
     font-size: larger;
   }
@@ -1231,6 +1150,10 @@ tr:hover {
   }
   .stat-leader-value {
     font-size: larger;
+  }
+  tr:hover {
+    cursor: none;
+    background-color: #ffffff00;
   }
 }
 </style>

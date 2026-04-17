@@ -104,6 +104,11 @@
                     </div>
                     <strong style="font-size:xx-large;color:white;height:75px">{{ gameClickedInfo.awayTeam.score }}</strong>
                 </div>
+                <div v-if="gameClickedInfo.gameState=='OFF' || gameClickedInfo.gameState=='FINAL'" class="game-popup-result">
+                    <strong>FINAL</strong>
+                    <strong v-if="gameClickedInfo.periodDescriptor.number > 3">({{ gameClickedInfo.periodDescriptor.periodType }})</strong>
+                </div>    
+                    <strong v-if="gameClickedInfo.gameState=='PRE' || gameClickedInfo.gameState=='FUT'" class="game-popup-time">{{ setTime(gameClickedInfo.startTimeUTC) }}</strong>
                 <div class="game-popup-team-section">
                     <strong style="font-size:xx-large;color:white;height:75px">{{ gameClickedInfo.homeTeam.score }}</strong>
                     <div class="game-popup-team-info">
@@ -290,6 +295,8 @@ import ScrollPanel from 'primevue/scrollpanel';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Schedule',
     components: {
@@ -338,16 +345,7 @@ export default {
                 else //if after september set season to 2025-2026
                     seasonYears = year + '' + (year + 1);
 
-                const response = await fetch(`/api/v1/club-schedule-season/${this.id}/${seasonYears}`, { //club-schedule-season/TOR/20232024
-                    method: 'GET',
-                    headers: {
-                        'Cache-Control': 'no-cache',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-          
+                const response = await fetchApi(`/api/v1/club-schedule-season/${this.id}/${seasonYears}`);
                 const data = await response.json();
                 console.log(data);
                 this.schedule = data.games;
@@ -368,16 +366,7 @@ export default {
                 this.date = new Date(game.startTimeUTC);
                 this.isLoading = true;
                 try {
-                    const response = await fetch(`/api/v1/gamecenter/${game.id}/landing`, {
-                        method: 'GET',
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                        },
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                
+                    const response = await fetchApi(`/api/v1/gamecenter/${game.id}/landing`);
                     const data = await response.json();
                     this.gameClicked = true;
                     this.gameClickedInfo = data;
@@ -388,16 +377,7 @@ export default {
                 }
 
                 try {
-                    const response = await fetch(`/api/v1/gamecenter/${game.id}/boxscore`, {
-                        method: 'GET',
-                        headers: {
-                            'Cache-Control': 'no-cache',
-                        },
-                    });
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
-                
+                    const response = await fetchApi(`/api/v1/gamecenter/${game.id}/boxscore`);
                     const data = await response.json();
                     this.boxScore = data;
                     this.isLoading = false;
@@ -502,6 +482,10 @@ export default {
             } else if (type === 'day') {
                 return dateObj.toLocaleString('en-us', { weekday: 'short' }).toUpperCase();
             }
+        },
+        setTime(utcTime) {
+            const localTime = new Date(utcTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return localTime;
         },
         dateDesc(dateStartTime) {
             const startTime = new Date(dateStartTime);
@@ -928,6 +912,22 @@ export default {
     padding: 5px;
 }
 
+.game-popup-result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+}
+
+.game-popup-time {
+    display: flex;
+    width: 35%;
+    justify-content: center;
+    font-size: large;
+    align-items: center;
+}
+
 .game-popup-teams {
     display: flex;
     justify-content: space-between;
@@ -1009,9 +1009,9 @@ export default {
         width: 100%;
     }
     .calendar-header {
-    margin-top: 0rem;
-    margin-bottom: 0px;
-}
+        margin-top: 0rem;
+        margin-bottom: 0px;
+    }
     .calendar-team-logo {
         width: 42px;
         height: 42px;
@@ -1037,11 +1037,15 @@ export default {
         margin-top: 0rem;
         width: 100%;
         border: none;
+        height: calc(100dvh - 310px);
+        overflow-y: auto;
+    }
+    .game-popup-teams {
+        height: 100px;
     }
     .game-popup .p-datatable-table {
         width: 100%;
     }
-    
     .schedule-section {
         flex-direction: column;
         margin-top: 0rem;

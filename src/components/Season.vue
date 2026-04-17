@@ -42,13 +42,13 @@
         <h3 class="game-log-header">Game Log</h3>
         <div v-if="playerInfo.position!='G'" class="game-log">
             <DataTable :value="gameLog">
-                <Column field="games" header="Games" style="width:15%;text-align:left;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                <Column field="games" header="Games" style="width:18%;text-align:left;color:white;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="goals" header="G" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="assists" header="A" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="points" header="P" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="plusMinus" header="+/-" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                <Column field="pim" header="PIM" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
-                <Column field="shots" header="SOG" style="width:4%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                <Column field="pim" header="PIM" style="width:2%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
+                <Column field="shots" header="SOG" style="width:2%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="toi" header="TOI" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="powerPlayGoals" header="PPG" style="width:3%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
                 <Column field="shorthandedGoals" header="SHG" style="width:5%;border-bottom:solid;border-width:thin;border-color:#ffffff0f"></Column>
@@ -78,6 +78,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
     name: 'Season',
     components: {
@@ -104,15 +106,7 @@ export default {
         async fetchGameLog() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/api/v1/player/${this.id}/game-log/${this.playerInfo.featuredStats.season}/2`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/api/v1/player/${this.id}/game-log/${this.playerInfo.featuredStats.season}/2`);
                 const data = await response.json();
                 this.configureGameLog(data);
                 this.isLoading = false;
@@ -233,11 +227,17 @@ export default {
     .game-log {
         width: 100%;
         margin-left: 0%;
-        height: 250px;
+        height: 450px;
         overflow-y: scroll;
+    }
+    .game-log .p-datatable-table {
+        width: 125%;
     }
     .game-log-header {
         margin-left: 0%;
+    }
+    .player-info-logo {
+        width: 80px;
     }
     .player-season-stats .p-datatable-table {
         width: 100%;

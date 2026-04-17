@@ -1,97 +1,98 @@
 <template>
     <div><ProgressSpinner v-if="isLoading" /></div>
-
-    <div v-if="forwards.length>0" class="forwards">
-        <h3 class="lines-header">Forwards</h3>
-        <div class="forwards-header" style="color:white">
-            <strong class="player-spot">LW</strong>
-            <strong class="player-spot">C</strong>
-            <strong class="player-spot">RW</strong>
-        </div>
-        <div v-for="(players, index) in groupedForwards" :key="index" class="forward-line">
-            <div v-for="(player, playerIndex) in players" :key="playerIndex" class="player-spot">
-                <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
-                <div>{{ player.name }}</div>
+    <div class="lineup-content">
+        <div v-if="forwards.length>0" class="forwards">
+            <h3 class="lines-header">Forwards</h3>
+            <div class="forwards-header" style="color:white">
+                <strong class="player-spot">LW</strong>
+                <strong class="player-spot">C</strong>
+                <strong class="player-spot">RW</strong>
+            </div>
+            <div v-for="(players, index) in groupedForwards" :key="index" class="forward-line">
+                <div v-for="(player, playerIndex) in players" :key="playerIndex" class="player-spot">
+                    <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
+                    <div>{{ player.name }}</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div v-if="defense.length>0" class="defense">
-        <h3 class="lines-header">Defense Pairings</h3>
-        <div v-for="(players, index) in groupedDefense" :key="index" class="defense-pairing">
-            <div v-for="(player, playerIndex) in players" :key="playerIndex" class="player-spot">
-                <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
-                <div>{{ player.name }}</div>
+        <div v-if="defense.length>0" class="defense">
+            <h3 class="lines-header">Defense Pairings</h3>
+            <div v-for="(players, index) in groupedDefense" :key="index" class="defense-pairing">
+                <div v-for="(player, playerIndex) in players" :key="playerIndex" class="player-spot">
+                    <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
+                    <div>{{ player.name }}</div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div v-if="powerplay1.length>0" class="powerplay">
-        <h3 class="lines-header">1st Powerplay Unit</h3>
-        <div class="powerplay-line"> <!-- Forwards -->
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay1[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[0].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay1[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[1].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay1[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[2].name }}</div></div>
-        </div>
-        <div class="powerplay-line"> <!-- Defense -->
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay1[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[3].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay1[4].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[4].name }}</div></div>
-        </div>
-    </div>
-
-    <div v-if="powerplay2.length>0" class="powerplay">
-        <h3 class="lines-header">2nd Powerplay Unit</h3>
-        <div class="powerplay-line"> <!-- Forwards -->
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay2[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[0].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay2[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[1].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay2[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[2].name }}</div></div>
-        </div>
-        <div class="powerplay-line"> <!-- Defense -->
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay2[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[3].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(powerplay2[4].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[4].name }}</div></div>
-        </div>
-    </div>
-
-    <div v-if="penaltykill1.length>0" class="penaltykill">
-        <h3 class="lines-header">1st Penalty Kill Unit</h3>
-        <div class="penaltykill-line"> <!-- Forwards -->
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[0].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[1].name }}</div></div>
-        </div>
-        <div class="penaltykill-line"> <!-- Defense -->
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[2].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[3].name }}</div></div>
-        </div>
-    </div>
-
-    <div v-if="penaltykill2.length>0" class="penaltykill">
-        <h3 class="lines-header">2nd Penalty Kill Unit</h3>
-        <div class="penaltykill-line"> <!-- Forwards -->
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[0].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[1].name }}</div></div>
-        </div>
-        <div class="penaltykill-line"> <!-- Defense -->
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[2].name }}</div></div>
-            <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[3].name }}</div></div>
-        </div>
-    </div>
-
-    <div v-if="defense.length>0" class="goalies">
-        <h3 class="lines-header">Goalies</h3>
-        <div class="goalies-lines">
-            <div v-for="(player, playerIndex) in goalies" :key="playerIndex" class="player-spot">
-                <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
-                <div>{{ player.name }}</div>
+        <div v-if="powerplay1.length>0" class="powerplay">
+            <h3 class="lines-header">1st Powerplay Unit</h3>
+            <div class="powerplay-line"> <!-- Forwards -->
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay1[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[0].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay1[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[1].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay1[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[2].name }}</div></div>
+            </div>
+            <div class="powerplay-line"> <!-- Defense -->
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay1[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[3].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay1[4].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay1[4].name }}</div></div>
             </div>
         </div>
-    </div>
 
-    <div v-if="injuries.length>0" class="injuries">
-        <h3 class="lines-header">Injuries</h3>
-        <div class="injuries-lines">
-            <div v-for="(player, playerIndex) in injuries" :key="playerIndex" class="player-spot">
-                <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
-                <div>{{ player.name }}</div>
+        <div v-if="powerplay2.length>0" class="powerplay">
+            <h3 class="lines-header">2nd Powerplay Unit</h3>
+            <div class="powerplay-line"> <!-- Forwards -->
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay2[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[0].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay2[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[1].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay2[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[2].name }}</div></div>
+            </div>
+            <div class="powerplay-line"> <!-- Defense -->
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay2[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[3].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(powerplay2[4].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ powerplay2[4].name }}</div></div>
+            </div>
+        </div>
+
+        <div v-if="penaltykill1.length>0" class="penaltykill">
+            <h3 class="lines-header">1st Penalty Kill Unit</h3>
+            <div class="penaltykill-line"> <!-- Forwards -->
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[0].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[1].name }}</div></div>
+            </div>
+            <div class="penaltykill-line"> <!-- Defense -->
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[2].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill1[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill1[3].name }}</div></div>
+            </div>
+        </div>
+
+        <div v-if="penaltykill2.length>0" class="penaltykill">
+            <h3 class="lines-header">2nd Penalty Kill Unit</h3>
+            <div class="penaltykill-line"> <!-- Forwards -->
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[0].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[0].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[1].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[1].name }}</div></div>
+            </div>
+            <div class="penaltykill-line"> <!-- Defense -->
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[2].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[2].name }}</div></div>
+                <div class="player-spot"><img :src="getPlayerJersey(penaltykill2[3].imageSrc)" alt="Player Jersey" class="player-jersey"><div>{{ penaltykill2[3].name }}</div></div>
+            </div>
+        </div>
+
+        <div v-if="defense.length>0" class="goalies">
+            <h3 class="lines-header">Goalies</h3>
+            <div class="goalies-lines">
+                <div v-for="(player, playerIndex) in goalies" :key="playerIndex" class="player-spot">
+                    <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
+                    <div>{{ player.name }}</div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="injuries.length>0" class="injuries">
+            <h3 class="lines-header">Injuries</h3>
+            <div class="injuries-lines">
+                <div v-for="(player, playerIndex) in injuries" :key="playerIndex" class="player-spot">
+                    <img :src="getPlayerJersey(player.imageSrc)" alt="Player Jersey" class="player-jersey">
+                    <div>{{ player.name }}</div>
+                </div>
             </div>
         </div>
     </div>
@@ -106,6 +107,8 @@
 import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+
+import { fetchApiHtml } from '@/services/fetchApi';
 
 export default {
     name: 'Lineup',
@@ -140,10 +143,7 @@ export default {
         async fetchLineup() {
             this.setupTeamChange();
             try {
-                const response = await fetch(`/dailyFaceoff/teams/${this.lineupTeam.value}/line-combinations`); // Make a GET request to the server endpoint for scraping lineup data
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApiHtml(`/dailyFaceoff/teams/${this.lineupTeam.value}/line-combinations`); // Make a GET request to the server endpoint for scraping lineup data
                 const htmlContent = await response.text(); // Get the HTML content as text
                 this.parseHTML(htmlContent); // Parse the HTML content
                 this.isLoading = false;
@@ -156,23 +156,6 @@ export default {
         parseHTML(htmlContent) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(htmlContent, 'text/html');
-            //get fowards lines
-            /*const forwardsContainer = doc.getElementById('forwards');
-            if (!forwardsContainer) {
-                console.error("Forwards container not found in HTML.");
-                return;
-            }
-            const forwardDivs = forwardsContainer.closest('.flex.flex-col').querySelectorAll('.flex.flex-row.flex-wrap.justify-evenly > div');
-            const forwards = [];
-            forwardDivs.forEach(div => {
-                const playerNameSpan = div.querySelector('.text-xs.font-bold.uppercase.xl\\:text-base');
-                const playerName = playerNameSpan ? playerNameSpan.textContent.trim() : 'Unknown';
-                const img = div.querySelector('img');
-                const playerImageSrc = img ? img.getAttribute('src') : null;
-                if(playerName!='Unknown')
-                    forwards.push({ name: playerName, imageSrc: playerImageSrc });
-            });*/
-            //get defense lines
             const lineupContainer = doc.getElementById('defense');
             if (!lineupContainer) {
                 console.error("Lineup container not found in HTML.");
@@ -212,9 +195,6 @@ export default {
             switch(this.id) {
                 case 'ANA':
                     this.lineupTeam = {team: 'Anaheim Ducks', value: 'anaheim-ducks'};
-                    break;
-                case 'ARI':
-                    this.lineupTeam = {team: 'Arizona Coyotes', value: 'arizona-coyotes'};
                     break;
                 case 'BOS':
                     this.lineupTeam = {team: 'Boston Bruins', value: 'boston-bruins'};
@@ -293,6 +273,9 @@ export default {
                     break;
                 case 'TOR':
                     this.lineupTeam = {team: 'Toronto Maple Leafs', value: 'toronto-maple-leafs'};
+                    break;
+                case 'UTA':
+                    this.lineupTeam = {team: 'Utah Mammoth', value: 'utah-mammoth'};
                     break;
                 case 'VAN':
                     this.lineupTeam = {team: 'Vancouver Canucks', value: 'vancouver-canucks'};
@@ -396,8 +379,24 @@ export default {
 
 /* Mobile Device Styling */
 @media (max-width: 640px) {
+    .injuries-lines {
+        overflow-x: auto;
+    }
+    .lineup-content {
+        margin-top: 1rem;
+        height: calc(100dvh - 330px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .lines-header {
+        margin-top: 0rem;
+    }
+    .player-jersey {
+        width: 100px;
+    }
     .player-spot {
         width: 100%;
+        font-size: small;
     }
 }
 </style>

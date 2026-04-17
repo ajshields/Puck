@@ -9,6 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.3.0",
+    "@capacitor/core": "^8.3.0",
+    "@capacitor/http": "^0.0.2",
+    "@capacitor/ios": "^8.3.0",
+    "@ionic/vue": "^8.8.4",
     "@radial-color-picker/vue-color-picker": "^5.0.1",
     "cheerio": "^1.0.0-rc.12",
     "http-proxy-middleware": "^2.0.6",

@@ -10,33 +10,33 @@
             <Dropdown v-model="selectedPosition" :options="positions" optionLabel="type" placeholder="Position" @change="optionChange" class="overall-stats-options-dropdown"/>
             <Dropdown v-model="selectedExperience" :options="experience" optionLabel="type" placeholder="Experience" @change="optionChange" class="overall-stats-options-dropdown"/>
         </div>
-        <div>
-          <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer">
-            <Column field="id" class="statistics-cell" style="text-align:left;width:4%"></Column>
-            <Column field="skaterFullName" header="Player" class="statistics-cell" style="text-align:left;height:40px;width:15%"></Column>
-            <Column field="season" header="Season" class="statistics-cell" style="width:7%"></Column>
-            <Column field="teamAbbrevs" header="Team" class="statistics-cell" style="width:4%"></Column>
-            <Column field="positionCode" header="Pos" class="statistics-cell" style="width:4%"></Column>
-            <Column field="gamesPlayed" header="GP" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="goals" header="G" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="assists" header="A" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="points" header="P" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="plusMinus" header="+/-" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="penaltyMinutes" header="PIM" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="pointsPerGame" header="P/GP" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="evGoals" header="EVG" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="evPoints" header="EVP" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="ppGoals" header="PPG" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="ppPoints" header="PPP" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="shGoals" header="SHG" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="shPoints" header="SHP" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="otGoals" header="OTG" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="gameWinningGoals" header="GWG" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="shots" header="S" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="shootingPct" header="S%" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="timeOnIcePerGame" header="TOI/GP" sortable class="statistics-cell" style="width:4%"></Column>
-            <Column field="faceoffWinPct" header="FOW%" sortable class="statistics-cell" style="width:4%"></Column>
-          </DataTable>
+        <div class="stats-content">
+            <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer">
+                <Column field="id" class="statistics-cell" style="text-align:left;width:4%"></Column>
+                <Column field="skaterFullName" header="Player" class="statistics-cell" style="text-align:left;height:40px;width:15%"></Column>
+                <Column field="season" header="Season" class="statistics-cell" style="width:7%"></Column>
+                <Column field="teamAbbrevs" header="Team" class="statistics-cell" style="width:4%"></Column>
+                <Column field="positionCode" header="Pos" class="statistics-cell" style="width:4%"></Column>
+                <Column field="gamesPlayed" header="GP" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="goals" header="G" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="assists" header="A" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="points" header="P" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="plusMinus" header="+/-" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="penaltyMinutes" header="PIM" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="pointsPerGame" header="P/GP" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="evGoals" header="EVG" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="evPoints" header="EVP" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="ppGoals" header="PPG" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="ppPoints" header="PPP" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="shGoals" header="SHG" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="shPoints" header="SHP" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="otGoals" header="OTG" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="gameWinningGoals" header="GWG" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="shots" header="S" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="shootingPct" header="S%" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="timeOnIcePerGame" header="TOI/GP" sortable class="statistics-cell" style="width:4%"></Column>
+                <Column field="faceoffWinPct" header="FOW%" sortable class="statistics-cell" style="width:4%"></Column>
+            </DataTable>
         </div>
         <div class="page-selection">
             <button @click="prevPage(true)">&lt;&lt;</button>
@@ -53,6 +53,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
+
+import { fetchApi } from '@/services/fetchApi';
 
 export default {
     name: 'Leaders',
@@ -91,7 +93,7 @@ export default {
           try {
             this.isLoading = true;
             this.statistics = [];
-            const url = '/restApi/stats/rest/en/skater/summary';
+            const url = `/restApi/stats/rest/en/skater/summary`;
             const queryParams = new URLSearchParams({
                 isAggregate: false,
                 isGame: false,
@@ -121,15 +123,7 @@ export default {
                     gameTypeId=2 and seasonId<=${this.endYear.seasonId} and 
                     seasonId>=${this.startYear.seasonId}`
             });
-            const response = await fetch(`${url}?${queryParams}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            const response = await fetchApi(`${url}?${queryParams}`);
             const data = await response.json();
             this.configureStatistics(data.data);
             this.isLoading = false;
@@ -140,15 +134,7 @@ export default {
         },
         async fetchFranchises() {
             try {
-                const response = await fetch(`/restApi/stats/rest/en/franchise`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                const response = await fetchApi(`/restApi/stats/rest/en/franchise`);
                 const data = await response.json();
                 this.franchises = data.data;
                 this.sortFranchises();
@@ -160,7 +146,7 @@ export default {
         async fetchYears() {
             try {
                 this.isLoading = true;
-                const response = await fetch(`/restApi/stats/rest/en/season`, {
+                const response = await fetchApi(`/restApi/stats/rest/en/season`, {
                   method: 'GET',
                   headers: {
                     'Cache-Control': 'no-cache',
@@ -174,7 +160,7 @@ export default {
                     this.years.push({label: data.data[i].formattedSeasonId, seasonId: data.data[i].id});
             } catch (error) {
                 console.error('Error fetching years:', error);
-                alert('Error fetching years. See console for details.');
+                //alert('Error fetching years. See console for details.');
             }
         },
         configureStatistics(data) {
@@ -376,6 +362,10 @@ export default {
     }
     .overall-stats-table .p-dropdown-trigger {
         width: 90%;
+    }
+    .stats-content {
+        height: calc(100dvh - 375px);
+        overflow-y: auto;
     }
     .years-options {
         width: 85%;

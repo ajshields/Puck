@@ -1,15 +1,17 @@
 <template>
     <!-- <div><ProgressSpinner v-if="isLoading" /></div> -->
-    <Settings></Settings>
-    <router-link :to="'/scores'" class="app-header">Puck</router-link>
+    <div class="player-info-header-nav">
+        <router-link :to="'/scores'" class="app-header">Puck</router-link>
+        <Settings></Settings>
+    </div>
     <!-- <AutoComplete v-model="searchPlayer" :suggestions="allSearchPlayers" field="label" placeholder="Search Players" :minLength="3" @complete="searchPlayerGo" /> -->
     <div v-if="allSearchPlayers.length>0">
-        <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Select a Player" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
+        <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Search Players" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
     </div>
 
     <div v-if="playerInfo.playerId" class="player-info-header">
         <img :src="playerInfo.headshot" alt="Team Logo" class="player-info-logo">
-        <strong style="font-size:xx-large;color:whitesmoke">{{ playerInfo.firstName.default }} {{ playerInfo.lastName.default }}</strong>
+        <strong class="player-info-name">{{ playerInfo.firstName.default }} {{ playerInfo.lastName.default }}</strong>
         <strong style="display:flex;align-items: center"><strong @click="goToTeam(playerInfo.currentTeamAbbrev)" style="cursor:pointer;display:flex;align-items: center"><img :src="playerInfo.teamLogo" alt="Player Logo" style="width:30px">{{ playerInfo.fullTeamName.default }}</strong> &nbsp;&nbsp;&#10242; {{ playerInfo.position }} &nbsp;&#10242; #{{ playerInfo.sweaterNumber }}</strong>
     </div>
     
@@ -19,7 +21,7 @@
         <router-link :to="'/player/' + id + '/info'">INFO</router-link>
     </nav>
     
-    <router-view v-if="playerInfo.playerId" name="player-content" :playerInfo="playerInfo"></router-view>
+    <router-view v-if="playerInfo.playerId" name="player-content" :playerInfo="playerInfo" :key="id"></router-view>
 
     <!-- Display error if any -->
     <div v-if="error">
@@ -32,6 +34,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import Settings from '@/components/Settings.vue';
 import AutoComplete from 'primevue/autocomplete';
 import Dropdown from 'primevue/dropdown';
+
+import { fetchApi } from '@/services/fetchApi';
 
 export default {
     name: 'Player',
@@ -48,30 +52,29 @@ export default {
         this.fetchPlayerInfo();
         this.fetchAllPlayers();
     },
+    watch: {
+      id(newId, oldId) {
+        if (newId !== oldId) {
+          this.playerInfo = {};
+          this.isLoading = true;
+          this.fetchPlayerInfo();
+        }
+      }
+    },
     data() {
-      return {
-          isLoading: true,
-          todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
-          playerInfo: {},
-          searchPlayer: null,
-          allSearchPlayers: [],
-          error: null,
-      };
+        return {
+            isLoading: true,
+            todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
+            playerInfo: {},
+            searchPlayer: null,
+            allSearchPlayers: [],
+            error: null,
+        };
     },
     methods: {
         async fetchPlayerInfo() {
             try {
-                const response = await fetch(`/api/v1/player/${this.id}/landing`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                  // You can add more options here if needed
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
+                const response = await fetchApi(`/api/v1/player/${this.id}/landing`);
                 const data = await response.json();
                 this.playerInfo = data;
                 this.isLoading = false;
@@ -95,7 +98,7 @@ export default {
             }
             const seasonYear = `${currentYear}${nextYear}`;
 
-            const url = '/restApi/stats/rest/en/skater/summary';
+            const url = `/restApi/stats/rest/en/skater/summary`;
             const queryParams = new URLSearchParams({
                 isAggregate: false,
                 isGame: false,
@@ -106,15 +109,7 @@ export default {
                     gameTypeId=2 and seasonId<=${seasonYear} and 
                     seasonId>=${seasonYear}`
             });
-            const response = await fetch(`${url}?${queryParams}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
+            const response = await fetchApi(`${url}?${queryParams}`);
             const data = await response.json();
             this.configureAllSearchPlayers(data);
             this.isLoading = false;
@@ -133,25 +128,25 @@ export default {
             });
         },
         searchPlayerGo(event) {
-            this.$router.push({ name: 'player.season', params: { id: event.value.value }});
-            setTimeout(() => {
-                window.location.reload();
-            }, 50);
+            const playerId = event.value.value;
 
-            const currentPath = this.$route.path;
-            // Construct the new team-specific path by replacing the current team abbreviation with the selected one
-            const newPlayerPath = currentPath.replace(/\/player\/\d+/, `/player/${event.value.value}`);
-            // Push the new path to the router
-            this.$router.push(newPlayerPath);
-            setTimeout(() => {
-                window.location.reload();
-            }, 50);
+            this.$router.push({
+              name: this.$route.name, // stay on same sub-route (season/career/info)
+              params: { id: playerId },
+              query: this.$route.query // preserve any query params if needed
+            });
         },
     },
 };
 </script>
 
 <style>
+.player-info-header-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
 .player-nav {
   width: 100%;
   margin-top: 1rem;
@@ -171,6 +166,11 @@ export default {
 .player-info-logo {
     width: 115px;
     border-radius: 50px;
+}
+
+.player-info-name {
+    font-size: xx-large;
+    color:whitesmoke;
 }
 
 .p-dropdown-items {
@@ -197,10 +197,17 @@ export default {
     margin-left: -20px;
 }
 
+.p-inputtext {
+    font-size: 16px !important;
+}
+
 /* Mobile Device Styling */
 @media (max-width: 640px) {
     .options-dropdown{
         margin-left: 7%;
+    }
+    .player-info-name {
+        font-size: x-large;
     }
 }
 </style>

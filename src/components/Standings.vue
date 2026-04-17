@@ -19,7 +19,7 @@
         <a @click="changeView('overall')" :class="{ active: currentView === 'overall' }">OVERALL</a>
     </div>
 
-    <div v-if="currentView === 'division'">
+    <div class="standings-content" v-if="currentView === 'division'">
       <h3>EASTERN</h3>
       <DataTable :value="divisionStandings.atlantic" @row-click="goToTeam">
         <h3 class="sub-section">ATLANTIC</h3>
@@ -29,17 +29,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="divisionStandings.metropolitan" @row-click="goToTeam">
         <h3 class="sub-section">METROPOLITAN</h3>
@@ -49,17 +49,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <h3>WESTERN</h3>
       <DataTable :value="divisionStandings.central" @row-click="goToTeam">
@@ -70,17 +70,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="divisionStandings.pacific" @row-click="goToTeam">
         <h3 class="sub-section">PACIFIC</h3>
@@ -90,21 +90,21 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
 
-    <div v-else-if="currentView === 'wildCard'">
+    <div class="standings-content" v-else-if="currentView === 'wildCard'">
       <h3>EASTERN</h3>
       <DataTable :value="wildCardStandings.atlantic" @row-click="goToTeam">
         <h3 class="sub-section">ATLANTIC</h3>
@@ -114,17 +114,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.metropolitan" @row-click="goToTeam">
         <h3 class="sub-section">METROPOLITAN</h3>
@@ -134,17 +134,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.eastWC" @row-click="goToTeam" :rowClass="getPlayoffBound">
         <h3 class="sub-section">WILD CARD</h3>
@@ -154,17 +154,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <h3>WESTERN</h3>
       <DataTable :value="wildCardStandings.central" @row-click="goToTeam">
@@ -175,17 +175,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.pacific" @row-click="goToTeam">
         <h3 class="sub-section">PACIFIC</h3>
@@ -195,17 +195,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.westWC" @row-click="goToTeam" :rowClass="getPlayoffBound">
         <h3 class="sub-section">WILD CARD</h3>
@@ -215,21 +215,21 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
 
-    <div v-else-if="currentView === 'conference'">
+    <div class="standings-content" v-else-if="currentView === 'conference'">
       <DataTable :value="conferenceStandings.eastern" @row-click="goToTeam">
         <h3 class="sub-section">EASTERN</h3>
         <Column field="place" header="" sortable style="width: 5%"></Column>
@@ -238,17 +238,17 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="conferenceStandings.western" @row-click="goToTeam">
         <h3 class="sub-section">WESTERN</h3>
@@ -258,40 +258,40 @@
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
 
-    <div v-else-if="currentView === 'overall'">
+    <div class="standings-content" v-else-if="currentView === 'overall'" scrollable scrollDirection="both">
       <DataTable :value="overallStandings" @row-click="goToTeam">
         <h3 class="sub-section">TEAM</h3>
         <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column frozen style="display:flex;justify-content:center;height:30px;align-items:center">
           <template #body="slotProps">
             <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 25%"></Column>
+        <Column field="team" header="" frozen class="team-header" style="width: 23%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 5%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 5%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 5%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
   </div>
@@ -568,6 +568,8 @@ import Layout from '@/components/Layout.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
+import { fetchApi } from '@/services/fetchApi';
+
 export default {
   name: 'Standings',
   components: {
@@ -603,16 +605,7 @@ export default {
     async fetchSchedule() {
       try {
         this.isLoading = true;
-        const response = await fetch(`/api/v1/schedule/${this.todaysDate}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/schedule/${this.todaysDate}`);
         const data = await response.json();
         this.schedule = data;
         this.isLoading = false;
@@ -628,17 +621,7 @@ export default {
     },
     async fetchTeams(standingsDate) {
       try {
-        const response = await fetch(`/api/v1/standings/${standingsDate}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
+        const response = await fetchApi(`/api/v1/standings/${standingsDate}`);
         const data = await response.json();
         this.configureStandings(data);
         // Handle the fetched data as needed
@@ -651,16 +634,7 @@ export default {
     async fetchBracket() {
       try {
         this.isLoading = true;
-        const response = await fetch(`/api/v1/playoff-bracket/${new Date().getFullYear()}`, {
-          method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache',
-          },
-          // You can add more options here if needed
-        });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        const response = await fetchApi(`/api/v1/playoff-bracket/${new Date().getFullYear()}`);
         const data = await response.json();
         console.log(data);
         this.bracket = data;
@@ -673,6 +647,11 @@ export default {
     changeView(view) {
       this.currentView = view;
     },
+    configureTeamName(team) {
+      if (team.clinchIndicator)
+        return `${team.clinchIndicator}-${team.teamAbbrev.default} ${team.teamCommonName.default}`;
+      return `${team.teamAbbrev.default} ${team.teamCommonName.default}`;
+    },
     configureStandings(teams) {
       let eastWCCounter = 0;
       let westWCCounter = 0;
@@ -680,16 +659,16 @@ export default {
         //push onto division table
         switch(teams.standings[i].divisionAbbrev) {
           case 'A':
-            this.divisionStandings.atlantic.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+            this.divisionStandings.atlantic.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
             break;
           case 'M':
-            this.divisionStandings.metropolitan.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+            this.divisionStandings.metropolitan.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
             break;
           case 'C':
-            this.divisionStandings.central.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+            this.divisionStandings.central.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
             break;
           case 'P':
-            this.divisionStandings.pacific.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+            this.divisionStandings.pacific.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
             break;
           default:
             break;
@@ -698,16 +677,16 @@ export default {
         if(teams.standings[i].divisionSequence <=3) {
           switch(teams.standings[i].divisionAbbrev) {
             case 'A':
-              this.wildCardStandings.atlantic.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+              this.wildCardStandings.atlantic.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
               break;
             case 'M':
-              this.wildCardStandings.metropolitan.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+              this.wildCardStandings.metropolitan.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
               break;
             case 'C':
-              this.wildCardStandings.central.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+              this.wildCardStandings.central.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
               break;
             case 'P':
-              this.wildCardStandings.pacific.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+              this.wildCardStandings.pacific.push({"place": teams.standings[i].divisionSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
               break;
             default:
               break;
@@ -716,11 +695,11 @@ export default {
           switch(teams.standings[i].conferenceAbbrev) {
             case 'E':
               eastWCCounter++;
-              this.wildCardStandings.eastWC.push({"place": eastWCCounter, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+              this.wildCardStandings.eastWC.push({"place": eastWCCounter, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
               break;
             case 'W':
               westWCCounter++
-              this.wildCardStandings.westWC.push({"place": westWCCounter, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+              this.wildCardStandings.westWC.push({"place": westWCCounter, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
               break;
             default:
               break;
@@ -729,16 +708,16 @@ export default {
         //push onto conference table
         switch(teams.standings[i].conferenceAbbrev) {
           case 'E':
-            this.conferenceStandings.eastern.push({"place": teams.standings[i].conferenceSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+            this.conferenceStandings.eastern.push({"place": teams.standings[i].conferenceSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
             break;
           case 'W':
-            this.conferenceStandings.western.push({"place": teams.standings[i].conferenceSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+            this.conferenceStandings.western.push({"place": teams.standings[i].conferenceSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
             break;
           default:
             break;
         }
         //push onto overall table
-        this.overallStandings.push({"place": teams.standings[i].leagueSequence, "teamLogo": teams.standings[i].teamLogo, "team": (teams.standings[i].teamAbbrev.default + " " + teams.standings[i].teamCommonName.default), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
+        this.overallStandings.push({"place": teams.standings[i].leagueSequence, "teamLogo": teams.standings[i].teamLogo, "team": this.configureTeamName(teams.standings[i]), "gamesPlayed": teams.standings[i].gamesPlayed, "record": (teams.standings[i].wins+"-"+teams.standings[i].losses+"-"+teams.standings[i].otLosses), "points": teams.standings[i].points, "regPlusOT": teams.standings[i].regulationPlusOtWins, "goalF": teams.standings[i].goalFor, "goalA": teams.standings[i].goalAgainst, "differential": teams.standings[i].goalDifferential, "shootoutWL": (teams.standings[i].shootoutWins+"-"+teams.standings[i].shootoutLosses), "last10": (teams.standings[i].l10Wins+"-"+teams.standings[i].l10Losses+"-"+teams.standings[i].l10OtLosses), "streak": (teams.standings[i].streakCode+teams.standings[i].streakCount)});
       }
     },
     getPlayoffBound(rowData) {
@@ -746,7 +725,9 @@ export default {
         return 'playoff-bound';
     },
     goToTeam(row) {
-      this.$router.push({ name: 'team.schedule', params: { id: row.data.team.split(' ')[0] }});
+      const teamAbbrev = row.data.team.split(' ')[0];
+      const teamId = teamAbbrev.includes('-') ? teamAbbrev.split('-')[1] : teamAbbrev;
+      this.$router.push({ name: 'team.schedule', params: { id: teamId }});
     }
   },
 };
@@ -758,6 +739,13 @@ export default {
   justify-content: space-evenly;
   gap: 10px;
   margin-bottom: 20px;
+}
+
+.header .active {
+  background-color: var(--hover-dark-color);
+  color: white;
+  border-radius: 10px;
+  font-weight: bold;
 }
 
 .header a:hover {
@@ -1018,6 +1006,10 @@ tr {
   }
   .series-team-wins {
     font-size: x-large;
+  }
+  .standings-content {
+    height: calc(100dvh - 215px);
+    overflow-y: auto;
   }
   /* East (right) side cascade */
   .series1 {grid-column: 28 / span 10; grid-row: 2 / span 3}

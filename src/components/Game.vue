@@ -191,7 +191,7 @@
                                 <!-- Goalie Headshot Image -->
                                 <div style="width:90%">
                                     <div style="color:white;cursor:pointer">
-                                        <strong @click="goToPlayer(getGoalieInfo(game.awayTeam.abbrev, 'id'))">{{ getGoalieInfo(game.awayTeam.abbrev, 'name') }}</strong>
+                                        <strong @click="goToPlayer(getGoalieInfo(game.awayTeam.abbrev, 'id'))" class="goalie-info-name">{{ getGoalieInfo(game.awayTeam.abbrev, 'name') }}</strong>
                                         <!-- <span>{{ getGoalieInfo(game.awayTeam.abbrev, 'record') }}</span> -->
                                     </div>
                                     <div style="display:flex;justify-content:space-around">
@@ -222,7 +222,7 @@
                                 <!-- goalie player image -->
                                 <div style="width:90%">
                                     <div style="color:white;cursor:pointer">
-                                        <strong @click="goToPlayer(getGoalieInfo(game.homeTeam.abbrev, 'id'))">{{ getGoalieInfo(game.homeTeam.abbrev, 'name') }}</strong>
+                                        <strong @click="goToPlayer(getGoalieInfo(game.homeTeam.abbrev, 'id'))" class="goalie-info-name">{{ getGoalieInfo(game.homeTeam.abbrev, 'name') }}</strong>
                                         <!-- <span>{{ getGoalieInfo(game.homeTeam.abbrev, 'record') }}</span> -->
                                     </div>
                                     <div style="display:flex;justify-content:space-around">
@@ -2360,6 +2360,9 @@ export default {
     .player-compare.first-name{font-size:x-small}
     .player-compare.last-name{font-size:small}
     .player-compare.position-num{font-size:x-small}
+    .goalie-info-name {
+        margin-left: 15px;
+    }
     .goalie-stats-content-away-section {
         padding: 10px;
         margin-right: 0px;

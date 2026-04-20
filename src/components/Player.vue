@@ -58,6 +58,7 @@ export default {
           this.playerInfo = {};
           this.isLoading = true;
           this.fetchPlayerInfo();
+          this.searchPlayer = null;
         }
       }
     },

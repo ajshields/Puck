@@ -459,21 +459,39 @@ export default {
     };
   },
   mounted() {
-    this.getYears();
-    this.fetchPoints();
-    this.fetchGoals();
-    this.fetchAssists();
-    this.fetchPlusMinus();
-    this.fetchPenaltyMins();
-    this.fetchFaceoffs();
-    this.fetchWins();
-    this.fetchShutouts();
-    this.fetchSavePctgs();
-    this.fetchGoalsAgainstAverages();
+    
+    this.fetchSchedule();
+    
   },
   methods: {
     isMobile() {
       return window.innerWidth <= 640;
+    },
+    async fetchSchedule() {
+      try {
+        this.isLoading = true;
+        const response = await fetchApi(`/api/v1/schedule/${this.todaysDate}`);
+        const data = await response.json();
+        this.isLoading = false;
+
+        if(this.todaysDate > data.regularSeasonEndDate) //if the regular season is over set default view to playoffs
+          this.type = 'playoffs';
+        //call all category fetch statements with updated type for reg season or playoffs
+        this.getYears();
+        this.fetchPoints();
+        this.fetchGoals();
+        this.fetchAssists();
+        this.fetchPlusMinus();
+        this.fetchPenaltyMins();
+        this.fetchFaceoffs();
+        this.fetchWins();
+        this.fetchShutouts();
+        this.fetchSavePctgs();
+        this.fetchGoalsAgainstAverages();
+      } catch (error) {
+        console.error('Error fetching schedule:', error);
+        alert('Error schedule scores. See console for details.');
+      }
     },
     //LEADERS METHODS
     async fetchPoints() {

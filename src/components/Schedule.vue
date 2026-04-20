@@ -128,7 +128,7 @@
                 <DataTable :value="popupLineScore">
                     <Column style="width: 3%">
                         <template #body="slotProps">
-                          <img :src="slotProps.data.logo" :alt="slotProps.data.team"/>
+                          <img :src="slotProps.data.logo" :alt="slotProps.data.team" class="popup-team-logo"/>
                         </template>
                     </Column>
                     <Column field="team" header="" style="width: 5%"></Column>
@@ -704,11 +704,15 @@ export default {
             this.$router.push({ name: 'game', params: { id: game.id }, query: { date: game.gameDate } });
         },
         goToTeam(abbrev) {
-            const newUrl = window.location.href.replace(/\/team\/\w+/, `/team/${abbrev}`);
-            window.location.href = newUrl;
-            setTimeout(() => {
-                window.location.reload();
-            }, 50);
+            const currentPath = this.$route.path;
+
+            const newPath = currentPath.replace(
+              /\/team\/[^/]+/,
+              `/team/${abbrev}`
+            );
+
+            this.$router.push(newPath);
+            this.fetchSchedule();
         },
     },
 };
@@ -970,6 +974,10 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.popup-team-logo {
+    width: 31px;
 }
 
 .popup-player-team-logo {

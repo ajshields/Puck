@@ -62,6 +62,15 @@ export default {
     mounted() {
         this.fetchSchedule();
     },
+    watch: {
+      id: {
+        immediate: true,
+        handler() {
+          this.fetchSchedule();
+          this.selectedTeam = null;
+        }
+      }
+    },
     data() {
         return {
             isLoading: true,
@@ -145,7 +154,6 @@ export default {
           );
 
           this.$router.push(newPath);
-          this.fetchSchedule();
         },
     },
     computed: {
@@ -183,7 +191,6 @@ export default {
                 {team: 'Vegas Golden Knights', value: 'VGK'},
                 {team: 'Washington Capitals', value: 'WSH'},
                 {team: 'Winnipeg Jets', value: 'WPG'},
-
             ];
         },
     },

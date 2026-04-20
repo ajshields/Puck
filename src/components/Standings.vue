@@ -610,10 +610,12 @@ export default {
         this.schedule = data;
         this.isLoading = false;
 
-        if(this.todaysDate > data.regularSeasonEndDate) //if the regular season is over send last date of regular season
+        if(this.todaysDate > data.regularSeasonEndDate) { //if the regular season is over send last date of regular season
           this.fetchTeams(data.regularSeasonEndDate);
-        else //send current date
+          this.type = 'playoffs';
+        } else { //send current date
           this.fetchTeams(this.todaysDate);
+        }
       } catch (error) {
         console.error('Error fetching scores:', error);
         alert('Error fetching scores. See console for details.');

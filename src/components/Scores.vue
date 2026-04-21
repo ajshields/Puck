@@ -33,7 +33,7 @@
             </div>
             <div v-else-if="game.gameType==3" class="game-type"> <!--playoffs tag-->
               <img src="@/assets/blueDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
-              <strong >playoffs</strong>
+              <strong>{{ getPlayoffsSeriesDesc(game.seriesStatus) }}</strong>
             </div>
             <div v-else-if="game.specialEvent" class="game-type"> <!--special event tag-->
               <img src="@/assets/yellowDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
@@ -57,7 +57,7 @@
               </div>
               <div class="period-clock">
                 <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'">{{ setTime(game.startTimeUTC) }}</strong>
-                <strong v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">{{ currentGameTime(game.gameState, game.periodDescriptor, game.clock) }}</strong>
+                <strong v-if="game.gameState=='OFF' || game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='FINAL'">{{ currentGameTime(game.gameState, game.periodDescriptor, game.clock, game.gameType) }}</strong>
               </div>
             </div>
             <div class="game-section">
@@ -210,8 +210,6 @@ export default {
         const response = await fetchApi(`/api/v1/score/${this.selectedDate}`);
         const data = await response.json();
         this.games = data;
-        console.log('DATA:', data);
-        console.log('GAMES BEFORE SORT:', this.games);
         this.sortGames(this.games);
         this.isLoading = false;
       } catch (error) {
@@ -280,6 +278,15 @@ export default {
       const date = new Date(Date.UTC(year, month - 1, day + 1)); // Subtract 1 from month to adjust for zero-based month index
       return date.toLocaleDateString('en-US', options);
     },
+    getPlayoffsSeriesDesc(seriesStatus) {
+      if(seriesStatus.bottomSeedWins > seriesStatus.topSeedWins) {
+        return `${seriesStatus.bottomSeedTeamAbbrev} lead series ${seriesStatus.bottomSeedWins}-${seriesStatus.topSeedWins}`;
+      } else if(seriesStatus.bottomSeedWins < seriesStatus.topSeedWins) {
+        return `${seriesStatus.topSeedTeamAbbrev} lead series ${seriesStatus.topSeedWins}-${seriesStatus.bottomSeedWins}`;
+      } else {
+        return `Series tied ${seriesStatus.topSeedWins}-${seriesStatus.bottomSeedWins}`;
+      }
+    },
     selectDate(date) {
       this.selectedDate = date;
       // Update the center index when a new date is selected
@@ -299,8 +306,11 @@ export default {
       const localTime = new Date(utcTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       return localTime;
     },
-    currentGameTime(gameState, periodDescriptor, clock) {
+    currentGameTime(gameState, periodDescriptor, clock, gameType) {
       if(gameState == "LIVE" || gameState == "CRIT") {
+        if(gameType==3 && periodDescriptor.number > 4) {
+          return `${clock.timeRemaining} ${periodDescriptor.number-3}OT`;
+        }
         switch (periodDescriptor.number) {
           case 1:
             if(clock.inIntermission)
@@ -324,6 +334,9 @@ export default {
             return "Final";
         }
       } else if(gameState == "OFF" || gameState == "FINAL") {
+        if(gameType==3 && periodDescriptor.number > 4) {
+          return `Final (${periodDescriptor.number-3}OT)`;
+        }
         switch (periodDescriptor.number) {
           case 3:
             return "Final";

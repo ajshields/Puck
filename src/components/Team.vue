@@ -103,7 +103,6 @@ export default {
                 const response = await fetchApi(`/api/v1/standings/${date}`);
                 const data = await response.json();
                 this.configureTeamInfo(data);
-                console.log(data);
                 this.isLoading = false;
             }
             catch (error) {

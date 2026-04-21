@@ -38,6 +38,7 @@
             <tbody>
               <tr v-for="point in points" :key="point.place" @click="handlePointsClick(point)" :class="{ 'selected-row': isSelectedPoints(point) }">
                 <td>{{ point.place }}</td>
+                <td class="stat-team-logo"><img :src="point.logo" :alt="point.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ point.name }}</td>
                 <td>{{ point.points }}</td>
               </tr>
@@ -76,6 +77,7 @@
             <tbody>
               <tr v-for="goal in goals" :key="goal.place" @click="handleGoalsClick(goal)" :class="{ 'selected-row': isSelectedGoals(goal) }">
                 <td>{{ goal.place }}</td>
+                <td class="stat-team-logo"><img :src="goal.logo" :alt="goal.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ goal.name }}</td>
                 <td>{{ goal.goals }}</td>
               </tr>
@@ -114,6 +116,7 @@
             <tbody>
               <tr v-for="assist in assists" :key="assist.place" @click="handleAssistsClick(assist)" :class="{ 'selected-row': isSelectedAssists(assist) }">
                 <td>{{ assist.place }}</td>
+                <td class="stat-team-logo"><img :src="assist.logo" :alt="assist.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ assist.name }}</td>
                 <td>{{ assist.assists }}</td>
               </tr>
@@ -152,6 +155,7 @@
             <tbody>
               <tr v-for="plusminus in plusMinus" :key="plusminus.place" @click="handlePlusMinusClick(plusminus)" :class="{ 'selected-row': isSelectedPlusMinus(plusminus) }">
                 <td>{{ plusminus.place }}</td>
+                <td class="stat-team-logo"><img :src="plusminus.logo" :alt="plusminus.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ plusminus.name }}</td>
                 <td>{{ plusminus.plusMinus }}</td>
               </tr>
@@ -190,6 +194,7 @@
             <tbody>
               <tr v-for="penaltyMin in penaltyMins" :key="penaltyMin.place" @click="handlePenaltyMinsClick(penaltyMin)" :class="{ 'selected-row': isSelectedPenaltyMins(penaltyMin) }">
                 <td>{{ penaltyMin.place }}</td>
+                <td class="stat-team-logo"><img :src="penaltyMin.logo" :alt="penaltyMin.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ penaltyMin.name }}</td>
                 <td>{{ penaltyMin.penaltyMins }}</td>
               </tr>
@@ -228,6 +233,7 @@
             <tbody>
               <tr v-for="faceoff in faceoffs" :key="faceoff.place" @click="handleFaceoffsClick(faceoff)" :class="{ 'selected-row': isSelectedFaceoffs(faceoff) }">
                 <td>{{ faceoff.place }}</td>
+                <td class="stat-team-logo"><img :src="faceoff.logo" :alt="faceoff.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ faceoff.name }}</td>
                 <td>{{ faceoff.faceoffs }}</td>
               </tr>
@@ -266,6 +272,7 @@
             <tbody>
               <tr v-for="win in wins" :key="win.place" @click="handleWinsClick(win)" :class="{ 'selected-row': isSelectedWins(win) }">
                 <td>{{ win.place }}</td>
+                <td class="stat-team-logo"><img :src="win.logo" :alt="win.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ win.name }}</td>
                 <td>{{ win.wins }}</td>
               </tr>
@@ -304,6 +311,7 @@
             <tbody>
               <tr v-for="shutout in shutouts" :key="shutout.place" @click="handleShutoutsClick(shutout)" :class="{ 'selected-row': isSelectedShutouts(shutout) }">
                 <td>{{ shutout.place }}</td>
+                <td class="stat-team-logo"><img :src="shutout.logo" :alt="shutout.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ shutout.name }}</td>
                 <td>{{ shutout.shutouts }}</td>
               </tr>
@@ -342,6 +350,7 @@
             <tbody>
               <tr v-for="savePctg in savePctgs" :key="savePctg.place" @click="handleSavePctgsClick(savePctg)" :class="{ 'selected-row': isSelectedSavePctgs(savePctg) }">
                 <td>{{ savePctg.place }}</td>
+                <td class="stat-team-logo"><img :src="savePctg.logo" :alt="savePctg.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ savePctg.name }}</td>
                 <td>{{ savePctg.savePctgs }}</td>
               </tr>
@@ -380,6 +389,7 @@
             <tbody>
               <tr v-for="goalsAgainstAverage in goalsAgainstAverages" :key="goalsAgainstAverage.place" @click="handleGoalsAgainstAveragesClick(goalsAgainstAverage)" :class="{ 'selected-row': isSelectedGoalsAgainstAverages(goalsAgainstAverage) }">
                 <td>{{ goalsAgainstAverage.place }}</td>
+                <td class="stat-team-logo"><img :src="goalsAgainstAverage.logo" :alt="goalsAgainstAverage.logo" class="stat-team-logo-size"/></td>
                 <td class="leader-name-header">{{ goalsAgainstAverage.name }}</td>
                 <td>{{ goalsAgainstAverage.goalsAgainstAverages }}</td>
               </tr>
@@ -670,7 +680,7 @@ export default {
       this.selectedPoints = null;
       this.selectedPointsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < pointsList.points.length;  i++) {
-        this.points.push({"place": (i+1), "name": (pointsList.points[i].firstName.default+" "+pointsList.points[i].lastName.default), "points": pointsList.points[i].value});
+        this.points.push({"place": (i+1), "logo": pointsList.points[i].teamLogo, "name": (pointsList.points[i].firstName.default+" "+pointsList.points[i].lastName.default), "points": pointsList.points[i].value});
       }
       this.selectedPoints = this.points.length > 0 ? this.points[0] : null,
       this.selectedPointsInfo.picture = this.pointsData.points[0].headshot;
@@ -683,7 +693,7 @@ export default {
       this.selectedGoals = null;
       this.selectedGoalsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < goalsList.goals.length;  i++) {
-        this.goals.push({"place": (i+1), "name": (goalsList.goals[i].firstName.default+" "+goalsList.goals[i].lastName.default), "goals": goalsList.goals[i].value});
+        this.goals.push({"place": (i+1), "logo": goalsList.goals[i].teamLogo, "name": (goalsList.goals[i].firstName.default+" "+goalsList.goals[i].lastName.default), "goals": goalsList.goals[i].value});
       }
       this.selectedGoals = this.goals.length > 0 ? this.goals[0] : null,
       this.selectedGoalsInfo.picture = this.goalsData.goals[0].headshot;
@@ -696,7 +706,7 @@ export default {
       this.selectedAssists = null;
       this.selectedAssistsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < assistsList.assists.length;  i++) {
-        this.assists.push({"place": (i+1), "name": (assistsList.assists[i].firstName.default+" "+assistsList.assists[i].lastName.default), "assists": assistsList.assists[i].value});
+        this.assists.push({"place": (i+1), "logo": assistsList.assists[i].teamLogo, "name": (assistsList.assists[i].firstName.default+" "+assistsList.assists[i].lastName.default), "assists": assistsList.assists[i].value});
       }
       this.selectedAssists = this.assists.length > 0 ? this.assists[0] : null,
       this.selectedAssistsInfo.picture = this.assistsData.assists[0].headshot;
@@ -709,7 +719,7 @@ export default {
       this.selectedPlusMinus = null;
       this.selectedPlusMinusInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < plusMinusList.plusMinus.length;  i++) {
-        this.plusMinus.push({"place": (i+1), "name": (plusMinusList.plusMinus[i].firstName.default+" "+plusMinusList.plusMinus[i].lastName.default), "plusMinus": plusMinusList.plusMinus[i].value});
+        this.plusMinus.push({"place": (i+1), "logo": plusMinusList.plusMinus[i].teamLogo, "name": (plusMinusList.plusMinus[i].firstName.default+" "+plusMinusList.plusMinus[i].lastName.default), "plusMinus": plusMinusList.plusMinus[i].value});
       }
       this.selectedPlusMinus = this.plusMinus.length > 0 ? this.plusMinus[0] : null,
       this.selectedPlusMinusInfo.picture = this.plusMinusData.plusMinus[0].headshot;
@@ -722,7 +732,7 @@ export default {
       this.selectedPenaltyMins = null;
       this.selectedPenaltyMinsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < penaltyMinsList.penaltyMins.length;  i++) {
-        this.penaltyMins.push({"place": (i+1), "name": (penaltyMinsList.penaltyMins[i].firstName.default+" "+penaltyMinsList.penaltyMins[i].lastName.default), "penaltyMins": penaltyMinsList.penaltyMins[i].value});
+        this.penaltyMins.push({"place": (i+1), "logo": penaltyMinsList.penaltyMins[i].teamLogo, "name": (penaltyMinsList.penaltyMins[i].firstName.default+" "+penaltyMinsList.penaltyMins[i].lastName.default), "penaltyMins": penaltyMinsList.penaltyMins[i].value});
       }
       this.selectedPenaltyMins = this.penaltyMins.length > 0 ? this.penaltyMins[0] : null,
       this.selectedPenaltyMinsInfo.picture = this.penaltyMinsData.penaltyMins[0].headshot;
@@ -735,7 +745,7 @@ export default {
       this.selectedFaceoffs = null;
       this.selectedFaceoffsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < faceoffsList.faceoffLeaders.length;  i++) {
-        this.faceoffs.push({"place": (i+1), "name": (faceoffsList.faceoffLeaders[i].firstName.default+" "+faceoffsList.faceoffLeaders[i].lastName.default), "faceoffs": (faceoffsList.faceoffLeaders[i].value*100).toFixed(1)});
+        this.faceoffs.push({"place": (i+1), "logo": faceoffsList.faceoffLeaders[i].teamLogo, "name": (faceoffsList.faceoffLeaders[i].firstName.default+" "+faceoffsList.faceoffLeaders[i].lastName.default), "faceoffs": (faceoffsList.faceoffLeaders[i].value*100).toFixed(1)});
       }
       this.selectedFaceoffs = this.faceoffs.length > 0 ? this.faceoffs[0] : null,
       this.selectedFaceoffsInfo.picture = this.faceoffsData.faceoffLeaders[0].headshot;
@@ -748,7 +758,7 @@ export default {
       this.selectedWins = null;
       this.selectedWinsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < winsList.wins.length;  i++) {
-        this.wins.push({"place": (i+1), "name": (winsList.wins[i].firstName.default+" "+winsList.wins[i].lastName.default), "wins": winsList.wins[i].value});
+        this.wins.push({"place": (i+1), "logo": winsList.wins[i].teamLogo, "name": (winsList.wins[i].firstName.default+" "+winsList.wins[i].lastName.default), "wins": winsList.wins[i].value});
       }
       this.selectedWins = this.wins.length > 0 ? this.wins[0] : null,
       this.selectedWinsInfo.picture = this.winsData.wins[0].headshot;
@@ -762,7 +772,7 @@ export default {
       this.selectedShutoutsInfo = {picture: null, name: null, info: [], points: null};
       if(shutoutsList.shutouts) {
         for(let i = 0; i < shutoutsList.shutouts.length;  i++) {
-          this.shutouts.push({"place": (i+1), "name": (shutoutsList.shutouts[i].firstName.default+" "+shutoutsList.shutouts[i].lastName.default), "shutouts": shutoutsList.shutouts[i].value});
+          this.shutouts.push({"place": (i+1), "logo": shutoutsList.shutouts[i].teamLogo, "name": (shutoutsList.shutouts[i].firstName.default+" "+shutoutsList.shutouts[i].lastName.default), "shutouts": shutoutsList.shutouts[i].value});
         }
         this.selectedShutouts = this.shutouts.length > 0 ? this.shutouts[0] : null,
         this.selectedShutoutsInfo.picture = this.shutoutsData.shutouts[0].headshot;
@@ -776,7 +786,7 @@ export default {
       this.selectedSavePctgs = null;
       this.selectedSavePctgsInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < savePctgsList.savePctg.length;  i++) {
-        this.savePctgs.push({"place": (i+1), "name": (savePctgsList.savePctg[i].firstName.default+" "+savePctgsList.savePctg[i].lastName.default), "savePctgs": String((savePctgsList.savePctg[i].value).toFixed(3)).slice(1)});
+        this.savePctgs.push({"place": (i+1), "logo": savePctgsList.savePctg[i].teamLogo, "name": (savePctgsList.savePctg[i].firstName.default+" "+savePctgsList.savePctg[i].lastName.default), "savePctgs": String((savePctgsList.savePctg[i].value).toFixed(3)).slice(1)});
       }
       this.selectedSavePctgs = this.savePctgs.length > 0 ? this.savePctgs[0] : null,
       this.selectedSavePctgsInfo.picture = this.savePctgsData.savePctg[0].headshot;
@@ -789,7 +799,7 @@ export default {
       this.selectedGoalsAgainstAverages = null;
       this.selectedGoalsAgainstAveragesInfo = {picture: null, name: null, info: [], points: null};
       for(let i = 0; i < goalsAgainstAveragesList.goalsAgainstAverage.length;  i++) {
-        this.goalsAgainstAverages.push({"place": (i+1), "name": (goalsAgainstAveragesList.goalsAgainstAverage[i].firstName.default+" "+goalsAgainstAveragesList.goalsAgainstAverage[i].lastName.default), "goalsAgainstAverages": (goalsAgainstAveragesList.goalsAgainstAverage[i].value).toFixed(2)});
+        this.goalsAgainstAverages.push({"place": (i+1), "logo": goalsAgainstAveragesList.goalsAgainstAverage[i].teamLogo, "name": (goalsAgainstAveragesList.goalsAgainstAverage[i].firstName.default+" "+goalsAgainstAveragesList.goalsAgainstAverage[i].lastName.default), "goalsAgainstAverages": (goalsAgainstAveragesList.goalsAgainstAverage[i].value).toFixed(2)});
       }
       this.selectedGoalsAgainstAverages = this.goalsAgainstAverages.length > 0 ? this.goalsAgainstAverages[0] : null,
       this.selectedGoalsAgainstAveragesInfo.picture = this.goalsAgainstAveragesData.goalsAgainstAverage[0].headshot;
@@ -1082,6 +1092,17 @@ export default {
   height: 24px; /* Adjust the height of the logo as needed */
 }
 
+.stat-team-logo {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+.stat-team-logo-size {
+  width: 30px;
+  height: 24px;
+}
+
 /* Add the following styles to center the DataTable within the right section */
 .right-section .p-datatable {
   max-width: 100%;
@@ -1168,6 +1189,10 @@ tr:hover {
   }
   .stat-leader-value {
     font-size: larger;
+  }
+  .team-logo-leaders{
+    width: 40px;
+    height: 27px;
   }
   tr:hover {
     cursor: none;

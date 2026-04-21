@@ -102,7 +102,6 @@ export default {
                 const response = await fetchApi(`/api/v1/club-stats/${this.id}/${seasonYears}/2`);
                 const data = await response.json();
                 this.allPlayers = data;
-                console.log(data);
                 this.configureSkaters(data.skaters);
                 this.configureGoalies(data.goalies);
                 this.isLoading = false;

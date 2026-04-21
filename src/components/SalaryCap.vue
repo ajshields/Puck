@@ -36,14 +36,12 @@ export default {
     methods: {
         async fetchSalaryCap() {
             this.setupTeamChange();
-            console.log();
             try {
                 const response = await fetch(`/puckPedia/team/${this.salaryTeam.value}`); // Make a GET request to the server endpoint for scraping salary cap data
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 const htmlContent = await response.text(); // Get the HTML content as text
-                console.log(htmlContent);
                 //this.parseHTML(htmlContent); // Parse the HTML content
                 this.isLoading = false;
             } catch (error) {

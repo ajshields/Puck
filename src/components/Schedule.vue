@@ -347,7 +347,6 @@ export default {
 
                 const response = await fetchApi(`/api/v1/club-schedule-season/${this.id}/${seasonYears}`);
                 const data = await response.json();
-                console.log(data);
                 this.schedule = data.games;
                 this.isLoading = false;
             } catch (error) {
@@ -1027,6 +1026,9 @@ export default {
     }
     .calendar-day {
         height: 65px;
+    }
+    .calendar-day:hover {
+        background-color: #ffffff00;
     }
     .game-details {
         margin-top: 11px;

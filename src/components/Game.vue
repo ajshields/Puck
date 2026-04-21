@@ -43,9 +43,9 @@
                 </div>
                 <div v-else class="middle-scoreboard">
                     <strong v-if="(game.gameState=='LIVE' || game.gameState=='CRIT') && !game.clock.inIntermission" style="font-size:large">{{ game.clock.timeRemaining }}</strong>
-                    <strong v-if="(game.gameState=='LIVE' || game.gameState=='CRIT')">{{ getPeriodScoreboard(false, game.periodDescriptor.number, game?.clock?.inIntermission) }}</strong>
+                    <strong v-if="(game.gameState=='LIVE' || game.gameState=='CRIT')">{{ getPeriodScoreboard(false, game.periodDescriptor.number, game.gameType, game?.clock?.inIntermission,) }}</strong>
                     <strong v-if="game.gameState=='OFF' || game.gameState=='FINAL'" style="font-size:large">Final</strong>
-                    <strong v-if="game.gameState=='OFF' || game.gameState=='FINAL'">{{ getPeriodScoreboard(true, game.periodDescriptor.number) }}</strong>
+                    <strong v-if="game.gameState=='OFF' || game.gameState=='FINAL'">{{ getPeriodScoreboard(true, game.periodDescriptor.number, game.gameType) }}</strong>
                 </div>
             </div>
             <!-- Home Scoreboard -->
@@ -97,7 +97,7 @@
                     <!-- SCORING SUMMARY -->
                     <div v-if="game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL'" class="scoring-summary">
                         <div v-for="period in game.summary.scoring">
-                            <h3 v-if="period.goals[0]">{{ getPeriod(period) }}</h3>
+                            <h3 v-if="period.goals[0]">{{ getPeriod(period, game.gameType) }}</h3>
                             <div v-if="period.periodDescriptor.periodType!='SO'" v-for="goal in period.goals" :key="goal.id" class="goal-box">
                                 <img :src="goal.headshot" @click="goToPlayer(goal.playerId)" alt="Player Logo" class="player-logo">
                                 <img :src="getPlayerTeamLogo(goal.teamAbbrev.default)" alt="Player Team Logo" class="player-team-logo">
@@ -252,7 +252,7 @@
                     <div v-if="(game.gameState=='LIVE' || game.gameState=='CRIT' || game.gameState=='OFF' || game.gameState=='FINAL') && penaltySummary.length>0" style="margin-top:1rem">
                         <h3 style="color:white">Penalties</h3>
                         <Accordion class="penalties-box">
-                                <AccordionTab v-for="(penalties, index) in penaltySummary" :key="index" :header="getPenaltyPeriod(index)+' Period'">
+                                <AccordionTab v-for="(penalties, index) in penaltySummary" :key="index" :header="getPenaltyPeriod(index, game.gameType)+' Period'">
                                     <DataTable :value="penalties" tableStyle="width: 100%">
                                         <Column style="width: 1%">
                                             <template #body="slotProps">
@@ -846,7 +846,6 @@ export default {
                 const response = await fetchApi(`/api/v1/gamecenter/${this.id}/boxscore`);
                 const data = await response.json();
                 this.boxScore = data;
-                console.log(this.boxScore);
                 this.switchPlayerGameStats('away');
                 this.isLoading = false;
             } catch (error) {
@@ -860,7 +859,6 @@ export default {
                 const response = await fetchApi(`/api/v1/wsc/game-story/${this.id}`);
                 const data = await response.json();
                 this.gameStory = data;
-                console.log(data);
             } catch (error) {
               console.error('Error fetching game-story:', error);
               alert('Error fetching game-story. See console for details.');
@@ -907,7 +905,6 @@ export default {
             return formattedDate;
         },
         configurePlays(data) {
-            console.log(data);
             //for(let i = data.plays.length-1; i>=0; i--) { //do this if you want all plays in game configured
             if(data.plays.length>0) { //do this if you want only most recent play configured
                 let i = data.plays.length-1;
@@ -1287,38 +1284,47 @@ export default {
                 }
             }
         },
-        getPeriodScoreboard(over, period, intermission) {
+        getPeriodScoreboard(over, period, gameType, intermission) {
             let periodShow = '';
-            switch(period) {
-                case 1:
-                    periodShow = '1ST';
-                    break;
-                case 2:
-                    periodShow = '2ND';
-                    break
-                case 3:
-                    if(over)
-                        return '';
-                    periodShow = '3RD';
-                    break
-                case 4:
-                    if(over)
-                        return '(OT)';
-                    periodShow = 'OT';
-                    break
-                case 5:
-                    if(over)
-                        return '(SO)';
-                    periodShow = 'SO';
-                    break
-                default:
-                    periodShow = '';
+            if(gameType==3 && period>4) {
+                if(over)
+                    return `(${period-3}OT)`;
+                periodShow = `${period-3}OT`;
+            }
+            else {
+                switch(period) {
+                    case 1:
+                        periodShow = '1ST';
+                        break;
+                    case 2:
+                        periodShow = '2ND';
+                        break
+                    case 3:
+                        if(over)
+                            return '';
+                        periodShow = '3RD';
+                        break
+                    case 4:
+                        if(over)
+                            return '(OT)';
+                        periodShow = 'OT';
+                        break
+                    case 5:
+                        if(over)
+                            return '(SO)';
+                        periodShow = 'SO';
+                        break
+                    default:
+                        periodShow = '';
+                }
             }
             if(intermission)
                 periodShow = periodShow + ' INT';
             return periodShow;
         },
-        getPeriod(period) {
+        getPeriod(period, gameType) {
+            if(gameType==3 && period.periodDescriptor.number>4)
+                return `${period.periodDescriptor.number-3}OT`;
             switch(period.periodDescriptor.number) {
                 case 1:
                     return '1st Period';
@@ -1473,20 +1479,24 @@ export default {
                     return num;
             }
         },
-        getPenaltyPeriod(index) {
+        getPenaltyPeriod(index, gameType) {
             if(this.game.summary) {
                 const period = this.game.summary.penalties[index].periodDescriptor.number;
-                switch(period) {
-                case 1:
-                    return '1ST';
-                case 2:
-                    return '2ND';
-                case 3:
-                    return '3RD';
-                case 4:
-                    return 'OT';
-                default:
-                    return period;
+                if(gameType==3 && period>4)
+                    return `${period-3}OT`;
+                else {
+                    switch(period) {
+                        case 1:
+                            return '1ST';
+                        case 2:
+                            return '2ND';
+                        case 3:
+                            return '3RD';
+                        case 4:
+                            return 'OT';
+                        default:
+                            return period;
+                    }
                 }
             }
         },

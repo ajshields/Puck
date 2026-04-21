@@ -638,7 +638,6 @@ export default {
         this.isLoading = true;
         const response = await fetchApi(`/api/v1/playoff-bracket/${new Date().getFullYear()}`);
         const data = await response.json();
-        console.log(data);
         this.bracket = data;
         this.isLoading = false;
       } catch (error) {

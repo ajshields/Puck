@@ -147,7 +147,7 @@
                             <div class="goalie-stats-content-away">
                                 <div v-for="goalie in gameStory.preGameMatchup.goalieComparison.awayTeam" class="goalie-stats-content-away-section">
                                     <div v-if="goalie.record" class="goalie-stat-values away">
-                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
+                                        <div class="goalie-record-section away"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
                                         <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
                                         <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
                                     </div>
@@ -172,7 +172,7 @@
                                         <strong class="player-compare position-num">#{{ goalie.sweaterNumber }} - {{ goalie.positionCode }}</strong>
                                     </div>
                                     <div v-if="goalie.record" class="goalie-stat-values home">
-                                        <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
+                                        <div class="goalie-record-section home"><strong class="goalie-compare record">{{ goalie.record }}</strong><strong class="goalie-compare record-text">Record</strong></div>
                                         <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare svg">{{ getSavePctg(goalie.savePctg) }}</strong><strong class="goalie-compare svg-text">SV%</strong></div>
                                         <div style="display:flex;flex-direction:column;align-items:center"><strong class="goalie-compare gaa">{{ goalie.gaa }}</strong><strong class="goalie-compare gaa-text">GAA</strong></div>
                                     </div>
@@ -1725,6 +1725,12 @@ export default {
     padding-left: 5px;
 }
 
+.goalie-record-section {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
 .goalie-compare.record{color:white}
 .goalie-compare.record-text{font-size:x-small}
 .goalie-compare.svg{color:white}
@@ -2360,6 +2366,12 @@ export default {
     }
     .game-type {
         margin-left: 0px;
+    }
+    .goalie-record-section.away {
+        align-items: flex-start;
+    }
+    .goalie-record-section.home {
+        align-items: flex-end;
     }
     .goalie-compare.record{font-size:x-small}
     .goalie-compare.record-text{font-size:xx-small}

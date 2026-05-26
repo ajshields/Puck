@@ -280,9 +280,13 @@ export default {
     },
     getPlayoffsSeriesDesc(seriesStatus) {
       if(seriesStatus.bottomSeedWins > seriesStatus.topSeedWins) {
-        return `${seriesStatus.bottomSeedTeamAbbrev} lead series ${seriesStatus.bottomSeedWins}-${seriesStatus.topSeedWins}`;
+        if(seriesStatus.bottomSeedWins == 4)
+          return `${seriesStatus.bottomSeedTeamAbbrev} wins series ${seriesStatus.bottomSeedWins}-${seriesStatus.topSeedWins}`;
+        return `${seriesStatus.bottomSeedTeamAbbrev} leads series ${seriesStatus.bottomSeedWins}-${seriesStatus.topSeedWins}`;
       } else if(seriesStatus.bottomSeedWins < seriesStatus.topSeedWins) {
-        return `${seriesStatus.topSeedTeamAbbrev} lead series ${seriesStatus.topSeedWins}-${seriesStatus.bottomSeedWins}`;
+          if(seriesStatus.topSeedWins == 4)
+            return `${seriesStatus.topSeedTeamAbbrev} wins series ${seriesStatus.topSeedWins}-${seriesStatus.bottomSeedWins}`;
+        return `${seriesStatus.topSeedTeamAbbrev} leads series ${seriesStatus.topSeedWins}-${seriesStatus.bottomSeedWins}`;
       } else {
         return `Series tied ${seriesStatus.topSeedWins}-${seriesStatus.bottomSeedWins}`;
       }

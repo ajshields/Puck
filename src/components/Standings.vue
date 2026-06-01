@@ -1021,7 +1021,7 @@ tr {
   .series10 {grid-column: 20 / span 8; grid-row: 14 / span 4}
   .series13 {grid-column: 26 / span 11; grid-row: 9 / span 4}
   /* Center box */
-  .stanley-cup-series {grid-column: 13 / span 13; grid-row: 7 / span 4}
+  .stanley-cup-series {grid-column: 13 / span 13; grid-row: 8 / span 4}
   .stanley-cup {
     grid-column: 15 / span 9;
     grid-row: 8 / span 6;
@@ -1040,7 +1040,7 @@ tr {
   .series-header.mobile-er2 {grid-column: 21 / span 6; grid-row: 2}
   .series-header.mobile-ecf {grid-column: 29 / span 5; grid-row: 8}
   /* Stanley Cup Finals Header */
-  .series-header.mobile-scf {grid-column: 17 / span 5; grid-row: 6}
+  .series-header.mobile-scf {grid-column: 17 / span 5; grid-row: 7}
   /* West Series Headers */
   .series-header.mobile-wr1 {grid-column: 3 / span 6; grid-row: 1}
   .series-header.mobile-wr2 {grid-column: 12 / span 6; grid-row: 2}

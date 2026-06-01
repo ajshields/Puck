@@ -13,8 +13,8 @@
         <div class="stats-content">
             <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer">
                 <Column field="id" class="statistics-cell" style="text-align:left;width:4%"></Column>
-                <Column field="skaterFullName" header="Player" class="statistics-cell" style="text-align:left;height:40px;width:15%"></Column>
-                <Column field="season" header="Season" class="statistics-cell" style="width:7%"></Column>
+                <Column field="skaterFullName" header="Player" class="statistics-cell" style="text-align:left;height:40px;width:6%"></Column>
+                <Column field="season" header="Season" class="statistics-cell" style="width:4%"></Column>
                 <Column field="teamAbbrevs" header="Team" class="statistics-cell" style="width:4%"></Column>
                 <Column field="positionCode" header="Pos" class="statistics-cell" style="width:4%"></Column>
                 <Column field="gamesPlayed" header="GP" sortable class="statistics-cell" style="width:4%"></Column>
@@ -41,7 +41,7 @@
         <div class="page-selection">
             <button @click="prevPage(true)">&lt;&lt;</button>
             <button @click="prevPage(false)">&lt;</button>
-            <span style="font-size:large;color:#ccc">Page {{ Math.ceil(pageStart/50) }}</span>
+            <span class="page-selection-num">{{ Math.ceil(pageStart/50) }}</span>
             <button @click="nextPage(false)">&gt;</button>
             <button @click="nextPage(true)">&gt;&gt;</button>
         </div>
@@ -70,8 +70,8 @@ export default {
         sortField: null,
         todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0], // Default to today's date
         years: [],
-        startYear: {label: '2023-24', seasonId: 20232024},
-        endYear: {label: '2023-24', seasonId: 20232024},
+        startYear: {label: '2025-26', seasonId: 20252026},
+        endYear: {label: '2025-26', seasonId: 20252026},
         statistics: [],
         franchises: [],
         selectedFranchise: {fullName: 'All Franchises', id: 0},
@@ -145,19 +145,15 @@ export default {
         },
         async fetchYears() {
             try {
-                this.isLoading = true;
-                const response = await fetchApi(`/restApi/stats/rest/en/season`, {
-                  method: 'GET',
-                  headers: {
-                    'Cache-Control': 'no-cache',
-                  },
-                });
-                if (!response.ok) {
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
+                //this.isLoading = true;
+                const response = await fetchApi(`/restApi/stats/rest/en/season`);
                 const data = await response.json();
-                for(let i = data.data.length-1; i >= 0; i--)
-                    this.years.push({label: data.data[i].formattedSeasonId, seasonId: data.data[i].id});
+                this.years = data.data
+                    .sort((a, b) => b.id - a.id) // highest id first
+                    .map(item => ({
+                        label: item.formattedSeasonId,
+                        seasonId: item.id
+                }));
             } catch (error) {
                 console.error('Error fetching years:', error);
                 //alert('Error fetching years. See console for details.');
@@ -297,6 +293,11 @@ export default {
     align-items: center;
 }
 
+.page-selection-num {
+    font-size:large;
+    color:#ccc;
+}
+
 .page-selection button {
     background-color: transparent;
     border: none;
@@ -362,6 +363,13 @@ export default {
     }
     .overall-stats-table .p-dropdown-trigger {
         width: 90%;
+    }
+    .statistics-table .p-datatable-table {
+        width: 230%;
+        font-size: small;
+    }
+    .statistics-table-options {
+        margin-left: 1rem;
     }
     .stats-content {
         height: calc(100dvh - 375px);

@@ -2,7 +2,7 @@
     <div><ProgressSpinner v-if="isLoading" /></div>
 
     <div v-if="playerInfo" class="player-season-section">
-        <strong class="player-season-year">{{ formatYears(playerInfo.seasonTotals[currentSeasonIndex].season) }}</strong>
+        <strong class="player-season-year">{{ formatYears(playerInfo.seasonTotals[currentSeasonIndex].season, this.playerInfo.seasonTotals) }}</strong>
 
         <div v-if="playerInfo.position!='G'" class="player-season-stats">
             <div class="player-season-stat"><strong>GP</strong><strong class="player-stat-value">{{ playerInfo.seasonTotals[currentSeasonIndex].gamesPlayed }}</strong></div>
@@ -119,18 +119,20 @@ export default {
         getSeasonIndex(seasons) {
             for(let i = (seasons.length-1); i >= 0; i--) {
                 if(seasons[i].leagueAbbrev=='NHL') {
-                    if(seasons[i].gameTypeId==3)
-                        return (i-1);
-                    else
                         return i;
                 }
             }
         },
-        formatYears(years) {
+        formatYears(years, seasons) {
             const yearsString = years.toString();
             const startYear = yearsString.slice(0, 4);
             const endYear = yearsString.slice(4);
-            return `${startYear}-${endYear}`;
+            const gameType = seasons[seasons.length-1].gameTypeId;
+            if(gameType==2)
+                return `${startYear}-${endYear}`;
+            else if(gameType==3)
+                return `${startYear}-${endYear} Playoffs`;
+
         },
         configureGameLog(data) {
             data.gameLog.forEach((game) => {
@@ -243,7 +245,9 @@ export default {
         width: 100%;
     }
     .player-season-year {
-        padding-left: 38%;
+        padding-left: 0%;
+        display: flex;
+        justify-content: center;
     }
 }
 </style>

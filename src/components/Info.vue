@@ -8,7 +8,7 @@
             <div><strong>Birth Place: </strong><strong style="color:white">{{ playerInfo.birthCity.default }}, <strong v-if="playerInfo.birthStateProvince">{{ playerInfo.birthStateProvince.default }}, </strong>{{ playerInfo.birthCountry }}</strong></div>
             <div><strong>Height: </strong><strong style="color:white">{{ getHeight(playerInfo.heightInInches) }}</strong></div>
             <div><strong>Weight: </strong><strong style="color:white">{{ playerInfo.weightInPounds }} lbs</strong></div>
-            <div><strong>Draft: </strong><strong style="color:white">{{ playerInfo.draftDetails.year }} - Round {{ playerInfo.draftDetails.round }} ({{ getRanking(playerInfo.draftDetails.overallPick) }} overall) by {{ playerInfo.draftDetails.teamAbbrev }}</strong></div>
+            <div v-if="playerInfo?.draftDetails"><strong>Draft: </strong><strong style="color:white">{{ playerInfo?.draftDetails?.year }} - Round {{ playerInfo?.draftDetails?.round }} ({{ getRanking(playerInfo?.draftDetails?.overallPick) }} overall) by {{ playerInfo?.draftDetails?.teamAbbrev }}</strong></div>
             <div v-if="playerInfo.position!='G'"><strong>Shoots: </strong><strong style="color:white">{{ playerInfo.shootsCatches }}</strong></div>
             <div v-else><strong>Catches: </strong><strong style="color:white">{{ playerInfo.shootsCatches }}</strong></div>
         </div>

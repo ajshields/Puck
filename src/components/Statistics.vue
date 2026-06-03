@@ -10,6 +10,9 @@
             <Dropdown v-model="selectedPosition" :options="positions" optionLabel="type" placeholder="Position" @change="optionChange" class="overall-stats-options-dropdown"/>
             <Dropdown v-model="selectedExperience" :options="experience" optionLabel="type" placeholder="Experience" @change="optionChange" class="overall-stats-options-dropdown"/>
         </div>
+        <div class="reset-options">
+            <Button class="reset-options-button" type="button" label="Reset" @click="resetOptions" />
+        </div>
         <div class="stats-content">
             <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer">
                 <Column field="id" class="statistics-cell" style="text-align:left;width:4%"></Column>
@@ -53,6 +56,7 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
+import Button from 'primevue/button';
 
 import { fetchApi } from '@/services/fetchApi';
 
@@ -63,6 +67,7 @@ export default {
       DataTable,
       Column,
       Dropdown,
+      Button,
     },
     data() {
       return {
@@ -70,8 +75,8 @@ export default {
         sortField: null,
         todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0], // Default to today's date
         years: [],
-        startYear: {label: '2025-26', seasonId: 20252026},
-        endYear: {label: '2025-26', seasonId: 20252026},
+        startYear: this.getCurrentYear(),
+        endYear: this.getCurrentYear(),
         statistics: [],
         franchises: [],
         selectedFranchise: {fullName: 'All Franchises', id: 0},
@@ -232,6 +237,31 @@ export default {
             this.pageStart = 1;
             this.fetchStatistics()
         },
+        resetOptions() {
+            this.startYear = this.getCurrentYear();
+            this.endYear = this.getCurrentYear();
+            this.selectedFranchise = {fullName: 'All Franchises', id: 0};
+            this.selectedPosition = {type: 'All Skaters', code: 'A'};
+            this.selectedExperience = {type: 'All Experience', code: ''};
+            this.pageStart = 1;
+            this.fetchStatistics()
+        },
+        getCurrentYear() {
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth();
+
+            // Jan-Sep => previous/current season
+            // Oct-Dec => current/next season
+            const seasonStartYear = currentMonth >= 9
+                ? currentYear
+                : currentYear - 1;
+
+            return {
+                label: `${seasonStartYear}-${String(seasonStartYear + 1).slice(-2)}`,
+                seasonId: Number(`${seasonStartYear}${seasonStartYear + 1}`)
+            };
+        },
         prevPage(skip) {
             if(this.pageStart!=1) {
                 if(skip)
@@ -312,6 +342,20 @@ export default {
     width: 200px; /* Adjust width as needed */
 }
 
+.reset-options {
+    display: flex;
+    padding-top: 5px;
+}
+
+.reset-options-button {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    color: white;
+    background-color: var(--color-background);
+    font-size: 16px;
+    cursor: pointer;
+}
+
 .p-dropdown-trigger {
     border: 1px solid #ccc; /* Border color */
     border-radius: 4px; /* Border radius */
@@ -364,11 +408,20 @@ export default {
     .overall-stats-table .p-dropdown-trigger {
         width: 90%;
     }
+    .reset-options {
+        display: flex;
+        justify-content: center;
+        padding-bottom: 5px;
+    }
+    .statistics-table {
+        margin-top: 0px;
+    }
     .statistics-table .p-datatable-table {
         width: 230%;
         font-size: small;
     }
     .statistics-table-options {
+        margin-top: 1rem;
         margin-left: 1rem;
     }
     .stats-content {

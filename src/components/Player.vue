@@ -12,7 +12,7 @@
     <div v-if="playerInfo.playerId" class="player-info-header">
         <img :src="playerInfo.headshot" alt="Team Logo" class="player-info-logo">
         <strong class="player-info-name">{{ playerInfo.firstName.default }} {{ playerInfo.lastName.default }}</strong>
-        <strong style="display:flex;align-items: center"><strong @click="goToTeam(playerInfo.currentTeamAbbrev)" style="cursor:pointer;display:flex;align-items: center"><img :src="playerInfo.teamLogo" alt="Player Logo" style="width:30px">{{ playerInfo.fullTeamName.default }}</strong> &nbsp;&nbsp;&#10242; {{ playerInfo.position }} &nbsp;&#10242; #{{ playerInfo.sweaterNumber }}</strong>
+        <strong style="display:flex;align-items: center"><strong @click="goToTeam(playerInfo.currentTeamAbbrev)" style="cursor:pointer;display:flex;align-items: center"><img v-if="playerInfo.teamLogo" :src="playerInfo.teamLogo" alt="Player Logo" style="width:30px">{{ playerInfo?.fullTeamName?.default }}</strong><strong v-if="playerInfo.teamLogo" style="padding-right:5px;">&nbsp;&nbsp;&#10242; </strong> {{ getPlayerPosition(playerInfo.position) }} &nbsp;&#10242; #{{ playerInfo.sweaterNumber }}</strong>
     </div>
     
     <nav class="player-nav">
@@ -127,6 +127,12 @@ export default {
                 if(player.playerId)
                     this.allSearchPlayers.push({label: player.skaterFullName, value: player.playerId});
             });
+        },
+        getPlayerPosition(position) {
+            if(position=='L' || position=='R')
+                return `${position}W`;
+            else
+                return position;
         },
         searchPlayerGo(event) {
             const playerId = event.value.value;

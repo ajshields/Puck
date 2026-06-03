@@ -3,7 +3,7 @@
 
     <div class="career-stats-content" v-if="playerInfo">
         <div v-if="playerInfo.position!='G'">
-            <DataTable :value="careerStats" class="career-stats-table" :rowClass="getSeasonClass" scrollable scrollHeight="400px">
+            <DataTable :value="careerStats" class="career-stats-table" :rowClass="getSeasonClass" scrollable scrollHeight="700px">
                 <ColumnGroup type="header">
                     <Row>
                         <Column header="" :colspan="3" headerClass="nhl-total"/>
@@ -44,7 +44,7 @@
             </DataTable>
         </div>
         <div v-else> <!--SET UP GOALIE STATS-->
-            <DataTable :value="careerStats" class="career-stats-table" :rowClass="getSeasonClass">
+            <DataTable :value="careerStats" class="career-stats-table" :rowClass="getSeasonClass" scrollable scrollHeight="700px">
                 <ColumnGroup type="header">
                     <Row>
                         <Column header="" :colspan="3" headerClass="nhl-total"/>

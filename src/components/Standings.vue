@@ -303,7 +303,7 @@
       <strong class="series-header mobile-er1">R1</strong>
       <div v-if="bracket.series[0].topSeedTeam" class="series series1">
         <div class="series-team" :class="{'series-team-loss': bracket.series[0].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[0].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[0].bottomSeedWins==4}"/>
+          <img :src="bracket.series[0].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[0].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[0].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[0].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[0].topSeedRankAbbrev }})</strong>
@@ -311,7 +311,7 @@
           <strong class="series-team-wins">{{ bracket.series[0].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[0].topSeedWins==4}">
-          <img :src="bracket.series[0].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[0].topSeedWins==4}"/>
+          <img :src="bracket.series[0].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[0].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[0].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[0].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[0].bottomSeedRankAbbrev }})</strong>
@@ -321,7 +321,7 @@
       </div>
       <div v-if="bracket.series[1].topSeedTeam" class="series series2">
         <div class="series-team" :class="{'series-team-loss': bracket.series[1].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[1].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[1].bottomSeedWins==4}"/>
+          <img :src="bracket.series[1].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[1].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[1].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[1].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[1].topSeedRankAbbrev }})</strong>
@@ -329,7 +329,7 @@
           <strong class="series-team-wins">{{ bracket.series[1].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[1].topSeedWins==4}">
-          <img :src="bracket.series[1].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[1].topSeedWins==4}"/>
+          <img :src="bracket.series[1].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[1].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[1].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[1].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[1].bottomSeedRankAbbrev }})</strong>
@@ -339,7 +339,7 @@
       </div>
       <div v-if="bracket.series[2].topSeedTeam" class="series series3">
         <div class="series-team" :class="{'series-team-loss': bracket.series[2].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[2].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[2].bottomSeedWins==4}"/>
+          <img :src="bracket.series[2].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[2].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[2].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[2].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[2].topSeedRankAbbrev }})</strong>
@@ -347,7 +347,7 @@
           <strong class="series-team-wins">{{ bracket.series[2].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[2].topSeedWins==4}">
-          <img :src="bracket.series[2].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[2].topSeedWins==4}"/>
+          <img :src="bracket.series[2].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[2].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[2].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[2].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[2].bottomSeedRankAbbrev }})</strong>
@@ -357,7 +357,7 @@
       </div>
       <div v-if="bracket.series[3].topSeedTeam" class="series series4">
         <div class="series-team" :class="{'series-team-loss': bracket.series[3].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[3].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[3].bottomSeedWins==4}"/>
+          <img :src="bracket.series[3].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[3].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[3].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[3].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[3].topSeedRankAbbrev }})</strong>
@@ -365,7 +365,7 @@
           <strong class="series-team-wins">{{ bracket.series[3].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[3].topSeedWins==4}">
-          <img :src="bracket.series[3].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[3].topSeedWins==4}"/>
+          <img :src="bracket.series[3].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[3].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[3].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[3].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[3].bottomSeedRankAbbrev }})</strong>
@@ -377,24 +377,24 @@
       <strong class="series-header mobile-er2">R2</strong>
       <div v-if="bracket.series[8].topSeedTeam" class="series series9">
         <div class="series-team" :class="{'series-team-loss': bracket.series[8].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[8].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[8].bottomSeedWins==4}"/>
+          <img :src="bracket.series[8].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[8].topSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[8].bottomSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[8].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[8].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[8].topSeedWins==4}">
-          <img :src="bracket.series[8].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[8].topSeedWins==4}"/>
+          <img :src="bracket.series[8].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[8].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[8].topSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[8].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[8].bottomSeedWins }}</strong>
         </div>
       </div>
       <div v-if="bracket.series[9].topSeedTeam" class="series series10">
         <div class="series-team" :class="{'series-team-loss': bracket.series[9].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[9].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[9].bottomSeedWins==4}"/>
+          <img :src="bracket.series[9].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[9].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[9].bottomSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[9].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[9].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[9].topSeedWins==4}">
-          <img :src="bracket.series[9].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[9].topSeedWins==4}"/>
+          <img :src="bracket.series[9].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[9].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[9].topSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[9].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[9].bottomSeedWins }}</strong>
         </div>
@@ -403,12 +403,12 @@
       <strong class="series-header mobile-ecf">ECF</strong>
       <div v-if="bracket.series[12].topSeedTeam" class="series series13">
         <div class="series-team" :class="{'series-team-loss': bracket.series[12].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[12].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[12].bottomSeedWins==4}"/>
+          <img :src="bracket.series[12].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[12].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[12].bottomSeedWins==4}"/>
           <strong class="series-team-info-after">{{ bracket.series[12].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[12].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[12].topSeedWins==4}">
-          <img :src="bracket.series[12].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[12].topSeedWins==4}"/>
+          <img :src="bracket.series[12].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[12].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[12].topSeedWins==4}"/>
           <strong class="series-team-info-after">{{ bracket.series[12].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[12].bottomSeedWins }}</strong>
         </div>
@@ -422,12 +422,12 @@
       <strong v-if="bracket.series[14].topSeedTeam" class="series-header mobile-scf">SCF</strong>
       <div v-if="bracket.series[14].topSeedTeam" class="series stanley-cup-series">
         <div class="series-team" :class="{'series-team-loss': bracket.series[14].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[14].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[14].bottomSeedWins==4}"/>
+          <img :src="bracket.series[14].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[14].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[14].bottomSeedWins==4}"/>
           <strong class="series-team-info-after">{{ bracket.series[14].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[14].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[14].topSeedWins==4}">
-          <img :src="bracket.series[14].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[14].topSeedWins==4}"/>
+          <img :src="bracket.series[14].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[14].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[14].topSeedWins==4}"/>
           <strong class="series-team-info-after">{{ bracket.series[14].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[14].bottomSeedWins }}</strong>
         </div>
@@ -440,7 +440,7 @@
       <strong class="series-header mobile-wr1">R1</strong>
       <div v-if="bracket.series[4].topSeedTeam" class="series series5">
         <div class="series-team" :class="{'series-team-loss': bracket.series[4].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[4].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[4].bottomSeedWins==4}"/>
+          <img :src="bracket.series[4].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[4].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[4].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[4].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[4].topSeedRankAbbrev }})</strong>
@@ -448,7 +448,7 @@
           <strong class="series-team-wins">{{ bracket.series[4].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[4].topSeedWins==4}">
-          <img :src="bracket.series[4].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[4].topSeedWins==4}"/>
+          <img :src="bracket.series[4].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[4].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[4].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[4].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[4].bottomSeedRankAbbrev }})</strong>
@@ -458,7 +458,7 @@
       </div>
       <div v-if="bracket.series[5].topSeedTeam" class="series series6">
         <div class="series-team" :class="{'series-team-loss': bracket.series[5].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[5].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[5].bottomSeedWins==4}"/>
+          <img :src="bracket.series[5].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[5].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[5].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[5].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[5].topSeedRankAbbrev }})</strong>
@@ -466,7 +466,7 @@
           <strong class="series-team-wins">{{ bracket.series[5].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[5].topSeedWins==4}">
-          <img :src="bracket.series[5].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[5].topSeedWins==4}"/>
+          <img :src="bracket.series[5].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[5].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[5].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[5].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[5].bottomSeedRankAbbrev }})</strong>
@@ -476,7 +476,7 @@
       </div>
       <div v-if="bracket.series[6].topSeedTeam" class="series series7">
         <div class="series-team" :class="{'series-team-loss': bracket.series[6].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[6].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[6].bottomSeedWins==4}"/>
+          <img :src="bracket.series[6].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[6].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[6].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[6].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[6].topSeedRankAbbrev }})</strong>
@@ -484,7 +484,7 @@
           <strong class="series-team-wins">{{ bracket.series[6].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[6].topSeedWins==4}">
-          <img :src="bracket.series[6].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[6].topSeedWins==4}"/>
+          <img :src="bracket.series[6].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[6].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[6].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[6].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[6].bottomSeedRankAbbrev }})</strong>
@@ -494,7 +494,7 @@
       </div>
       <div v-if="bracket.series[7].topSeedTeam" class="series series8">
         <div class="series-team" :class="{'series-team-loss': bracket.series[7].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[7].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[7].bottomSeedWins==4}"/>
+          <img :src="bracket.series[7].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[7].topSeedTeam.abbrev)" class="series-team-logo"  :class="{'series-team-logo-loss': bracket.series[7].bottomSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[7].topSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[7].topSeedRankAbbrev }})</strong>
@@ -502,7 +502,7 @@
           <strong class="series-team-wins">{{ bracket.series[7].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[7].topSeedWins==4}">
-          <img :src="bracket.series[7].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[7].topSeedWins==4}"/>
+          <img :src="bracket.series[7].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[7].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[7].topSeedWins==4}"/>
           <div class="series-team-info">
             <strong class="playoffs-team-name">{{ bracket.series[7].bottomSeedTeam.abbrev }}</strong>
             <strong class="playoffs-team-seed">({{ bracket.series[7].bottomSeedRankAbbrev }})</strong>
@@ -514,24 +514,24 @@
       <strong class="series-header mobile-wr2">R2</strong>
       <div v-if="bracket.series[10].topSeedTeam" class="series series11">
         <div class="series-team" :class="{'series-team-loss': bracket.series[10].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[10].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[10].bottomSeedWins==4}"/>
+          <img :src="bracket.series[10].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[10].topSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[10].bottomSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[10].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[10].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[10].topSeedWins==4}">
-          <img :src="bracket.series[10].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[10].topSeedWins==4}"/>
+          <img :src="bracket.series[10].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[10].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[10].topSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[10].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[10].bottomSeedWins }}</strong>
         </div>
       </div>
       <div v-if="bracket.series[11].topSeedTeam" class="series series12">
         <div class="series-team" :class="{'series-team-loss': bracket.series[11].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[11].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[11].bottomSeedWins==4}"/>
+          <img :src="bracket.series[11].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[11].topSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[11].bottomSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[11].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[11].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[11].topSeedWins==4}">
-          <img :src="bracket.series[11].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[11].topSeedWins==4}"/>
+          <img :src="bracket.series[11].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[11].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[11].topSeedWins==4}"/>
           <strong class="playoffs-team-name">{{ bracket.series[11].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[11].bottomSeedWins }}</strong>
         </div>
@@ -540,12 +540,12 @@
       <strong class="series-header mobile-wcf">WCF</strong>
       <div v-if="bracket.series[12].topSeedTeam" class="series series14">
         <div class="series-team" :class="{'series-team-loss': bracket.series[13].bottomSeedWins==4}" style="border-bottom: 2px solid #3E3E3E;">
-          <img :src="bracket.series[13].topSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[13].bottomSeedWins==4}"/>
+          <img :src="bracket.series[13].topSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[13].topSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[13].bottomSeedWins==4}"/>
           <strong class="series-team-info-after">{{ bracket.series[13].topSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[13].topSeedWins }}</strong>
         </div>
         <div class="series-team" :class="{'series-team-loss': bracket.series[13].topSeedWins==4}">
-          <img :src="bracket.series[13].bottomSeedTeam.darkLogo" :alt="Logo" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[13].topSeedWins==4}"/>
+          <img :src="bracket.series[13].bottomSeedTeam.darkLogo" :alt="Logo" @click="goToTeamBracket(bracket.series[13].bottomSeedTeam.abbrev)" class="series-team-logo" :class="{'series-team-logo-loss': bracket.series[13].topSeedWins==4}"/>
           <strong class="series-team-info-after">{{ bracket.series[13].bottomSeedTeam.abbrev }}</strong>
           <strong class="series-team-wins">{{ bracket.series[13].bottomSeedWins }}</strong>
         </div>
@@ -729,7 +729,10 @@ export default {
       const teamAbbrev = row.data.team.split(' ')[0];
       const teamId = teamAbbrev.includes('-') ? teamAbbrev.split('-')[1] : teamAbbrev;
       this.$router.push({ name: 'team.schedule', params: { id: teamId }});
-    }
+    },
+    goToTeamBracket(abbrev) {
+      this.$router.push({ name: 'team.schedule', params: { id: abbrev }});
+    },
   },
 };
 </script>

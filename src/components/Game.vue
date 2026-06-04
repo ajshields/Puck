@@ -6,11 +6,28 @@
     </div>
     <div><ProgressSpinner v-if="isLoading" /></div>
 
-    <div class="highlight-modal" v-if="showHighlight">
-      <div class="highlight-modal-content">
-        <span class="highlight-close" @click="showHighlight=false">&times;</span>
-        <video :src="`https://edge.api.brightcove.com/playback/v1/accounts/6415718365001/videos/6347431119112`" controls autoplay style="width:650px;height:400px;border-radius:10px"></video>
-      </div>
+    <div class="highlight-modal" v-if="showHighlight" @click="showHighlight=false">
+        <div class="highlight-modal-content" @click.stop>
+            <span class="highlight-close" @click="showHighlight=false">&times;</span>
+            <!-- <video :src="`https://edge.api.brightcove.com/playback/v1/accounts/6415718365001/videos/6347431119112`" controls autoplay style="width:650px;height:400px;border-radius:10px"></video> -->
+            <!-- <iframe
+              :src="highlightUrl"
+              width="650"
+              height="400"
+              style="border-radius:10px"
+              frameborder="0"
+              allow="autoplay; fullscreen"
+              allowfullscreen
+            /> -->
+            <video
+              v-if="highlightUrl"
+              :src="highlightUrl"
+              controls
+              autoplay
+              playsinline
+              style="width:100%"
+            />
+        </div>
     </div>
 
     <div v-if="game.gameType">
@@ -115,7 +132,7 @@
                                         <strong v-if="goal.assists.length==0 && goal.goalModifier!='penalty-shot'" class="assist-text">Unassisted</strong>
                                     </div>
                                 </div>
-                                <!-- <button @click="playHighlight(goal)" class="highlight-button">&#11208;</button> -->
+                                <button @click="fetchHighlight(goal.highlightClip)" class="highlight-button">&#9205;</button>
                             </div>
                             <div v-else v-for="attempt in game.summary.shootout.events" class="goal-box">
                                 <img :src="attempt.headshot" alt="Player Logo" class="player-logo">
@@ -768,6 +785,8 @@ export default {
             playerStatsTeamSelected: null,
             playerGameStats: [],
             playerGameStatsTeamSelected: null,
+            showHighlight: false,
+            highlightUrl: null
         };
     },
     mounted() {
@@ -795,26 +814,26 @@ export default {
         },
         async refreshGame() {
           try {
-    this.isLoading = true;
+            this.isLoading = true;
 
-    const [game, box, plays, story] = await Promise.all([
-      fetchApi(`/api/v1/gamecenter/${this.id}/landing`).then(r => r.json()),
-      fetchApi(`/api/v1/gamecenter/${this.id}/boxscore`).then(r => r.json()),
-      fetchApi(`/api/v1/gamecenter/${this.id}/play-by-play`).then(r => r.json()),
-      fetchApi(`/api/v1/wsc/game-story/${this.id}`).then(r => r.json())
-    ]);
+            const [game, box, plays, story] = await Promise.all([
+              fetchApi(`/api/v1/gamecenter/${this.id}/landing`).then(r => r.json()),
+              fetchApi(`/api/v1/gamecenter/${this.id}/boxscore`).then(r => r.json()),
+              fetchApi(`/api/v1/gamecenter/${this.id}/play-by-play`).then(r => r.json()),
+              fetchApi(`/api/v1/wsc/game-story/${this.id}`).then(r => r.json())
+            ]);
 
-    // assign AFTER all are ready
-    this.game = game;
-    this.boxScore = box;
-    this.configurePlays(plays);
-    this.gameStory = story;
+            // assign AFTER all are ready
+            this.game = game;
+            this.boxScore = box;
+            this.configurePlays(plays);
+            this.gameStory = story;
 
-  } catch (e) {
-    console.error(e);
-  } finally {
-    this.isLoading = false;
-  }
+            } catch (e) {
+              console.error(e);
+            } finally {
+              this.isLoading = false;
+            }
         },
         //fetchGame method
             //use one of two API calls: 
@@ -875,6 +894,24 @@ export default {
               console.error('Error fetching play-by-play:', error);
               //alert('Error fetching play-by-play. See console for details.');
             }
+        },
+        async fetchHighlight(highlightClip) {
+            const response = await fetch(
+              `https://edge.api.brightcove.com/playback/v1/accounts/6415718365001/videos/${highlightClip}`,
+              {
+                headers: {
+                  Accept: 'application/json;pk=BCpkADawqM3l37Vq8trLJ95vVwxubXYZXYglAopEZXQTHTWX3YdalyF9xmkuknxjBgiMYwt8VZ_OZ1jAjYxz_yzuNh_cjC3uOaMspVTD-hZfNUHtNnBnhVD0Gmsih8TBF8QlQFXiCQM3W_u4ydJ1qK2Rx8ZutCUg3PHb7Q'
+                }
+              }
+            );
+          
+            const data = await response.json();
+            const mp4Source = data.sources.find(
+              source => source.container === 'MP4'
+            );
+
+            this.highlightUrl = mp4Source.src;
+            this.showHighlight = true;
         },
         gameStartTime(utcDateTime) {
             // Convert UTC string to Date object
@@ -1500,9 +1537,6 @@ export default {
                 }
             }
         },
-        playHighlight(goal) {
-            this.showHighlight = true;
-        },
         openGame(game) {
             const url = this.$router.resolve({ name: 'game', params: { id: game.id }, query: { date: this.selectedDate } }).href;
             window.location.href = url;
@@ -1560,7 +1594,7 @@ export default {
   position: fixed;
   z-index: 1;
   left: 0;
-  top: -50px;
+  top: -275px;
   width: 100%;
   overflow: auto;
   background-color: rgb(0,0,0);
@@ -2130,10 +2164,12 @@ export default {
     display: flex;
     background: #5e5e5e;
     color: #181818;
-    font-size: 30px;
+    font-size: 45px;
     border: none;
     border-radius: 50px;
     height: 40px;
+    width: 37px;
+    line-height: 1px;
     cursor: pointer;
     align-items: center;
     margin-left: auto;
@@ -2418,6 +2454,14 @@ export default {
     }
     .penalties-box .p-datatable-tbody {
         font-size: smaller;
+    }
+    .highlight-modal {
+        top: 120px;
+    }
+    .highlight-button {
+        font-size: 25px;
+        height: 23px;
+        width: 24px;
     }
     .home-team-score-layout {
         display: flex;

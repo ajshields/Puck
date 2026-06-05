@@ -6,6 +6,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import store from './store';
 import Home from './components/Home.vue';
 import Scores from './components/Scores.vue';
+import News from './components/News.vue';
 import Standings from './components/Standings.vue';
 import Leaders from './components/Leaders.vue';
 import Fantasy from './components/Fantasy.vue';
@@ -25,6 +26,7 @@ import Info from './components/Info.vue';
 const routes = [
   { path: '/', component: Home, meta: {disableSwipeBack: true} },
   { path: '/scores:date?', name: 'scores', component: Scores, meta: {disableSwipeBack: true} },
+  { path: '/news', component: News, meta: {disableSwipeBack: true} },
   { path: '/standings', component: Standings, meta: {disableSwipeBack: true} },
   { path: '/leaders', component: Leaders, meta: {disableSwipeBack: true}, children: [
     {

@@ -772,6 +772,7 @@ export default {
         return {
             isLoading: true,
             showHighlight: false,
+            highlightUrl: null,
             error: null,
             selectedDate: null,
             game: {},
@@ -784,9 +785,7 @@ export default {
             playerStats: [],
             playerStatsTeamSelected: null,
             playerGameStats: [],
-            playerGameStatsTeamSelected: null,
-            showHighlight: false,
-            highlightUrl: null
+            playerGameStatsTeamSelected: null
         };
     },
     mounted() {
@@ -2455,13 +2454,17 @@ export default {
     .penalties-box .p-datatable-tbody {
         font-size: smaller;
     }
-    .highlight-modal {
-        top: 120px;
-    }
     .highlight-button {
         font-size: 25px;
         height: 23px;
         width: 24px;
+    }
+    .highlight-modal {
+        top: -250px;
+    }
+    .highlight-modal-content {
+        margin: calc(100dvh - 295px) auto;
+        padding: 0px 20px 0px 20px;
     }
     .home-team-score-layout {
         display: flex;

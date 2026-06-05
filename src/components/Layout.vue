@@ -7,6 +7,7 @@
             </div>
             <nav class="app-nav">
                 <router-link to="/scores" class="app-nav-tab" :class="{active: activeTab === 'scores'}">SCORES</router-link>
+                <router-link to="/news" class="app-nav-tab" :class="{active: activeTab === 'news'}">NEWS</router-link>
                 <router-link to="/standings" class="app-nav-tab" :class="{active: activeTab === 'standings'}">STANDINGS</router-link>
                 <router-link to="/leaders/categories" class="app-nav-tab" :class="{active: activeTab === 'leaders'}">LEADERS</router-link>
                 <!-- <router-link to="/fantasy">FANTASY</router-link> -->
@@ -33,6 +34,7 @@ export default {
       const path = route.fullPath;
 
       if (path.includes('scores')) return 'scores';
+      if (path.includes('news')) return 'news';
       if (path.includes('standings')) return 'standings';
       if (path.includes('leaders')) return 'leaders';
 

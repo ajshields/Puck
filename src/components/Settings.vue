@@ -40,6 +40,11 @@ export default {
                       command: () => this.navigateTo('/scores')
                     },
                     {
+                      label: ' NEWS',
+                      icon: 'pi pi-fw pi-book',
+                      command: () => this.navigateTo('/news')
+                    },
+                    {
                       label: ' STANDINGS',
                       icon: 'pi pi-fw pi-list',
                       command: () => this.navigateTo('/standings')

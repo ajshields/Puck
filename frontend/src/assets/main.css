@@ -1,0 +1,40 @@
+@import './base.css';
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 2rem 2rem 2rem;
+  font-weight: normal;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: var(--link-color);
+  transition: 0.4s;
+  padding: 3px;
+  /* margin-top: 30px; */
+  /* margin-left: 100px; */
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: var(--hover-dark-color);
+    border-radius: 10px;
+  }
+}
+
+:root {
+  --link-color: #00F2FF;
+  --main-color: #00F2FF;
+  --hover-color: #00F2FF94;
+  --hover-dark-color: #00F2FF3D;
+}
+
+@media (max-width: 640px) {
+  #app {
+    padding: 0.5rem;
+    padding-top: env(safe-area-inset-top);
+  }
+}

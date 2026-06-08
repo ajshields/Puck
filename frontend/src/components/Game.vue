@@ -137,12 +137,12 @@
                                 </div>
                                 <button @click="fetchHighlight(goal.highlightClip)" class="highlight-button">&#9205;</button>
                             </div>
-                            <div v-else v-for="attempt in game.summary.shootout.events" class="goal-box">
+                            <div v-else v-for="attempt in game.summary.shootout.events" class="goal-box-shootout">
                                 <img :src="attempt.headshot" alt="Player Logo" class="player-logo">
-                                <img :src="getPlayerTeamLogo(attempt.teamAbbrev)" alt="Player Team Logo" class="player-team-logo">
+                                <img :src="getPlayerTeamLogo(attempt.teamAbbrev.default)" alt="Player Team Logo" class="player-team-logo">
                                 <div class="summary-players" style="width:100%">
                                     <div style="display:inline-flex;align-items:center">
-                                        <strong class="goal-text" style="width:30%">{{ getAbbrevName(attempt.firstName.default, attempt.lastName.default) }}<strong v-if="attempt.gameWinner" class="goal-text-amount"> (GW)</strong></strong>
+                                        <strong class="goal-text-shootout">{{ getAbbrevName(attempt.firstName.default, attempt.lastName.default) }}<strong v-if="attempt.gameWinner" class="goal-text-amount"> (GW)</strong></strong>
                                         <img v-if="attempt.result=='goal'" src="@/assets/puck.svg" alt="Puck" class="penalty-shot-logo"/>
                                         <img v-else src="@/assets/mask.svg" alt="Mask" class="penalty-shot-logo"/>
                                     </div>
@@ -1474,7 +1474,8 @@ export default {
             return (value*100).toFixed(toDecimal);
         },
         getSavePctg(savePctg) {
-            return String((savePctg).toFixed(3)).slice(1);
+            if(savePctg)
+                return String((savePctg).toFixed(3)).slice(1);
         },
         getRanking(value) {
             switch(value) {
@@ -2143,6 +2144,24 @@ export default {
     color: #9f9f9f;
 }
 
+.goal-box-shootout {
+    display: flex;
+    border: solid;
+    border-width: thin;
+    border-color: #ffffff14;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    align-items: center;
+    width: 50%;
+}
+
+.goal-text-shootout {
+    font-size: large;
+    margin-right: 10px;
+    cursor: pointer;
+    width: 70%
+}
+
 .special-teams {
     text-transform: uppercase;
     border: solid;
@@ -2414,6 +2433,9 @@ export default {
     }
     .game-type {
         margin-left: 0px;
+    }
+    .goal-box-shootout {
+        width: 100%;
     }
     .goalie-record-section.away {
         align-items: flex-start;

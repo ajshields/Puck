@@ -1,5 +1,6 @@
 import './assets/main.css';
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import { createRouter, createWebHistory } from 'vue-router';
@@ -96,8 +97,10 @@ const router = createRouter({
 });
 
 const app = createApp(App);
+const pinia = createPinia();
 app.use(PrimeVue);
 app.use(router);
 app.use(store);
+app.use(pinia);
 
 app.mount('#app');

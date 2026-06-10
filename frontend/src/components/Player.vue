@@ -2,11 +2,15 @@
     <!-- <div><ProgressSpinner v-if="isLoading" /></div> -->
     <div class="player-info-header-nav">
         <router-link :to="'/scores'" class="app-header">Puck</router-link>
-        <Settings></Settings>
+        <div class="settings-section">
+            <Settings></Settings>
+            <Account></Account>
+            <Options></Options>
+        </div>
     </div>
     <!-- <AutoComplete v-model="searchPlayer" :suggestions="allSearchPlayers" field="label" placeholder="Search Players" :minLength="3" @complete="searchPlayerGo" /> -->
-    <div v-if="allSearchPlayers.length>0">
-        <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Search Players" @change="searchPlayerGo" class="options-dropdown"></Dropdown>
+    <div v-if="allSearchPlayers.length>0" class="options-dropdown">
+        <Dropdown v-model="searchPlayer" :options="allSearchPlayers" filter optionLabel="label" placeholder="Search Players" @change="searchPlayerGo"></Dropdown>
     </div>
 
     <div v-if="playerInfo.playerId" class="player-info-header">
@@ -31,7 +35,9 @@
 
 <script>
 import ProgressSpinner from './ProgressSpinner.vue';
-import Settings from '@/components/Settings.vue';
+import Options from '@/components/Options.vue';
+import Account from './Account.vue';
+import Settings from './Settings.vue';
 import AutoComplete from 'primevue/autocomplete';
 import Dropdown from 'primevue/dropdown';
 
@@ -41,6 +47,8 @@ export default {
     name: 'Player',
     components: {
         ProgressSpinner,
+        Options,
+        Account,
         Settings,
         AutoComplete,
         Dropdown,
@@ -182,14 +190,12 @@ export default {
 
 .p-dropdown-items {
     display: block;
-    border: 1px solid #ccc;
-    border-radius: 0 0 4px 4px;
+    border-radius: 8px;
     box-shadow: none;
     background-color: #181818;
     max-height: 200px;
     overflow-y: auto;
     width: 100%;
-    margin-left: -20px;
 }
 
 .p-dropdown-filter-container {
@@ -201,18 +207,23 @@ export default {
     max-height: 200px;
     overflow-y: auto;
     width: 100%;
-    margin-left: -20px;
 }
 
 .p-inputtext {
     font-size: 16px !important;
 }
 
+.settings-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 44px;
+  margin-right: -15px;
+  width: 50%;
+}
+
 /* Mobile Device Styling */
 @media (max-width: 640px) {
-    .options-dropdown{
-        margin-left: 7%;
-    }
     .player-info-name {
         font-size: x-large;
     }

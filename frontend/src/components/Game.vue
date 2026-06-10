@@ -34,9 +34,10 @@
         <div class="game-nav-header">
             <button @click="goBack" class="back-button">&#9664;</button>
             <strong class="date-formatting">{{ dateDesc() }}</strong>
-            <div class="settings-section">
-                <Account></Account>
+            <div class="game-settings-section">
                 <Settings></Settings>
+                <Account></Account>
+                <Options></Options>
             </div>
         </div>
         <!-- SCOREBOARD -->
@@ -337,7 +338,7 @@
                     <!-- PLAYER STATS -->
                     <div v-if="game.gameState=='PRE' || game.gameState=='FUT'" class="players-stats-section">
                         <div class="player-stats-box" style="margin-top:1rem">
-                            <h3 style="color:white">Player Stats</h3>
+                            <h3 style="color:white">Stats</h3>
                             <div class="player-stats-teams">
                                 <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.awayTeam.id }" @click="switchPlayerStats(game.awayTeam.id)">{{ game.awayTeam.commonName.default }}</v-button>
                                 <v-button class="player-stats-button" :class="{ 'player-stats-button-selected': playerStatsTeamSelected === game.homeTeam.id }" @click="switchPlayerStats(game.homeTeam.id)">{{ game.homeTeam.commonName.default }}</v-button>
@@ -746,8 +747,9 @@
 <script>
 import ProgressSpinner from './ProgressSpinner.vue';
 import PullToRefresh from '@/components/PullToRefresh.vue';
-import Settings from '@/components/Settings.vue';
+import Options from '@/components/Options.vue';
 import Account from '@/components/Account.vue';
+import Settings from '@/components/Settings.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Accordion from 'primevue/accordion';
@@ -761,8 +763,9 @@ export default {
     components: {
         ProgressSpinner,
         PullToRefresh,
-        Settings,
+        Options,
         Account,
+        Settings,
         DataTable,
         Column,
         Accordion,
@@ -1313,7 +1316,7 @@ export default {
                         // Create a penalty object
                         const penaltyObj = {
                             team: penalty.teamAbbrev.default ? penalty.teamAbbrev.default : penalty.teamAbbrev,
-                            player: `${penalty.committedByPlayer.firstName.default} ${penalty.committedByPlayer.lastName.default}`,
+                            player: `${penalty?.committedByPlayer?.firstName.default} ${penalty?.committedByPlayer?.lastName.default}`,
                             penalty: `${formatPenaltyType(penalty.descKey)} - ${penalty.duration} minutes`,
                             time: penalty.timeInPeriod
                         };
@@ -1619,6 +1622,7 @@ export default {
 
 .game-nav-header {
     display: flex;
+    align-items: center;
 }
 
 .back-button {
@@ -1877,6 +1881,29 @@ export default {
     width: 100%;
 }
 
+.players-stats-section tr {
+    background-color: #181818;
+}
+
+.players-stats-section td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #5d5d5d38;
+}
+
+.players-stats-section th {
+    border: none;
+}
+
+.players-stats-section th:nth-child(2) .p-column-header-content {
+    justify-content: flex-start;
+}
+
+.players-stats-section .p-column-header-content {
+    justify-content: center;
+}
+
 .player-stats-box {
     display: flex;
     width: 100%;
@@ -1892,22 +1919,24 @@ export default {
     border-width: thin;
     border-color: #ffffff14;
     border-radius: 8px;
+    height: 30px;
+    width: 50%;
 }
 
 .stats-name-header {
-    text-align: left;
+    text-align: left !important;
 }
 
 .player-stats-button {
     display: flex;
-    width: 125px !important;
+    width: 50%;
     justify-content: center;
     background-color: #ffffff00;
     color: white;
     border: none;
     text-align: center;
     text-decoration: none;
-    font-size: 16px;
+    font-size: 15px;
     margin: 2px 2px;
     transition-duration: 0.3s;
     cursor: pointer;
@@ -1924,13 +1953,34 @@ export default {
     color: black;
 }
 
-.penalties-box {
-    cursor: pointer;
-    border: solid;
-    border-width: thin;
-    border-color: #ffffff14;
-    border-radius: 5px;
-    padding: 5px;
+.penalties-box tr {
+    background-color: #181818;
+}
+
+.penalties-box td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border: none;
+}
+
+.penalties-box th {
+    border: none;
+}
+
+.penalties-box th:first-child .p-column-header-content {
+    justify-content: flex-start;
+}
+
+.penalties-box .p-column-header-content {
+    justify-content: center;
+}
+
+.penalties-box .p-accordion-content {
+    padding: 0rem !important;
+}
+
+.penalties-box a {
+    padding: 1rem;
 }
 
 .penalties-team-logo {
@@ -2368,12 +2418,14 @@ export default {
     width:30%;
 }
 
-.settings-section {
+.game-settings-section {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    height: 39px;
-    margin-right: 3%;
+    height: 40px;
+    margin-top: -5px;
+    margin-right: -20px;
+    width: 100%;
 }
 
 /* Mobile Device Styling */
@@ -2489,6 +2541,9 @@ export default {
     .penalties-box .p-datatable-tbody {
         font-size: smaller;
     }
+    .penalties-box a {
+        padding: 0.5rem;
+    }
     .highlight-button {
         font-size: 25px;
         height: 23px;
@@ -2534,6 +2589,9 @@ export default {
     }
     .players-stats-section .p-datatable-table {
         width: 165%;
+    }
+    .player-stats-teams {
+        width: 80%;
     }
     .player-team-logo.three-stars {
         width: 30px;

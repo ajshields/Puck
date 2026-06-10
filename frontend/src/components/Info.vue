@@ -150,6 +150,29 @@ export default {
     margin-left: 20%;
 }
 
+.awards-section tr {
+    background-color: #181818;
+}
+
+.awards-section td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #5d5d5d38;
+}
+
+.awards-section th {
+    border: none;
+}
+
+.awards-section th:first-child .p-column-header-content {
+    justify-content: flex-start;
+}
+
+.awards-section .p-column-header-content {
+    justify-content: center;
+}
+
 .awards-header {
     color: white;
     display: flex;

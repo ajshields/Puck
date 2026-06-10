@@ -193,6 +193,29 @@ export default {
     width: 100%;
 }
 
+.roster-stats tr {
+    background-color: #181818;
+}
+
+.roster-stats td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #5d5d5d38;
+}
+
+.roster-stats th {
+    border: none;
+}
+
+.roster-stats th:nth-child(1) .p-column-header-content {
+    justify-content: flex-start;
+}
+
+.roster-stats .p-column-header-content {
+    justify-content: center;
+}
+
 .skaters-row {
     width: 5%;
     height: 40px;
@@ -202,7 +225,7 @@ export default {
 }
 
 .name-header {
-    text-align: left;
+    text-align: left !important;
     width: 5%;
     height: 40px;
     border-bottom: solid;

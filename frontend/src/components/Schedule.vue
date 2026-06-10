@@ -880,6 +880,28 @@ export default {
     flex-direction: column;
 }
 
+.game-popup tr {
+    background-color: #181818;
+}
+
+.game-popup td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border-bottom: none;
+}
+
+.game-popup th {
+    border-bottom: none;
+}
+
+.game-popup .p-column-header-content {
+    justify-content: center;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    padding: 0.2rem 0rem;
+}
+
 .popup-open-game {
     display: flex;
     justify-content: center;
@@ -1036,6 +1058,9 @@ export default {
     }
     .game-details-team {
         margin-left: 8px;
+    }
+    .p-datatable .p-datatable-thead > tr > th {
+        padding: 0rem 0rem;
     }
     .popup-open-game {
         height: 20px;

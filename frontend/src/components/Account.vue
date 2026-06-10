@@ -28,7 +28,8 @@
     <div class="account-modal" v-if="showAccountSettings" @click="showAccountSettings=false">
         <div class="account-modal-content" @click.stop>
             <span class="account-close" @click="showAccountSettings=false">&times;</span>
-            <h1 class="account-modal-header">LOGGED IN</h1>
+            <h2>Welcome {{ auth.user.firstName }} {{ auth.user.lastName }}</h2>
+            <span>Email: {{ auth.user.email }}</span>
             <Button class="account-logout-button" label="Sign Out" @click="logOut()"/>
         </div>
     </div>
@@ -41,9 +42,6 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
-import 'primevue/resources/primevue.min.css'; // PrimeVue CSS
-import 'primeicons/primeicons.css'; // PrimeIcons CSS
-import '@radial-color-picker/vue-color-picker/dist/vue-color-picker.min.css';
 import { useAuthStore } from '@/stores/auth';
 
 export default {
@@ -58,11 +56,12 @@ export default {
   },
   data() {
     return {
-        isLoggedIn: false,
-        showLogIn: false,
-        showAccountSettings: false,
-        email: "",
-        password: ""
+      auth: useAuthStore(),
+      isLoggedIn: false,
+      showLogIn: false,
+      showAccountSettings: false,
+      email: "",
+      password: ""
     };
   },
   methods: {
@@ -80,8 +79,7 @@ export default {
     
       const data = await response.json();
       if (response.ok) {
-        const auth = useAuthStore();
-        auth.login(data.token, data.user);
+        this.auth.login(data.token, data.user);
         this.showLogIn = false;
         this.showAccountSettings = true;
       } else {
@@ -89,13 +87,11 @@ export default {
       }
     },
     logOut() {
-      const auth = useAuthStore();
-      auth.logout();
+      this.auth.logout();
       this.showAccountSettings = false;
     },
     openAccountModel() {
-      const auth = useAuthStore();
-      if(auth.isLoggedIn)
+      if(this.auth.isLoggedIn)
           this.showAccountSettings = true;
       else
           this.showLogIn = true;
@@ -113,12 +109,6 @@ export default {
     font-size: 15px;
     margin-top: 3px;
     cursor: pointer;
-}
-
-.account-button:hover {
-    background-color: var(--hover-dark-color);
-    border-radius: 8px;
-    transition: background-color 0.8s ease;
 }
 
 .account-settings-options {
@@ -226,10 +216,6 @@ export default {
 
 /* Mobile Device Styling */
 @media (max-width: 640px) {
-  .account-button:hover {
-      background-color: var(--color-background);
-      border-radius: 0px;
-  }
   .account-modal {
     top: -65px;
   }

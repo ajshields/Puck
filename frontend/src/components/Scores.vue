@@ -26,7 +26,7 @@
     <PullToRefresh scrollSelector=".all-games" @refresh="refreshGames">
       <div class="all-games" ref="gamesScroll" v-if="games.games && games.games.length > 0" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
         <ul>
-          <li v-for="game in games.games" :key="game.id" @click="openGame(game)" class="game-box">
+          <li v-for="game in games.games" :key="game.id" @click="openGame(game)" class="game-box" style="margin-bottom:1rem;">
             <div v-if="game.gameType==1" class="game-type"> <!--preseason tag-->
               <img src="@/assets/greenDash.svg" alt="dash" style="width:6px;padding-top:1px"/>
               <strong >preseason</strong>
@@ -595,10 +595,6 @@ h3 {
 ul {
   list-style: none;
   padding: 0;
-}
-
-li {
-  margin-bottom: 1rem;
 }
 
 /* Mobile Device Styling */

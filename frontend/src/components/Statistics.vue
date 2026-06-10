@@ -14,9 +14,9 @@
             <Button class="reset-options-button" type="button" label="Reset" @click="resetOptions" />
         </div>
         <div class="stats-content">
-            <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer">
-                <Column field="id" class="statistics-cell" style="text-align:left;width:4%"></Column>
-                <Column field="skaterFullName" header="Player" class="statistics-cell" style="text-align:left;height:40px;width:6%"></Column>
+            <DataTable :value="statistics" class="statistics-table" @sort="onSort" @row-click="goToPlayer" scrollable scrollHeight="700px">
+                <Column field="id" class="statistics-cell id"></Column>
+                <Column field="skaterFullName" header="Player" class="statistics-cell name"></Column>
                 <Column field="season" header="Season" class="statistics-cell" style="width:4%"></Column>
                 <Column field="teamAbbrevs" header="Team" class="statistics-cell" style="width:4%"></Column>
                 <Column field="positionCode" header="Pos" class="statistics-cell" style="width:4%"></Column>
@@ -295,7 +295,7 @@ export default {
 <style>
 .statistics-table-options {
     width: 100%;
-    margin-top: 2rem;
+    margin-top: 1rem;
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
@@ -304,17 +304,6 @@ export default {
 .years-options {
     display: flex;
     justify-content: space-between;
-}
-
-.statistics-table {
-    width: 100%;
-    margin-top: 2rem;
-}
-
-.statistics-cell {
-    border-bottom: solid;
-    border-width: thin;
-    border-color: #6d6d6d29;
 }
 
 .page-selection {
@@ -356,28 +345,9 @@ export default {
     cursor: pointer;
 }
 
-.p-dropdown-trigger {
-    border: 1px solid #ccc; /* Border color */
-    border-radius: 4px; /* Border radius */
-    margin-top: -25px;
-    margin-left: -20px;
-    width: inherit;
-}
-
 .p-dropdown-trigger:hover {
     border-color: #999; /* Border color on hover */
     cursor: pointer;
-}
-
-.p-dropdown-items {
-    border: 1px solid #ccc; /* Border color */
-    border-radius: 0 0 4px 4px; /* Border radius */
-    box-shadow: none; /* Remove shadow */
-    background-color: #181818;
-    max-height: 200px; /* Limit dropdown height */
-    overflow-y: auto; /* Enable vertical scrolling */
-    width: 100%;
-    margin-left: -20px;
 }
 
 .p-dropdown-item {
@@ -400,13 +370,73 @@ export default {
     cursor: pointer;
 }
 
+.statistics-table {
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.statistics-cell {
+    border-bottom: solid;
+    border-width: thin;
+    border-color: #6d6d6d29;
+}
+
+/*.statistics-cell.id {
+    text-align: left;
+    width: 4%;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: #1e1e1e;
+}
+
+.statistics-cell.name {
+    text-align: left;
+    height: 40px;
+    width: 6%;
+    position: sticky;
+    left: 4%;
+    z-index: 1;
+    background: #1e1e1e;
+}*/
+
+.stats-content tr {
+    background-color: #181818;
+}
+
+.stats-content td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #5d5d5d38;
+    position: relative;
+    z-index: 0;
+}
+
+.stats-content .p-datatable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #1e1e1e;
+    border: none;
+}
+
+.stats-content .p-datatable .p-datatable-thead > tr > th {
+    padding: 0.5rem 0rem;
+}
+
+.stats-content th:nth-child(2) .p-column-header-content {
+    justify-content: flex-start;
+}
+
+.stats-content .p-column-header-content {
+    justify-content: center;
+}
+
 /* Mobile Device Styling */
 @media (max-width: 640px) {
     .overall-stats-table .p-datatable-table {
         width: 260%;
-    }
-    .overall-stats-table .p-dropdown-trigger {
-        width: 90%;
     }
     .reset-options {
         display: flex;
@@ -420,17 +450,12 @@ export default {
         width: 230%;
         font-size: small;
     }
-    .statistics-table-options {
-        margin-top: 1rem;
-        margin-left: 1rem;
-    }
     .stats-content {
         height: calc(100dvh - 375px);
         overflow-y: auto;
     }
     .years-options {
         width: 85%;
-        margin-left: 30px;
     }
 }
 </style>

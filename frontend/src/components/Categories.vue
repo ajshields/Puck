@@ -19,7 +19,7 @@
             <DataTable :value="selectedPointsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -28,7 +28,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPointsInfo.points }}</strong>
           </div>
@@ -58,7 +58,7 @@
             <DataTable :value="selectedGoalsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -67,7 +67,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedGoalsInfo.goals }}</strong>
           </div>
@@ -97,7 +97,7 @@
             <DataTable :value="selectedAssistsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -106,7 +106,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedAssistsInfo.assists }}</strong>
           </div>
@@ -136,7 +136,7 @@
             <DataTable :value="selectedPlusMinusInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -145,7 +145,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPlusMinusInfo.plusMinus }}</strong>
           </div>
@@ -175,7 +175,7 @@
             <DataTable :value="selectedPenaltyMinsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -184,7 +184,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedPenaltyMinsInfo.penaltyMins }}</strong>
           </div>
@@ -214,7 +214,7 @@
             <DataTable :value="selectedFaceoffsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -223,7 +223,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedFaceoffsInfo.faceoffs }}%</strong>
           </div>
@@ -253,7 +253,7 @@
             <DataTable :value="selectedWinsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -262,7 +262,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedWinsInfo.wins }}</strong>
           </div>
@@ -292,7 +292,7 @@
             <DataTable :value="selectedShutoutsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -301,7 +301,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedShutoutsInfo.shutouts }}</strong>
           </div>
@@ -331,7 +331,7 @@
             <DataTable :value="selectedSavePctgsInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -340,7 +340,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedSavePctgsInfo.savePctgs }}</strong>
           </div>
@@ -370,7 +370,7 @@
             <DataTable :value="selectedGoalsAgainstAveragesInfo.info" class="custom-datatable">
               <Column style="width: 25%">
                 <template #body="slotProps">
-                  <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/>
+                  <div class="logo-cell-categories"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-leaders"/></div>
                 </template>
               </Column>
               <Column field="team" style="width: 25%"></Column>
@@ -379,7 +379,7 @@
             </DataTable>
           </div>
           <!-- Space -->
-          <div v-if="(!isMobile())" style="margin-bottom: 20px;"></div>
+          <div v-if="(!isMobile())"></div>
           <div class="stat-leader-value">
             <strong>{{ selectedGoalsAgainstAveragesInfo.goalsAgainstAverages }}</strong>
           </div>
@@ -1030,6 +1030,13 @@ export default {
   margin-top: 40px;
 }
 
+.logo-cell-categories {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+}
+
 .stat-header {
   margin-top: -50px;
   color: var(--link-color);
@@ -1061,6 +1068,10 @@ export default {
   max-width: 100%; /* Adjust based on your design */
   width: 100%;
   overflow: auto;
+}
+
+.datatable-container th {
+  display: none;
 }
 
 /* Add this style for the DataTable */

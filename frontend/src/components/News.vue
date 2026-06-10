@@ -20,7 +20,7 @@
     </div>
 
     <div class="news-options">
-      <v-button class="news-selector" :class="{ 'news-selector-selected': type === 'news' }" @click="type='news'">Top News</v-button>
+      <v-button class="news-selector" :class="{ 'news-selector-selected': type === 'news' }" @click="type='news'">News</v-button>
       <v-button class="news-selector" :class="{ 'news-selector-selected': type === 'recaps' }" @click="type='recaps'">Game Recaps</v-button>
     </div>
 
@@ -57,7 +57,7 @@
 <script>
 import ProgressSpinner from './ProgressSpinner.vue';
 import Layout from '@/components/Layout.vue';
-import Settings from '@/components/Settings.vue';
+import Options from '@/components/Options.vue';
 
 import { fetchApi } from '@/services/fetchApi';
 
@@ -66,7 +66,7 @@ export default {
     components: {
         ProgressSpinner,
         Layout,
-        Settings,
+        Options,
     },
     data() {
         return {

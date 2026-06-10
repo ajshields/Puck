@@ -23,13 +23,13 @@
       <h3>EASTERN</h3>
       <DataTable :value="divisionStandings.atlantic" @row-click="goToTeam">
         <h3 class="sub-section">ATLANTIC</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -39,17 +39,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="divisionStandings.metropolitan" @row-click="goToTeam">
         <h3 class="sub-section">METROPOLITAN</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -59,18 +59,18 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <h3>WESTERN</h3>
       <DataTable :value="divisionStandings.central" @row-click="goToTeam">
         <h3 class="sub-section">CENTRAL</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -80,17 +80,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="divisionStandings.pacific" @row-click="goToTeam">
         <h3 class="sub-section">PACIFIC</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -100,7 +100,7 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
     </div>
 
@@ -108,13 +108,13 @@
       <h3>EASTERN</h3>
       <DataTable :value="wildCardStandings.atlantic" @row-click="goToTeam">
         <h3 class="sub-section">ATLANTIC</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -124,17 +124,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.metropolitan" @row-click="goToTeam">
         <h3 class="sub-section">METROPOLITAN</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -144,17 +144,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.eastWC" @row-click="goToTeam" :rowClass="getPlayoffBound">
         <h3 class="sub-section">WILD CARD</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -164,18 +164,18 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <h3>WESTERN</h3>
       <DataTable :value="wildCardStandings.central" @row-click="goToTeam">
         <h3 class="sub-section">CENTRAL</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -185,17 +185,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.pacific" @row-click="goToTeam">
         <h3 class="sub-section">PACIFIC</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -205,17 +205,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.westWC" @row-click="goToTeam" :rowClass="getPlayoffBound">
         <h3 class="sub-section">WILD CARD</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -225,20 +225,20 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
     </div>
 
     <div class="standings-content" v-else-if="currentView === 'conference'">
       <DataTable :value="conferenceStandings.eastern" @row-click="goToTeam">
         <h3 class="sub-section">EASTERN</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -248,17 +248,17 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
       <DataTable :value="conferenceStandings.western" @row-click="goToTeam">
         <h3 class="sub-section">WESTERN</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%">
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -268,20 +268,20 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
     </div>
 
     <div class="standings-content" v-else-if="currentView === 'overall'" scrollable scrollDirection="both">
       <DataTable :value="overallStandings" @row-click="goToTeam">
         <h3 class="sub-section">TEAM</h3>
-        <Column field="place" header="" sortable style="width: 5%"></Column>
-        <Column frozen style="display:flex;justify-content:center;height:30px;align-items:center">
+        <Column field="place" header="" sortable style="width: 3%"></Column>
+        <Column style="width: 4%" frozen>
           <template #body="slotProps">
-            <img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" />
+            <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" frozen class="team-header" style="width: 23%"></Column>
+        <Column field="team" header="" frozen class="team-header" style="width: 21%"></Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
@@ -291,7 +291,7 @@
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 10%"></Column>
+        <Column field="streak" header="STRK" style="width: 9%"></Column>
       </DataTable>
     </div>
   </div>
@@ -807,38 +807,40 @@ export default {
 }
 
 .team-logo-standings{
-  width: 30px; /* Adjust the width of the logo as needed */
-  height: 24px; /* Adjust the height of the logo as needed */
+  width: 50px; /* Adjust the width of the logo as needed */
+}
+
+.logo-cell-standings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .team-header {
-  text-align: left;
+  text-align: left !important;
 }
 
-th {
-  text-align: center; /* or right or center, depending on your preference */
+.standings-content tr {
+  background-color: #181818;
 }
 
-tr {
+.standings-content td {
+  padding: 0rem 1rem;
   text-align: center;
+  border-bottom: none;
 }
 
-.p-datatable-table {
-  width: 100%;
-  border-collapse: collapse;
+.standings-content th {
+  border-bottom: none;
 }
 
-.p-datatable-thead {
-  background-color: #56565636;
+.standings-content .p-column-header-content {
+  justify-content: center;
 }
 
 .p-sortable-column:not(.p-highlight) .p-sortable-column-icon {
   display: none !important;
-}
-
-.p-sortable-column.p-highlight .p-sortable-column-icon {
-  display: inline-block !important;
-  color: var(--link-color);
 }
 
 .playoff-bound {
@@ -993,8 +995,14 @@ tr {
     font-size: small;
     margin-bottom: 0px;
   }
+  .team-logo-standings {
+    width: 30px;
+  }
   .p-datatable-table {
-    width: 200%;
+    width: 215%;
+  }
+  .p-datatable .p-datatable-tbody > tr > td{
+    padding: 0px;
   }
   .playoffs-team-name {
     font-size: small;
@@ -1014,6 +1022,9 @@ tr {
   .standings-content {
     height: calc(100dvh - 215px);
     overflow-y: auto;
+  }
+  .standings-content th {
+    padding: 0.2rem 0rem;
   }
   /* East (right) side cascade */
   .series1 {grid-column: 28 / span 10; grid-row: 2 / span 3}

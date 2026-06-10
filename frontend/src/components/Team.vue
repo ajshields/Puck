@@ -5,10 +5,14 @@
     </div> -->
     <div class="team-info-header-nav">
         <router-link :to="'/scores'" class="app-header">Puck</router-link>
-        <Settings></Settings>
+        <div class="settings-section">
+            <Settings></Settings>
+            <Account></Account>
+            <Options></Options>
+        </div>
     </div>
     <div style="margin-top:10px">
-        <Dropdown v-model="selectedTeam" :options="configureTeams" optionLabel="team" placeholder="Select Team" @change="teamChange" class="options-dropdown"/>
+        <Dropdown v-model="selectedTeam" :options="teams" optionLabel="team" placeholder="Select Team" @change="teamChange" class="options-dropdown"/>
     </div>
 
     <div v-if="teamInfo.teamAbbrev" class="team-header-team">
@@ -44,15 +48,19 @@
 
 <script>
 import ProgressSpinner from './ProgressSpinner.vue';
+import Options from '@/components/Options.vue';
+import Account from '@/components/Account.vue';
 import Settings from '@/components/Settings.vue';
 import Dropdown from 'primevue/dropdown';
-
 import { fetchApi } from '@/services/fetchApi';
+import teams from '@/constants/teams';
 
 export default {
     name: 'Team',
     components: {
         ProgressSpinner,
+        Options,
+        Account,
         Settings,
         Dropdown,
     },
@@ -77,6 +85,7 @@ export default {
             todaysDate: new Date(new Date().toLocaleDateString()).toISOString().split('T')[0],
             error: null,
             teamInfo: {},
+            teams,
             selectedTeam: null,
         };
     },
@@ -153,44 +162,6 @@ export default {
           );
 
           this.$router.push(newPath);
-        },
-    },
-    computed: {
-        configureTeams() {
-            return [
-                {team: 'Anaheim Ducks', value: 'ANA'},
-                {team: 'Boston Bruins', value: 'BOS'},
-                {team: 'Buffalo Sabres', value: 'BUF'},
-                {team: 'Calgary Flames', value: 'CGY'},
-                {team: 'Carolina Hurricanes', value: 'CAR'},
-                {team: 'Chicago Blackhawks', value: 'CHI'},
-                {team: 'Colorado Avalanche', value: 'COL'},
-                {team: 'Columbus Blue Jackets', value: 'CBJ'},
-                {team: 'Dallas Stars', value: 'DAL'},
-                {team: 'Detroit Red Wings', value: 'DET'},
-                {team: 'Edmonton Oilers', value: 'EDM'},
-                {team: 'Florida Panthers', value: 'FLA'},
-                {team: 'Los Angeles Kings', value: 'LAK'},
-                {team: 'Minnesota Wild', value: 'MIN'},
-                {team: 'Montreal Canadiens', value: 'MTL'},
-                {team: 'Nashville Predators', value: 'NSH'},
-                {team: 'New Jersey Devils', value: 'NJD'},
-                {team: 'New York Islanders', value: 'NYI'},
-                {team: 'New York Rangers', value: 'NYR'},
-                {team: 'Ottawa Senators', value: 'OTT'},
-                {team: 'Philadelphia Flyers', value: 'PHI'},
-                {team: 'Pittsburgh Penguins', value: 'PIT'},
-                {team: 'San Jose Sharks', value: 'SJS'},
-                {team: 'Seattle Kraken', value: 'SEA'},
-                {team: 'St Louis Blues', value: 'STL'},
-                {team: 'Tampa Bay Lightning', value: 'TBL'},
-                {team: 'Toronto Maple Leafs', value: 'TOR'},
-                {team: 'Utah Mammoth', value: 'UTA'},
-                {team: 'Vancouver Canucks', value: 'VAN'},
-                {team: 'Vegas Golden Knights', value: 'VGK'},
-                {team: 'Washington Capitals', value: 'WSH'},
-                {team: 'Winnipeg Jets', value: 'WPG'},
-            ];
         },
     },
 };

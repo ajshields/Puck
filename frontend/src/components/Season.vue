@@ -219,6 +219,29 @@ export default {
     margin-left: 10%;
 }
 
+.game-log tr {
+    background-color: #181818;
+}
+
+.game-log td {
+    padding: 0rem 1rem;
+    text-align: center;
+    border: none;
+    border-bottom: 1px solid #5d5d5d38;
+}
+
+.game-log th {
+    border: none;
+}
+
+.game-log th:first-child .p-column-header-content {
+    justify-content: flex-start;
+}
+
+.game-log .p-column-header-content {
+    justify-content: center;
+}
+
 .game-log-header {
     margin-left: 10%;
     padding-left: 10px;

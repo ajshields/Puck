@@ -4,8 +4,9 @@
             <div class="layout-header-nav">
               <router-link :to="'/scores'" class="app-header">Puck</router-link>
               <div class="settings-section">
-                <Account></Account>
                 <Settings></Settings>
+                <Account></Account>
+                <Options></Options>
               </div>
             </div>
             <nav class="app-nav">
@@ -21,16 +22,18 @@
 </template>
   
 <script>
-import Settings from '@/components/Settings.vue';
+import Options from '@/components/Options.vue';
 import Account from '@/components/Account.vue';
+import Settings from '@/components/Settings.vue';
 import { useRoute } from 'vue-router';
 import { computed } from 'vue';
 
 export default {
   name: 'Layout',
   components: {
-    Settings,
+    Options,
     Account,
+    Settings
   },
   setup() {
     const route = useRoute();
@@ -119,8 +122,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 30px;
-  margin-right: 3%;
+  height: 44px;
+  margin-right: -15px;
+  width: 50%;
 }
 
 /* Mobile Device Styling */

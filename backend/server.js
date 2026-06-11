@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const pool = require("./db");
+const auth = require("./middleware/auth");
 
 const app = express();
 
@@ -54,8 +55,31 @@ app.post("/register", async (req, res) => {
       `,
       [firstName, lastName, email, passwordHash]
     );
+    await pool.query(
+      `
+      INSERT INTO user_preferences (user_id, favorite_teams, favorite_players, app_theme)
+      VALUES ($1, $2, $3, $4)
+      `,
+      [
+        newUser.rows[0].id,
+        [],
+        [],
+        '#00F2FF'
+      ]
+    );
 
-    // 4. return created user
+    const userId = newUser.rows[0].id;
+
+    // 4. create default preferences row
+    await pool.query(
+      `
+      INSERT INTO user_preferences (user_id)
+      VALUES ($1)
+      `,
+      [userId]
+    );
+
+    // 5. return created user
     res.json(newUser.rows[0]);
 
   } catch (err) {
@@ -107,6 +131,65 @@ app.post("/login", async (req, res) => {
       },
     });
 
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+//GET USER PREFERENCES
+app.get("/user/preferences", auth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const result = await pool.query(
+      `
+      SELECT favorite_teams, favorite_players, app_theme
+      FROM user_preferences
+      WHERE user_id = $1
+      `,
+      [userId]
+    );
+
+    const prefs = result.rows[0];
+
+    res.json({
+      favorite_teams: prefs?.favorite_teams || [],
+      favorite_players: prefs?.favorite_players || [],
+      app_theme: prefs?.app_theme || "#00F2FF"
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+//SAVE USER PREFERENCES
+app.post("/user/preferences", auth, async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const {
+      favorite_teams,
+      favorite_players,
+      app_theme
+    } = req.body;
+
+    const result = await pool.query(
+      `
+      UPDATE user_preferences
+      SET
+        favorite_teams = $1::jsonb,
+        favorite_players = $2::jsonb,
+        app_theme = $3,
+        updated_at = NOW()
+      WHERE user_id = $4
+      RETURNING *
+      `,
+      [ JSON.stringify(favorite_teams),  JSON.stringify(favorite_players), app_theme, userId]
+    );
+
+    res.json(result.rows[0]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });

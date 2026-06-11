@@ -95,8 +95,8 @@
 import ProgressSpinner from './ProgressSpinner.vue';
 import PullToRefresh from '@/components/PullToRefresh.vue';
 import Layout from '@/components/Layout.vue';
-
 import { fetchApi } from '@/services/fetchApi';
+import { usePreferencesStore } from '@/stores/preferences';
 
 export default {
   name: 'Scores',
@@ -123,6 +123,8 @@ export default {
     };
   },
   mounted() {
+    //const prefs = usePreferencesStore();
+    //console.log(prefs.favorite_teams);
     this.selectedDate = this.$route.params.date || this.getFormattedToday();
     this.setupDateRange();
     this.fetchGames();

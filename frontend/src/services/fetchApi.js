@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { CapacitorHttp } from '@capacitor/core';
+import { useAuthStore } from '@/stores/auth';
 
 /**
  * Map proxy routes to real APIs
@@ -8,6 +9,7 @@ const API_MAP = {
     '/api': 'https://api-web.nhle.com',
     '/restApi': 'https://api.nhle.com',
     '/dailyFaceoff': 'https://www.dailyfaceoff.com',
+    '/backend': 'http://localhost:3000',
 };
 
 const isNative = Capacitor.isNativePlatform();
@@ -34,6 +36,7 @@ function resolveUrl(url) {
  */
 export async function fetchApi(url, options = {}) {
     const finalUrl = isDevWeb ? url : resolveUrl(url);
+    const auth = useAuthStore();
 
     try {
         //NATIVE (iOS / Android)
@@ -45,8 +48,9 @@ export async function fetchApi(url, options = {}) {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                     ...(options.headers || {}),
+                    ...(auth.token ? { Authorization: `Bearer ${auth.token}` } : {})
                 },
-                data: options.body || undefined,
+                data: options.body ? JSON.parse(JSON.stringify(options.body)) : undefined,
             });
 
             return {
@@ -62,6 +66,7 @@ export async function fetchApi(url, options = {}) {
             headers: {
                 'Content-Type': 'application/json',
                 ...(options.headers || {}),
+                ...(auth.token ? { Authorization: `Bearer ${auth.token}` } : {})
             },
             body: options.body
                 ? JSON.stringify(options.body)

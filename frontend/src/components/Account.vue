@@ -123,8 +123,7 @@ export default {
   top: -375px;
   width: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: #000000ea;
 }
 
 .account-modal-content {

@@ -1,13 +1,16 @@
 <template>
-  <router-view />
+  <router-view/>
 </template>
 
 <script>
-import { onMounted, onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 import { createGesture } from '@ionic/vue';
 import { useRouter } from 'vue-router';
 import { Capacitor } from '@capacitor/core';
 import { useRoute } from 'vue-router';
+
+import { useAuthStore } from '@/stores/auth';
+import { usePreferencesStore } from '@/stores/preferences';
 
 export default {
   name: 'App',
@@ -15,9 +18,17 @@ export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
+
+    const auth = useAuthStore();
+    const prefs = usePreferencesStore();
+    const appReady = ref(false);
     let gesture = null;
 
-    onMounted(() => {
+    onMounted(async () => {
+      //load preferences
+      await prefs.init();
+      //apply theme globally
+      prefs.applyTheme?.();
       // allow on real mobile OR dev mobile viewport
       const isNative = Capacitor.isNativePlatform();
       const isMobileBrowser = window.innerWidth <= 768;
@@ -61,7 +72,7 @@ export default {
       }
     });
 
-    return {};
+    return {appReady};
   }
 };
 </script>

@@ -43,6 +43,11 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/yahoo/, ''),
       },
+      '/backend': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/backend/, '')
+      },
       /*'/fantasy': {
         target: 'https://fantasysports.yahooapis.com',
         changeOrigin: true,

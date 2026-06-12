@@ -22,8 +22,8 @@
         </div>
         <div class="team-info-team-middle">
             <img :src="teamInfo.teamLogo" alt="Team Logo" class="team-page-logo">
-            <strong class="team-info-name">{{ teamInfo.teamName.default }}</strong>
-            <strong style="width:110%;display:flex;justify-content:center">{{ getRecord(teamInfo.wins, teamInfo.losses, teamInfo.otLosses) }}, {{ getPlacement(teamInfo) }}</strong>
+            <strong class="team-info-name" :class="{'team-favorite-team': isFavoriteTeam(teamInfo.teamAbbrev.default)}">{{ teamInfo.teamName.default }}</strong>
+            <strong style="width:150%;display:flex;justify-content:center">{{ getRecord(teamInfo.wins, teamInfo.losses, teamInfo.otLosses) }}, {{ getPlacement(teamInfo) }}</strong>
         </div>
         <div class="team-info-team">
             <strong>{{ teamInfo.streakCode }}{{ teamInfo.streakCount }}</strong>
@@ -54,6 +54,7 @@ import Settings from '@/components/Settings.vue';
 import Dropdown from 'primevue/dropdown';
 import { fetchApi } from '@/services/fetchApi';
 import teams from '@/constants/teams';
+import { usePreferencesStore } from '@/stores/preferences';
 
 export default {
     name: 'Team',
@@ -87,6 +88,7 @@ export default {
             teamInfo: {},
             teams,
             selectedTeam: null,
+            favoriteTeams: (usePreferencesStore()).favorite_teams
         };
     },
     methods: {
@@ -153,6 +155,9 @@ export default {
             }
             return `${teamInfo.divisionSequence}${ending} ${teamInfo.divisionName}`;
         },
+        isFavoriteTeam(team) {
+            return this.favoriteTeams.includes(team);
+        },
         teamChange() {
           const currentPath = this.$route.path;
 
@@ -208,6 +213,10 @@ export default {
 
 .team-page-logo {
     width: 200px
+}
+
+.team-favorite-team {
+  color: var(--favorites-color);
 }
 
 /* Mobile Device Styling */

@@ -44,7 +44,7 @@
                 <div class="game-team">
                   <div style="display:flex;width:250px;color:white">
                     <img :src="game.awayTeam.logo" alt="Away Team Logo" class="team-logo">
-                    <strong>{{ game.awayTeam.abbrev }} {{ game.awayTeam.name.default }}</strong>
+                    <strong :class="{'scores-favorite-team': isFavoriteTeam(game.awayTeam.abbrev)}">{{ game.awayTeam.abbrev }} {{ game.awayTeam.name.default }}</strong>
                   </div>
                   <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ getOdds(game.awayTeam.odds) }}</strong>
                 </div>
@@ -65,7 +65,7 @@
                 <div class="game-team">
                   <div style="display:flex;width:250px;color:white">
                     <img :src="game.homeTeam.logo" alt="Home Team Logo" class="team-logo">
-                    <strong>{{ game.homeTeam.abbrev }} {{ game.homeTeam.name.default }}</strong>
+                    <strong :class="{'scores-favorite-team': isFavoriteTeam(game.homeTeam.abbrev)}">{{ game.homeTeam.abbrev }} {{ game.homeTeam.name.default }}</strong>
                   </div>
                   <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ getOdds(game.homeTeam.odds) }}</strong>
                 </div>
@@ -119,6 +119,7 @@ export default {
       touchStartX: 0,
       touchStartY: 0,
       isSwiping: false,
+      favoriteTeams: (usePreferencesStore()).favorite_teams,
       error: null,
     };
   },
@@ -233,9 +234,32 @@ export default {
       }
     },
     sortGames(games) {
-      const finishedGames = games.games.filter(game => game.gameState === 'FINAL' || game.gameState === 'OFF');
+      const isFavoriteGame = (game) =>
+        this.favoriteTeams.some(team =>
+          game.homeTeam?.abbrev === team ||
+          game.awayTeam?.abbrev === team
+      );
+
+      const isOngoing = (game) =>
+        game.gameState !== 'FINAL' && game.gameState !== 'OFF';
+
+      const getRank = (game) => {
+        const fave = isFavoriteGame(game);
+        const live = isOngoing(game);
+      
+        if (fave && live) return 0; // ongoing favorites
+        if (fave && !live) return 1; // finished favorites
+        if (!fave && live) return 2; // ongoing non-favorites
+        return 3;                 // finished non-favorites
+      };
+    
+      this.games.games = [...games.games].sort(
+        (a, b) => getRank(a) - getRank(b)
+      );
+
+      /*const finishedGames = games.games.filter(game => game.gameState === 'FINAL' || game.gameState === 'OFF');
       const ongoingGames = games.games.filter(game => game.gameState !== 'FINAL' && game.gameState !== 'OFF');
-      this.games.games = ongoingGames.concat(finishedGames);
+      this.games.games = ongoingGames.concat(finishedGames);*/
     },
     setupDateRange() {
       const today = new Date();
@@ -426,6 +450,9 @@ export default {
       else if(game.situation && team == 'home' && game.situation.homeTeam.situationDescriptions)
         return 'PP';
     },
+    isFavoriteTeam(team) {
+      return this.favoriteTeams.includes(team);
+    },
     openGame(game) {
       // Programmatically navigate to the Game component with the current date
       this.$router.push({ name: 'game', params: { id: game.id }, query: { date: this.selectedDate } });
@@ -588,6 +615,10 @@ export default {
   width: 40px; /* Adjust the width of the logo as needed */
   height: 24px; /* Adjust the height of the logo as needed */
   margin-right: 8px; /* Add margin between logo and team abbreviation */
+}
+
+.scores-favorite-team {
+  color: var(--favorites-color);
 }
 
 h3 {

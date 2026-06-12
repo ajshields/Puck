@@ -256,5 +256,8 @@ export default {
     .roster-stats .p-datatable-table {
         width: 200%;
     }
+    .roster-stats td {
+        font-size: small;
+    }
 }
 </style>

@@ -219,10 +219,10 @@ export default {
 /* Mobile Device Styling */
 @media (max-width: 640px) {
   .account-modal {
-    top: -65px;
+    top: -200px;
   }
   .account-modal-content {
-    margin: 48% auto;
+    margin: 100% auto;
     width: 85%;
   }
   .account-settings-options {

@@ -30,6 +30,7 @@ a,
   --main-color: #00F2FF;
   --hover-color: #00F2FF94;
   --hover-dark-color: #00F2FF3D;
+  --favorites-color: #e5bc00;
 }
 
 @media (max-width: 640px) {

@@ -29,17 +29,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="divisionStandings.metropolitan" @row-click="goToTeam">
         <h3 class="sub-section">METROPOLITAN</h3>
@@ -49,17 +53,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <h3>WESTERN</h3>
       <DataTable :value="divisionStandings.central" @row-click="goToTeam">
@@ -70,17 +78,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="divisionStandings.pacific" @row-click="goToTeam">
         <h3 class="sub-section">PACIFIC</h3>
@@ -90,17 +102,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
 
@@ -114,17 +130,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.metropolitan" @row-click="goToTeam">
         <h3 class="sub-section">METROPOLITAN</h3>
@@ -134,17 +154,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.eastWC" @row-click="goToTeam" :rowClass="getPlayoffBound">
         <h3 class="sub-section">WILD CARD</h3>
@@ -154,17 +178,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <h3>WESTERN</h3>
       <DataTable :value="wildCardStandings.central" @row-click="goToTeam">
@@ -175,17 +203,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.pacific" @row-click="goToTeam">
         <h3 class="sub-section">PACIFIC</h3>
@@ -195,17 +227,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="wildCardStandings.westWC" @row-click="goToTeam" :rowClass="getPlayoffBound">
         <h3 class="sub-section">WILD CARD</h3>
@@ -215,17 +251,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
 
@@ -238,17 +278,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
       <DataTable :value="conferenceStandings.western" @row-click="goToTeam">
         <h3 class="sub-section">WESTERN</h3>
@@ -258,17 +302,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
 
@@ -281,17 +329,21 @@
             <div class="logo-cell-standings"><img :src="slotProps.data.teamLogo" :alt="slotProps.data.team" class="team-logo-standings" /></div>
           </template>
         </Column>
-        <Column field="team" header="" frozen class="team-header" style="width: 21%"></Column>
+        <Column field="team" header="" frozen class="team-header" style="width: 18%">
+          <template #body="slotProps">
+            <span :class="{'standings-favorite-team': isFavoriteTeam(slotProps.data.team)}">{{ slotProps.data.team }}</span>
+          </template>
+        </Column>
         <Column field="gamesPlayed" header="GP" sortable style="width: 5%"></Column>
         <Column field="record" header="W-L-OTL" style="width: 10%"></Column>
         <Column field="points" header="P" sortable style="width: 5%"></Column>
         <Column field="regPlusOT" header="ROW" sortable style="width: 5%"></Column>
-        <Column field="goalF" header="GF" sortable style="width: 6%"></Column>
-        <Column field="goalA" header="GA" sortable style="width: 6%"></Column>
+        <Column field="goalF" header="GF" sortable style="width: 7%"></Column>
+        <Column field="goalA" header="GA" sortable style="width: 7%"></Column>
         <Column field="differential" header="DIFF" sortable style="width: 5%"></Column>
         <Column field="shootoutWL" header="SO W-L" style="width: 10%"></Column>
         <Column field="last10" header="LAST 10" style="width: 10%"></Column>
-        <Column field="streak" header="STRK" style="width: 9%"></Column>
+        <Column field="streak" header="STRK" style="width: 10%"></Column>
       </DataTable>
     </div>
   </div>
@@ -567,8 +619,8 @@ import ProgressSpinner from './ProgressSpinner.vue';
 import Layout from '@/components/Layout.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-
 import { fetchApi } from '@/services/fetchApi';
+import { usePreferencesStore } from '@/stores/preferences';
 
 export default {
   name: 'Standings',
@@ -591,6 +643,7 @@ export default {
       overallStandings: [],
       schedule: [],
       bracket: {},
+      favoriteTeams: (usePreferencesStore()).favorite_teams,
       error: null,
     };
   },
@@ -733,6 +786,12 @@ export default {
     goToTeamBracket(abbrev) {
       this.$router.push({ name: 'team.schedule', params: { id: abbrev }});
     },
+    isFavoriteTeam(team) {
+      const match = team.match(/([A-Z]{2,3})/); 
+      const teamCode = match ? match[1] : null;
+
+      return this.favoriteTeams.includes(teamCode);
+    }
   },
 };
 </script>
@@ -837,6 +896,10 @@ export default {
 
 .standings-content .p-column-header-content {
   justify-content: center;
+}
+
+.standings-favorite-team {
+  color: var(--favorites-color);
 }
 
 .p-sortable-column:not(.p-highlight) .p-sortable-column-icon {
@@ -1025,6 +1088,9 @@ export default {
   }
   .standings-content th {
     padding: 0.2rem 0rem;
+  }
+  .standings-content td {
+    font-size: small;
   }
   /* East (right) side cascade */
   .series1 {grid-column: 28 / span 10; grid-row: 2 / span 3}

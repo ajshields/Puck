@@ -46,8 +46,8 @@
             <div class="away-scoreboard">
                 <img :src="game.awayTeam.logo" alt="Away Team Logo" @click="goToTeam(game.awayTeam.abbrev)" class="team-logo-game away">
                 <div @click="goToTeam(game.awayTeam.abbrev)" class="scoreboard-layout away">
-                    <strong class="scoreboard-city-name">{{ game.awayTeam.placeName.default }}</strong>
-                    <strong class="scoreboard-team-name">{{ game.awayTeam.commonName.default }}</strong>
+                    <strong class="scoreboard-city-name" :class="{'game-favorite-team': isFavoriteTeam(game.awayTeam.abbrev)}">{{ game.awayTeam.placeName.default }}</strong>
+                    <strong class="scoreboard-team-name" :class="{'game-favorite-team': isFavoriteTeam(game.awayTeam.abbrev)}">{{ game.awayTeam.commonName.default }}</strong>
                     <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ game.awayTeam.record }}</strong>
                     <strong v-if="game.awayTeam.sog" class="scoreboard-team-sog">SOG: {{ game.awayTeam.sog }}</strong>
                 </div>
@@ -76,8 +76,8 @@
                     <strong v-if="game.situation && game.situation.homeTeam.situationDescriptions" class="game-powerplay-tag home">PP</strong>
                 </div>
                 <div @click="goToTeam(game.homeTeam.abbrev)" class="scoreboard-layout home">
-                    <strong class="scoreboard-city-name">{{ game.homeTeam.placeName.default }}</strong>
-                    <strong class="scoreboard-team-name">{{ game.homeTeam.commonName.default }}</strong>
+                    <strong class="scoreboard-city-name" :class="{'game-favorite-team': isFavoriteTeam(game.homeTeam.abbrev)}">{{ game.homeTeam.placeName.default }}</strong>
+                    <strong class="scoreboard-team-name" :class="{'game-favorite-team': isFavoriteTeam(game.homeTeam.abbrev)}">{{ game.homeTeam.commonName.default }}</strong>
                     <strong v-if="game.gameState=='PRE' || game.gameState=='FUT'" style="font-size:small">{{ game.homeTeam.record }}</strong>
                     <strong v-if="game.homeTeam.sog" class="scoreboard-team-sog">SOG: {{ game.homeTeam.sog }}</strong>
                 </div>
@@ -755,8 +755,8 @@ import Column from 'primevue/column';
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Button from 'primevue/button';
-
 import { fetchApi } from '@/services/fetchApi';
+import { usePreferencesStore } from '@/stores/preferences';
 
 export default {
     name: 'Game',
@@ -793,7 +793,8 @@ export default {
             playerStats: [],
             playerStatsTeamSelected: null,
             playerGameStats: [],
-            playerGameStatsTeamSelected: null
+            playerGameStatsTeamSelected: null,
+            favoriteTeams: (usePreferencesStore()).favorite_teams
         };
     },
     mounted() {
@@ -1544,6 +1545,9 @@ export default {
                     }
                 }
             }
+        },
+        isFavoriteTeam(team) {
+            return this.favoriteTeams.includes(team);
         },
         openGame(game) {
             const url = this.$router.resolve({ name: 'game', params: { id: game.id }, query: { date: this.selectedDate } }).href;
@@ -2416,6 +2420,10 @@ export default {
 
 .overall-game-info-label {
     width:30%;
+}
+
+.game-favorite-team {
+    color: var(--favorites-color);
 }
 
 .game-settings-section {

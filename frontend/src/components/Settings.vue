@@ -32,7 +32,7 @@
                                     <img
                                         :src="slotProps.option.logo"
                                         :alt="slotProps.option.team"
-                                        class="team-logo"
+                                        class="preferences-team-logo"
                                     />
                                     <span>
                                         {{ slotProps.option.team }}
@@ -240,8 +240,11 @@ export default {
 
 .favourite-teams-dropdown {
   margin-left: 10px;
-  max-width: 630px;
   overflow-x: auto;
+}
+
+.favourite-teams-dropdown .p-multiselect {
+  width: 100%;
 }
 
 .favourite-teams-dropdown .p-multiselect-item {
@@ -251,11 +254,10 @@ export default {
 .team-option {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 
-.team-logo {
-  width: 24px;
+.preferences-team-logo {
+  width: 36px;
   height: 24px;
   object-fit: contain;
 }
@@ -302,14 +304,11 @@ export default {
 
 /* Mobile Device Styling */
 @media (max-width: 640px) {
-  .favourite-teams-dropdown {
-    max-width: 220px;
-  }
   .settings-modal {
-    top: -65px;
+    top: -110px;
   }
   .settings-modal-content {
-    margin: 48% auto;
+    margin: 85% auto;
     width: 100%;
   }
   .settings-options {

@@ -4,7 +4,7 @@
         <Button class="settings-button" icon="pi pi-cog" aria-label="Settings" @click="openSettingsModel()"/>
     </div>
 
-    <div v-if="showColorPicker" class="theme-picker">
+    <div v-if="showColorPicker" class="theme-picker" @click="showColorPicker=false">
       <span class="color-close" @click="showColorPicker=false">&times;</span>
       <color-picker v-bind="color" @input="onInput" style="width:200px;height:200px"></color-picker>
     </div>
@@ -45,8 +45,8 @@
                 <div class="theme-section">
                   <span>Theme</span>
                   <div class="theme-buttons">
-                    <Button label="Select" @click="showColorPicker=true"></Button>
-                    <Button label="Default"></Button>
+                    <Button label="Select" :style="{ backgroundColor:selectedAppTheme, border:`1px solid ${selectedAppTheme}` }" @click="showColorPicker=true" />
+                    <Button label="Default" style="background-color:#00F2FF;border:1px solid #00F2FF;" @click="selectedAppTheme='#00F2FF'"/>
                   </div>
                 </div>
                 <div class="settings-buttons">
@@ -69,7 +69,6 @@ import '@radial-color-picker/vue-color-picker/dist/vue-color-picker.min.css';
 import { useAuthStore } from '@/stores/auth';
 import { usePreferencesStore } from '@/stores/preferences';
 import teams from '@/constants/teams';
-import { fetchApi } from '@/services/fetchApi';
 
 export default {
   name: 'Account',
@@ -89,6 +88,8 @@ export default {
         showSettings: false,
         selectedFavoriteTeams: [],
         originalFavoriteTeams: [],
+        selectedAppTheme: '',
+        originalAppTheme: '',
         teams,
         color: { hue: 0, saturation: 100, luminosity: 50, alpha: 1 },
         showColorPicker: false,
@@ -100,6 +101,8 @@ export default {
       // copy current saved state into editable draft
       this.selectedFavoriteTeams = [...(Array.isArray(prefs.favorite_teams) ? prefs.favorite_teams : [])];
       this.originalFavoriteTeams = [...this.selectedFavoriteTeams];
+      this.selectedAppTheme = prefs.app_theme;
+      this.originalAppTheme = prefs.app_theme;
       this.showSettings = true;
     },
     async saveSettings() {
@@ -109,13 +112,14 @@ export default {
 
       try {
         prefs.favorite_teams = [...this.selectedFavoriteTeams];
+        prefs.app_theme = this.selectedAppTheme;
         // save locally
         prefs.saveToLocal();
         // save server (if logged in)
         if (auth.token) {
           await prefs.saveToServer();
         }
-      
+        prefs.applyTheme();
         this.showSettings = false;
       } finally {
         this.isLoading = false;
@@ -123,24 +127,7 @@ export default {
     },
     onInput(hue) {
       this.color.hue = hue;
-      this.changeColourScheme(this.hslToHex(this.color.hue, this.color.saturation, this.color.luminosity));
-    },
-    changeColourScheme(theme) {
-      // Update the value of the CSS custom property
-      switch(theme) {
-        case 'default':
-            document.documentElement.style.setProperty('--link-color', '#00F2FF');
-            document.documentElement.style.setProperty('--main-color', '#00F2FF');
-            document.documentElement.style.setProperty('--hover-color', '#00F2FF94');
-            document.documentElement.style.setProperty('--hover-dark-color', '#00F2FF3D');
-            break;
-        default:
-            document.documentElement.style.setProperty('--link-color', theme);
-            document.documentElement.style.setProperty('--main-color', theme);
-            document.documentElement.style.setProperty('--hover-color', `${theme}94`);
-            document.documentElement.style.setProperty('--hover-dark-color', `${theme}3d`);
-            break;
-      }
+      this.selectedAppTheme = this.hslToHex(this.color.hue, this.color.saturation, this.color.luminosity);
     },
     hslToHex(h, s, l) {
         h /= 360;

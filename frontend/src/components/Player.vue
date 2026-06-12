@@ -209,6 +209,12 @@ export default {
     width: 100%;
 }
 
+.p-dropdown:not(.p-disabled).p-focus,
+.p-dropdown:not(.p-disabled):hover {
+    border: #383838;
+    box-shadow: 0 0 0 1px #383838;
+}
+
 .p-inputtext {
     font-size: 16px !important;
 }

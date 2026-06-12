@@ -43,6 +43,7 @@ import InputText from 'primevue/inputtext';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import { useAuthStore } from '@/stores/auth';
+import { usePreferencesStore } from '@/stores/preferences';
 
 export default {
   name: 'Account',
@@ -79,9 +80,11 @@ export default {
     
       const data = await response.json();
       if (response.ok) {
+        const prefs = usePreferencesStore();
         this.auth.login(data.token, data.user);
         this.showLogIn = false;
         this.showAccountSettings = true;
+        await prefs.init();
       } else {
         console.error(data.error || "Login failed");
       }

@@ -11,7 +11,7 @@
             <Options></Options>
         </div>
     </div>
-    <div style="margin-top:10px">
+    <div>
         <Dropdown v-model="selectedTeam" :options="teams" optionLabel="team" placeholder="Select Team" @change="teamChange" class="options-dropdown"/>
     </div>
 
